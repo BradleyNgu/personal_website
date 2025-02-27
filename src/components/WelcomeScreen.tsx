@@ -54,12 +54,23 @@ interface WelcomeScreenProps {
     }, [onComplete]);
     
     return (
-      <div className="ascii-terminal">
+      <div className="ascii-terminal" style={{
+          width: "100vw",
+          height: "100vh",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          textAlign: "center",
+          backgroundColor: "black",
+          color: "white"  // ✅ Ensures white font
+      }}>
         {lines.map((line, i) => (
           <pre key={i}>{line}</pre>
         ))}
       </div>
     );
+  
   };
   
   export default WelcomeScreen;

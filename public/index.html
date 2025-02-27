@@ -103,7 +103,9 @@
         function loadReactApp() {
             document.getElementById("terminal").style.display = "none";
             document.getElementById("root").classList.remove("hidden");
-            import("/src/main.tsx").then(() => console.log("React App Loaded"));
+            import("/src/main.tsx")
+                .then(() => console.log("React App Loaded"))
+                .catch(err => console.error("Failed to load React:", err));
         }
 
         typeNextLine();

@@ -10,9 +10,7 @@ const App: React.FC = () => {
       {!showPortfolio ? (
         <WelcomeScreen onComplete={() => setShowPortfolio(true)} />
       ) : (
-        <div className="portfolio">
-          <h1 style={{ color: "white" }}>Welcome to my portfolio!</h1>
-        </div>
+        <div className="portfolio" />
       )}
     </div>
   );

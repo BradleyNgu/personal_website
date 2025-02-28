@@ -101,7 +101,7 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onComplete }) => {
         clearInterval(interval);
         setTimeout(onComplete, 1500);
       }
-    }, 65); // Reduced interval time to 65ms for faster printing
+    }, 40); // Reduced interval time to 65ms for faster printing
 
     return () => clearInterval(interval);
   }, [onComplete]);

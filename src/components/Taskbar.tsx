@@ -1,6 +1,6 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "../styles/taskbar.css";
-import startIcon from "/src/assets/icons/start.png";
+import startIcon from "../assets/icons/start.png"; // Ensure correct path
 
 interface TaskbarProps {
   openWindows: string[];
@@ -38,7 +38,7 @@ const Taskbar: React.FC<TaskbarProps> = ({ openWindows, closeWindow }) => {
     <div className="taskbar">
       {/* Start Button */}
       <button className="start-button" onClick={() => setShowMenu(!showMenu)}>
-        <img src={startIcon} alt="Start" />
+        <img src={startIcon} alt="Start" className="start-icon" />
       </button>
 
       {/* Start Menu */}

@@ -3,118 +3,119 @@
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 50px; /* Adjust as needed */
+  height: 50px; /* Adjust height as needed */
   background-color: #1c5aa6;
   display: flex;
   align-items: center;
-  padding: 5px;
+  padding: 0;
 }
-  
-  .start-button {
-    background: none;
-    border: none;
-    cursor: pointer;
-    margin-left: 10px;
-  }
-  
-  .start-button img {
-    width: 30px;
-  }
-  
-  .start-menu {
-    position: absolute;
-    bottom: 50px;
-    left: 10px;
-    width: 180px;
-    background: rgba(10, 30, 80, 0.9);
-    border-radius: 5px;
-    padding: 10px;
-    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
-    animation: fadeIn 0.2s ease-in-out;
-  }
-  
-  .start-menu ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-  
-  .start-menu li {
-    padding: 8px;
-    cursor: pointer;
-    color: white;
-  }
-  
-  .start-menu li:hover {
-    background: rgba(255, 255, 255, 0.2);
-  }
-  
-  .logout {
-    color: red;
-  }
-  
-  .open-apps {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    padding: 0 10px;
-  }
-  
-  .taskbar-app {
-    background: rgba(255, 255, 255, 0.2);
-    border: none;
-    padding: 5px 10px;
-    margin-right: 5px;
-    border-radius: 4px;
-    color: white;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-  }
-  
-  .taskbar-app .close-btn {
-    margin-left: 5px;
-    color: red;
-    font-weight: bold;
-  }
-  
-  .taskbar-app:hover {
-    background: rgba(255, 255, 255, 0.4);
-  }
-  
-  .system-tray {
-    margin-right: 20px;
-    font-size: 14px;
-  }
 
-  .start-button {
-    background: none;
-    border: none;
-    padding: 0;
-    cursor: pointer;
-    height: 100%; /* Fill the taskbar height */
-    width: 120px; /* Increase width */
-    display: flex;
-    align-items: center;
-    justify-content: center;
+/* Start Button: Fully covers the bottom-left */
+.start-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  height: 100%; /* Makes it take up the full taskbar height */
+  width: 100px; /* Adjust width to ensure it's covering the bottom left */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #17478a; /* Darker color for contrast */
+  transition: background 0.2s ease-in-out;
+  padding: 0;
+}
+
+/* Ensuring the button fills properly */
+.start-button:hover {
+  background-color: #123c74;
+}
+
+/* Make the logo fill the button completely */
+.start-button img {
+  width: 100%; /* Fill the full button width */
+  height: 100%; /* Fill the full button height */
+  object-fit: contain; /* Keeps aspect ratio while filling */
+}
+
+/* Start Menu Positioned Under Start Button */
+.start-menu {
+  position: absolute;
+  bottom: 50px; /* Ensures it appears above the taskbar */
+  left: 0; /* Align to the bottom-left */
+  width: 200px;
+  background: rgba(10, 30, 80, 0.9);
+  border-radius: 5px;
+  padding: 10px;
+  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+.start-menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.start-menu li {
+  padding: 10px;
+  cursor: pointer;
+  color: white;
+  transition: background 0.2s ease-in-out;
+}
+
+.start-menu li:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.logout {
+  color: red;
+}
+
+/* Open Applications Section */
+.open-apps {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+}
+
+.taskbar-app {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  padding: 5px 10px;
+  margin-right: 5px;
+  border-radius: 4px;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.taskbar-app .close-btn {
+  margin-left: 5px;
+  color: red;
+  font-weight: bold;
+}
+
+.taskbar-app:hover {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+/* System Tray (Time Display) */
+.system-tray {
+  margin-right: 20px;
+  font-size: 14px;
+  color: white;
+}
+
+/* Start Menu Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
   }
-  
-  .start-button img {
-    height: 90%; /* Scale the image to match the button */
-    width: auto;
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
-  
-  
-  
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-      transform: translateY(5px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  
-  }
-  
+}

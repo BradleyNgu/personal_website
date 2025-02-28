@@ -1,17 +1,13 @@
 import React, { useState } from "react";
 import WelcomeScreen from "./components/WelcomeScreen";
-import "./styles/App.css";
+import Desktop from "./components/Desktop";
 
 const App: React.FC = () => {
-  const [showPortfolio, setShowPortfolio] = useState(false);
+  const [showDesktop, setShowDesktop] = useState(false);
 
   return (
     <div className="App">
-      {!showPortfolio ? (
-        <WelcomeScreen onComplete={() => setShowPortfolio(true)} />
-      ) : (
-        <div className="portfolio" />
-      )}
+      {!showDesktop ? <WelcomeScreen onComplete={() => setShowDesktop(true)} /> : <Desktop />}
     </div>
   );
 };

@@ -107,7 +107,7 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onComplete }) => {
   }, [onComplete]);
 
   const progressBar = () => {
-    const totalLength = 100;
+    const totalLength = 50;
     const filledLength = Math.round((progress / 100) * totalLength);
     const emptyLength = totalLength - filledLength;
     return `+${"#".repeat(filledLength)}${" ".repeat(emptyLength)}+`;

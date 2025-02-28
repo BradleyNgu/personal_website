@@ -92,10 +92,10 @@ const Desktop: React.FC = () => {
   return (
     <div className="desktop">
       {/* Desktop Icons */}
+      <Icon name="Recycle Bin" image={recycleBinIcon} onClick={() => openWindow("Recycle Bin")} />
       <Icon name="Projects" image={folderIcon} onClick={() => openWindow("Projects")} />
       <Icon name="Experiences" image={folderIcon} onClick={() => openWindow("Experiences")} />
       <Icon name="My Computer" image={computerIcon} onClick={() => openWindow("My Computer")} />
-      <Icon name="Recycle Bin" image={recycleBinIcon} onClick={() => openWindow("Recycle Bin")} />
       <Icon name="Browser" image={browserIcon} onClick={() => openWindow("Browser")} />
 
       {/* Open Windows */}

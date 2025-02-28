@@ -103,13 +103,14 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onComplete }) => {
         clearInterval(interval);
         setTimeout(onComplete, 1500);
       }
-    }, 40); // Reduced interval time to 65ms for faster printing
+    }, 40);
 
     return () => clearInterval(interval);
   }, [onComplete]);
 
+  // Function to generate a dynamic progress bar
   const progressBar = () => {
-    const totalLength = 100;
+    const totalLength = 50; // Fixed width for consistent size
     const filledLength = Math.round((progress / 100) * totalLength);
     const emptyLength = totalLength - filledLength;
     return `+${"#".repeat(filledLength)}${" ".repeat(emptyLength)}+`;
@@ -134,16 +135,20 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onComplete }) => {
       {lines.map((line, i) => (
         <pre key={i} style={{ margin: 0, lineHeight: 1.1 }}>{line}</pre>
       ))}
+
+      {/* Progress Bar - Always centered */}
       <div
         style={{
           position: "absolute",
-          bottom: "25px",
+          bottom: "5%", // Adjusted for better visibility
           left: "50%",
-          transform: "translateX(-50%)",
-          width: "80%",
+          transform: "translate(-50%, 0)", // Ensures it's always centered
+          maxWidth: "90%", // Prevents overflow on smaller screens
           textAlign: "center",
           color: "white",
           fontFamily: "monospace",
+          fontSize: "16px", // Ensures readability across devices
+          whiteSpace: "nowrap", // Prevents line breaks in the progress bar
         }}
       >
         <pre style={{ margin: 0 }}>{progressBar()}</pre>
@@ -153,4 +158,3 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onComplete }) => {
 };
 
 export default WelcomeScreen;
-

@@ -43,7 +43,7 @@ const Taskbar: React.FC<TaskbarProps> = ({ openWindows, closeWindow }) => {
 
       {/* Start Menu */}
       {showMenu && (
-        <div ref={menuRef} className="start-menu">
+        <div ref={menuRef} className="start-menu" style={{ zIndex: 50, pointerEvents: "auto" }}>
           <ul>
             <li>📂 My Projects</li>
             <li>📝 Resume</li>
@@ -52,7 +52,8 @@ const Taskbar: React.FC<TaskbarProps> = ({ openWindows, closeWindow }) => {
             <li className="logout">🚪 Logout</li>
           </ul>
         </div>
-      )}
+        )}
+
 
       {/* Open Applications Section */}
       <div className="open-apps">

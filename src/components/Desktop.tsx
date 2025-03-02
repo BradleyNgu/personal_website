@@ -8,19 +8,6 @@ import computerIcon from "../assets/icons/computer.png";
 import recycleBinIcon from "../assets/icons/recycle-bin.png";
 import browserIcon from "../assets/icons/browser.png";
 
-interface Folder {
-  name: string;
-  icon: string;
-}
-
-const folders: Folder[] = [
-  { name: "Recycle Bin", icon: recycleBinIcon },
-  { name: "Projects", icon: folderIcon },
-  { name: "Experiences", icon: folderIcon },
-  { name: "My Computer", icon: computerIcon },
-  { name: "Browser", icon: browserIcon },
-];
-
 interface DraggableWindowProps {
   name: string;
   onClose: () => void;
@@ -80,22 +67,72 @@ const DraggableWindow: React.FC<DraggableWindowProps> = ({
       style={{
         left: isMaximized ? 0 : position.x,
         top: isMaximized ? 0 : position.y,
-        width: isMaximized ? "100%" : "300px",
-        height: isMaximized ? "calc(100vh - 50px)" : "200px", // Ensures taskbar is visible
+        width: isMaximized ? "100%" : "400px",
+        height: isMaximized ? "calc(100vh - 50px)" : "300px",
         zIndex: isActive ? 1000 : 1,
         border: "2px solid #000080",
-        backgroundColor: "#B0C4DE",
+        backgroundColor: "#F0F0F0",
+        boxShadow: "4px 4px 10px rgba(0, 0, 0, 0.3)",
+        display: isMaximized || isActive ? "block" : "none",
       }}
     >
-      <div className="window-header" onMouseDown={handleMouseDown} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '4px 8px', background: 'linear-gradient(to bottom, #0A5CC0, #0854A0)', color: 'white', position: 'relative', borderBottom: '1px solid white' }}>
+      <div
+        className="window-header"
+        onMouseDown={handleMouseDown}
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          padding: "4px 8px",
+          background: "linear-gradient(to bottom, #0A5CC0, #0854A0)",
+          color: "white",
+          position: "relative",
+          borderBottom: "1px solid white",
+        }}
+      >
         <span>{name}</span>
-        <div className="window-controls" style={{ display: 'flex', gap: '4px', position: 'absolute', right: '8px', top: '4px' }}>
-          <button style={{ width: '24px', height: '24px', background: '#A0C0E0', border: '1px solid white', color: 'black' }} onClick={onMinimize}>_</button>
-          <button style={{ width: '24px', height: '24px', background: '#A0C0E0', border: '1px solid white', color: 'black' }} onClick={onMaximize}>□</button>
-          <button style={{ width: '24px', height: '24px', background: 'red', color: 'white', border: '1px solid white' }} onClick={onClose}>X</button>
+        <div className="window-controls" style={{ display: "flex", gap: "4px" }}>
+          <button
+            style={{
+              width: "24px",
+              height: "24px",
+              background: "#A0C0E0",
+              border: "1px solid white",
+              color: "black",
+            }}
+            onClick={onMinimize}
+          >
+            _
+          </button>
+          <button
+            style={{
+              width: "24px",
+              height: "24px",
+              background: "#A0C0E0",
+              border: "1px solid white",
+              color: "black",
+            }}
+            onClick={onMaximize}
+          >
+            {isMaximized ? "❐" : "□"}
+          </button>
+          <button
+            style={{
+              width: "24px",
+              height: "24px",
+              background: "red",
+              color: "white",
+              border: "1px solid white",
+            }}
+            onClick={onClose}
+          >
+            X
+          </button>
         </div>
       </div>
-      <div className="window-content" style={{ padding: '10px', backgroundColor: '#F0F0F0' }}>Contents of {name}</div>
+      <div className="window-content" style={{ backgroundColor: "white", height: "calc(100% - 30px)", border: "1px solid #000080" }}>
+        {/* Blank canvas for future content */}
+      </div>
     </div>
   );
 };
@@ -106,54 +143,40 @@ const Desktop: React.FC = () => {
   const [maximizedWindows, setMaximizedWindows] = useState<{ [key: string]: boolean }>({});
   const [minimizedWindows, setMinimizedWindows] = useState<{ [key: string]: boolean }>({});
 
-  const openFolder = (folder: string) => {
-    if (!openWindows.includes(folder)) {
-      setOpenWindows([...openWindows, folder]);
+  const openWindow = (windowName: string) => {
+    if (!openWindows.includes(windowName)) {
+      setOpenWindows([...openWindows, windowName]);
     }
-    setMinimizedWindows((prev) => ({ ...prev, [folder]: false }));
-    setActiveWindow(folder);
+    setMinimizedWindows((prev) => ({ ...prev, [windowName]: false }));
+    setActiveWindow(windowName);
   };
 
-  const closeFolder = (folder: string) => {
-    setOpenWindows(openWindows.filter((win) => win !== folder));
-    setActiveWindow(openWindows.length > 1 ? openWindows[0] : null);
-  };
-
-  const minimizeFolder = (folder: string) => {
-    setMinimizedWindows((prev) => ({ ...prev, [folder]: true }));
+  const closeWindow = (windowName: string) => {
+    setOpenWindows(openWindows.filter((w) => w !== windowName));
     setActiveWindow(null);
-  };
-
-  const toggleMaximizeFolder = (folder: string) => {
-    setMaximizedWindows((prev) => ({ ...prev, [folder]: !prev[folder] }));
   };
 
   return (
     <div className="desktop">
-      {folders.map((folder) => (
-        <div key={folder.name} className="folder-icon" onClick={() => openFolder(folder.name)}
-          style={{ width: '64px', height: '64px', margin: '20px', textAlign: 'center', display: 'inline-block' }}>
-          <img src={folder.icon} alt={folder.name} style={{ width: '100%', height: '100%' }} />
-          <div style={{ textAlign: 'center', marginTop: '5px' }}>{folder.name}</div>
-        </div>
-      ))}
+      <Icon name="Recycle Bin" image={recycleBinIcon} onClick={() => openWindow("Recycle Bin")} />
+      <Icon name="Projects" image={folderIcon} onClick={() => openWindow("Projects")} />
+      <Icon name="Experiences" image={folderIcon} onClick={() => openWindow("Experiences")} />
+      <Icon name="My Computer" image={computerIcon} onClick={() => openWindow("My Computer")} />
+      <Icon name="Browser" image={browserIcon} onClick={() => openWindow("Browser")} />
 
-      {openWindows.map((folder) => (
-        !minimizedWindows[folder] && (
-          <DraggableWindow
-            key={folder}
-            name={folder}
-            onClose={() => closeFolder(folder)}
-            onMinimize={() => minimizeFolder(folder)}
-            onMaximize={() => toggleMaximizeFolder(folder)}
-            bringToFront={() => setActiveWindow(folder)}
-            isActive={activeWindow === folder}
-            isMaximized={maximizedWindows[folder] || false}
-          />
-        )
+      {openWindows.map((window) => (
+        <DraggableWindow
+          key={window}
+          name={window}
+          onClose={() => closeWindow(window)}
+          bringToFront={() => setActiveWindow(window)}
+          isActive={!minimizedWindows[window] && activeWindow === window}
+          onMinimize={() => setMinimizedWindows((prev) => ({ ...prev, [window]: true }))}
+          onMaximize={() => setMaximizedWindows((prev) => ({ ...prev, [window]: !prev[window] }))}
+          isMaximized={maximizedWindows[window] || false}
+        />
       ))}
-
-      <Taskbar openWindows={openWindows} closeWindow={closeFolder} />
+      <Taskbar openWindows={openWindows} closeWindow={closeWindow} />
     </div>
   );
 };

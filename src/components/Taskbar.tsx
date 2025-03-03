@@ -47,7 +47,7 @@ const Taskbar: React.FC<TaskbarProps> = ({ openWindows, closeWindow }) => {
           <ul>
             <li>📂 My Projects</li>
             <li>📝 Resume</li>
-            <li>🌐 Browser</li>
+            <li>🌐 About Me</li>
             <li>🔧 Settings</li>
             <li className="logout">🚪 Logout</li>
           </ul>

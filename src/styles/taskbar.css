@@ -18,7 +18,7 @@
   border: none;
   cursor: pointer;
   height: 100%; /* Ensures it fits within the taskbar */
-  width: 120px; /* Adjusted width for proper scaling */
+  width: 150px; /* Adjusted width for proper scaling */
   display: flex;
   align-items: center;
   justify-content: center;

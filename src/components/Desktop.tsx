@@ -8,29 +8,38 @@ import computerIcon from "../assets/icons/computer.png";
 import recycleBinIcon from "../assets/icons/recycle-bin.png";
 import browserIcon from "../assets/icons/browser.png";
 
-interface WindowProps {
+interface DraggableWindowProps {
   name: string;
   onClose: () => void;
   bringToFront: () => void;
   isActive: boolean;
+  onMinimize: () => void;
+  onMaximize: () => void;
+  isMaximized: boolean;
 }
 
-const DraggableWindow: React.FC<WindowProps> = ({ name, onClose, bringToFront, isActive }) => {
-  const [position, setPosition] = useState({ x: 150, y: 150 });
-  const [isDragging, setIsDragging] = useState(false);
-  const [offset, setOffset] = useState({ x: 0, y: 0 });
+const DraggableWindow: React.FC<DraggableWindowProps> = ({
+  name,
+  onClose,
+  bringToFront,
+  isActive,
+  onMinimize,
+  onMaximize,
+  isMaximized,
+}) => {
+  const [position, setPosition] = useState<{ x: number; y: number }>({ x: 150, y: 150 });
+  const [isDragging, setIsDragging] = useState<boolean>(false);
+  const [offset, setOffset] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
 
-  // Handle mouse press to begin dragging
   const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
     setIsDragging(true);
     setOffset({
       x: e.clientX - position.x,
       y: e.clientY - position.y,
     });
-    bringToFront(); // Move window to front when clicked
+    bringToFront();
   };
 
-  // Handle dragging movement
   const handleMouseMove = (e: MouseEvent) => {
     if (!isDragging) return;
     setPosition({
@@ -39,7 +48,6 @@ const DraggableWindow: React.FC<WindowProps> = ({ name, onClose, bringToFront, i
     });
   };
 
-  // Stop dragging when mouse is released
   const handleMouseUp = () => {
     setIsDragging(false);
   };
@@ -57,16 +65,74 @@ const DraggableWindow: React.FC<WindowProps> = ({ name, onClose, bringToFront, i
     <div
       className="window"
       style={{
-        left: position.x,
-        top: position.y,
-        zIndex: isActive ? 1000 : 1, // Ensures active window is on top
+        left: isMaximized ? 0 : position.x,
+        top: isMaximized ? 0 : position.y,
+        width: isMaximized ? "100%" : "400px",
+        height: isMaximized ? "calc(100vh - 50px)" : "300px",
+        zIndex: isActive ? 1000 : 1,
+        border: "2px solid #000080",
+        backgroundColor: "#F0F0F0",
+        boxShadow: "4px 4px 10px rgba(0, 0, 0, 0.3)",
+        display: isMaximized || isActive ? "block" : "none",
       }}
     >
-      <div className="window-header" onMouseDown={handleMouseDown}>
+      <div
+        className="window-header"
+        onMouseDown={handleMouseDown}
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          padding: "4px 8px",
+          background: "linear-gradient(to bottom, #0A5CC0, #0854A0)",
+          color: "white",
+          position: "relative",
+          borderBottom: "1px solid white",
+        }}
+      >
         <span>{name}</span>
-        <button onClick={onClose}>X</button>
+        <div className="window-controls" style={{ display: "flex", gap: "4px" }}>
+          <button
+            style={{
+              width: "24px",
+              height: "24px",
+              background: "#A0C0E0",
+              border: "1px solid white",
+              color: "black",
+            }}
+            onClick={onMinimize}
+          >
+            _
+          </button>
+          <button
+            style={{
+              width: "24px",
+              height: "24px",
+              background: "#A0C0E0",
+              border: "1px solid white",
+              color: "black",
+            }}
+            onClick={onMaximize}
+          >
+            {isMaximized ? "❐" : "□"}
+          </button>
+          <button
+            style={{
+              width: "24px",
+              height: "24px",
+              background: "red",
+              color: "white",
+              border: "1px solid white",
+            }}
+            onClick={onClose}
+          >
+            X
+          </button>
+        </div>
       </div>
-      <div className="window-content">Content of {name}</div>
+      <div className="window-content" style={{ backgroundColor: "white", height: "calc(100% - 30px)", border: "1px solid #000080" }}>
+        {/* Blank canvas for future content */}
+      </div>
     </div>
   );
 };
@@ -74,44 +140,42 @@ const DraggableWindow: React.FC<WindowProps> = ({ name, onClose, bringToFront, i
 const Desktop: React.FC = () => {
   const [openWindows, setOpenWindows] = useState<string[]>([]);
   const [activeWindow, setActiveWindow] = useState<string | null>(null);
+  const [maximizedWindows, setMaximizedWindows] = useState<{ [key: string]: boolean }>({});
+  const [minimizedWindows, setMinimizedWindows] = useState<{ [key: string]: boolean }>({});
 
-  // Open a new window or bring an existing one to the front
   const openWindow = (windowName: string) => {
     if (!openWindows.includes(windowName)) {
       setOpenWindows([...openWindows, windowName]);
     }
-    setActiveWindow(windowName); // Set clicked window as active
+    setMinimizedWindows((prev) => ({ ...prev, [windowName]: false }));
+    setActiveWindow(windowName);
   };
 
-  // Close a window and update the active window
   const closeWindow = (windowName: string) => {
     setOpenWindows(openWindows.filter((w) => w !== windowName));
-    setActiveWindow(openWindows.length > 1 ? openWindows[0] : null);
+    setActiveWindow(null);
   };
 
   return (
     <div className="desktop">
-      {/* Desktop Icons */}
       <Icon name="Recycle Bin" image={recycleBinIcon} onClick={() => openWindow("Recycle Bin")} />
       <Icon name="Projects" image={folderIcon} onClick={() => openWindow("Projects")} />
       <Icon name="Experiences" image={folderIcon} onClick={() => openWindow("Experiences")} />
       <Icon name="My Computer" image={computerIcon} onClick={() => openWindow("My Computer")} />
       <Icon name="Browser" image={browserIcon} onClick={() => openWindow("Browser")} />
 
-      {/* Open Windows */}
-      <div className="open-windows">
-        {openWindows.map((window) => (
-          <DraggableWindow
-            key={window}
-            name={window}
-            onClose={() => closeWindow(window)}
-            bringToFront={() => setActiveWindow(window)}
-            isActive={activeWindow === window}
-          />
-        ))}
-      </div>
-
-      {/* Taskbar */}
+      {openWindows.map((window) => (
+        <DraggableWindow
+          key={window}
+          name={window}
+          onClose={() => closeWindow(window)}
+          bringToFront={() => setActiveWindow(window)}
+          isActive={!minimizedWindows[window] && activeWindow === window}
+          onMinimize={() => setMinimizedWindows((prev) => ({ ...prev, [window]: true }))}
+          onMaximize={() => setMaximizedWindows((prev) => ({ ...prev, [window]: !prev[window] }))}
+          isMaximized={maximizedWindows[window] || false}
+        />
+      ))}
       <Taskbar openWindows={openWindows} closeWindow={closeWindow} />
     </div>
   );

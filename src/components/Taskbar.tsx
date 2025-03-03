@@ -1,16 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
 import "../styles/taskbar.css";
-import startIcon from "../assets/icons/start.png"; // Ensure correct path
+import startIcon from "../assets/icons/start.png";
+import profilePlaceholder from "../assets/icons/profile_image.jpeg"; // Replace with actual profile image
 
-interface TaskbarProps {
-  openWindows: string[];
-  closeWindow: (window: string) => void;
-}
-
-const Taskbar: React.FC<TaskbarProps> = ({ openWindows, closeWindow }) => {
+const Taskbar: React.FC = () => {
   const [showMenu, setShowMenu] = useState(false);
   const [currentTime, setCurrentTime] = useState<string>("");
   const menuRef = useRef<HTMLDivElement | null>(null);
+  const startButtonRef = useRef<HTMLButtonElement | null>(null);
 
   // Live Clock Update
   useEffect(() => {
@@ -23,54 +20,66 @@ const Taskbar: React.FC<TaskbarProps> = ({ openWindows, closeWindow }) => {
     return () => clearInterval(interval);
   }, []);
 
-  // Close Start Menu When Clicking Outside
+  // Handle clicks outside to close the Start Menu properly
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+    const handleClickOutside = (event: PointerEvent) => {
+      if (
+        menuRef.current &&
+        !menuRef.current.contains(event.target as Node) && // Click is outside menu
+        startButtonRef.current &&
+        !startButtonRef.current.contains(event.target as Node) // Click is not on Start Button
+      ) {
         setShowMenu(false);
       }
     };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+
+    if (showMenu) {
+      document.addEventListener("pointerdown", handleClickOutside); // Use pointerdown for reliability
+    } else {
+      document.removeEventListener("pointerdown", handleClickOutside);
+    }
+
+    return () => document.removeEventListener("pointerdown", handleClickOutside);
+  }, [showMenu]); // Depend on showMenu state
 
   return (
     <div className="taskbar">
       {/* Start Button */}
-      <button className="start-button" onClick={() => setShowMenu(!showMenu)}>
+      <button
+        ref={startButtonRef}
+        className="start-button"
+        onClick={() => setShowMenu((prev) => !prev)} // Toggle menu on click
+      >
         <img src={startIcon} alt="Start" className="start-icon" />
       </button>
 
       {/* Start Menu */}
       {showMenu && (
-        <div ref={menuRef} className="start-menu" style={{ zIndex: 50, pointerEvents: "auto" }}>
-          <ul>
-            <li>📂 My Projects</li>
+        <div ref={menuRef} className="start-menu">
+          {/* Profile Section */}
+          <div className="profile-section">
+            <img src={profilePlaceholder} alt="Profile" className="profile-img" />
+            <span className="profile-name">Bradley Nguyen</span>
+          </div>
+
+          {/* Menu Items */}
+          <ul className="start-menu-items">
             <li>📝 Resume</li>
-            <li>🌐 Browser</li>
-            <li>🔧 Settings</li>
-            <li className="logout">🚪 Logout</li>
+            <li>📂 My Projects</li>
+            <li>📧 My Contact</li>
+            <li className="logoff">🚪 Log Off</li>
           </ul>
         </div>
-        )}
-
+      )}
 
       {/* Open Applications Section */}
       <div className="open-apps">
-        {openWindows.length > 0 ? (
-          openWindows.map((app) => (
-            <button key={app} className="taskbar-app" onClick={() => closeWindow(app)}>
-              <span className="app-icon">🖥️</span> {app} <span className="close-btn">✖</span>
-            </button>
-          ))
-        ) : (
-          <span className="no-open-apps">No Open Windows</span>
-        )}
+        <span className="no-open-apps">No Open Windows</span>
       </div>
 
       {/* System Tray */}
       <div className="system-tray">
-        <span>{currentTime}</span>
+        <span className="time-display">{currentTime}</span>
       </div>
     </div>
   );

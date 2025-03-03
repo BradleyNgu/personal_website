@@ -67,19 +67,19 @@ const asciiArt = `
 
 
 
-██╗    ██╗███████╗██╗      ██████╗ ██████╗ ███╗   ███╗███████╗                                      
-██║    ██║██╔════╝██║     ██╔════╝██╔═══██╗████╗ ████║██╔════╝                                      
-██║ █╗ ██║█████╗  ██║     ██║     ██║   ██║██╔████╔██║█████╗                                        
-██║███╗██║██╔══╝  ██║     ██║     ██║   ██║██║╚██╔╝██║██╔══╝                                        
-╚███╔███╔╝███████╗███████╗╚██████╗╚██████╔╝██║ ╚═╝ ██║███████╗                                      
- ╚══╝╚══╝ ╚══════╝╚══════╝ ╚═════╝ ╚═════╝ ╚═╝     ╚═╝╚══════╝       
-                                                                                                    
-████████╗ ██████╗     ███╗   ███╗██╗   ██╗    ██╗    ██╗███████╗██████╗ ███████╗██╗████████╗███████╗
-╚══██╔══╝██╔═══██╗    ████╗ ████║╚██╗ ██╔╝    ██║    ██║██╔════╝██╔══██╗██╔════╝██║╚══██╔══╝██╔════╝
-   ██║   ██║   ██║    ██╔████╔██║ ╚████╔╝     ██║ █╗ ██║█████╗  ██████╔╝███████╗██║   ██║   █████╗  
-   ██║   ██║   ██║    ██║╚██╔╝██║  ╚██╔╝      ██║███╗██║██╔══╝  ██╔══██╗╚════██║██║   ██║   ██╔══╝  
-   ██║   ╚██████╔╝    ██║ ╚═╝ ██║   ██║       ╚███╔███╔╝███████╗██████╔╝███████║██║   ██║   ███████╗
-   ╚═╝    ╚═════╝     ╚═╝     ╚═╝   ╚═╝        ╚══╝╚══╝ ╚══════╝╚═════╝ ╚══════╝╚═╝   ╚═╝   ╚══════╝    
+██╗    ██╗███████╗██╗      ██████╗ ██████╗ ███╗   ███╗███████╗    ████████╗ ██████╗     
+██║    ██║██╔════╝██║     ██╔════╝██╔═══██╗████╗ ████║██╔════╝    ╚══██╔══╝██╔═══██╗    
+██║ █╗ ██║█████╗  ██║     ██║     ██║   ██║██╔████╔██║█████╗         ██║   ██║   ██║    
+██║███╗██║██╔══╝  ██║     ██║     ██║   ██║██║╚██╔╝██║██╔══╝         ██║   ██║   ██║    
+╚███╔███╔╝███████╗███████╗╚██████╗╚██████╔╝██║ ╚═╝ ██║███████╗       ██║   ╚██████╔╝    
+ ╚══╝╚══╝ ╚══════╝╚══════╝ ╚═════╝ ╚═════╝ ╚═╝     ╚═╝╚══════╝       ╚═╝    ╚═════╝     
+                                                                                        
+███╗   ███╗██╗   ██╗    ██╗    ██╗███████╗██████╗ ███████╗██╗████████╗███████╗          
+████╗ ████║╚██╗ ██╔╝    ██║    ██║██╔════╝██╔══██╗██╔════╝██║╚══██╔══╝██╔════╝          
+██╔████╔██║ ╚████╔╝     ██║ █╗ ██║█████╗  ██████╔╝███████╗██║   ██║   █████╗            
+██║╚██╔╝██║  ╚██╔╝      ██║███╗██║██╔══╝  ██╔══██╗╚════██║██║   ██║   ██╔══╝            
+██║ ╚═╝ ██║   ██║       ╚███╔███╔╝███████╗██████╔╝███████║██║   ██║   ███████╗          
+╚═╝     ╚═╝   ╚═╝        ╚══╝╚══╝ ╚══════╝╚═════╝ ╚══════╝╚═╝   ╚═╝   ╚══════╝          
 `;
 
 interface WelcomeScreenProps {
@@ -89,6 +89,7 @@ interface WelcomeScreenProps {
 const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onComplete }) => {
   const [lines, setLines] = useState<string[]>([]);
   const [progress, setProgress] = useState(0);
+  const [fontSize, setFontSize] = useState("8px");
 
   useEffect(() => {
     let index = 0;
@@ -108,9 +109,37 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onComplete }) => {
     return () => clearInterval(interval);
   }, [onComplete]);
 
-  // Function to generate a dynamic progress bar
+  // Function to adjust font size dynamically and center the ASCII art
+  useEffect(() => {
+    const adjustFontSize = () => {
+      const screenWidth = window.innerWidth;
+      const screenHeight = window.innerHeight;
+
+      // Get ASCII art dimensions
+      const numLines = asciiArt.trim().split("\n").length;
+      const maxLineLength = Math.max(...asciiArt.split("\n").map((line) => line.length));
+
+      // Compute font size to fit within screen width and height
+      const maxFontSizeW = (screenWidth / maxLineLength) * 0.85; // Reduced to ensure fit
+      const maxFontSizeH = (screenHeight / numLines) * 0.8; // Reduced to ensure fit
+
+      // Choose the smallest value to fit everything on screen
+      const optimalFontSize = Math.min(maxFontSizeW, maxFontSizeH, 10); // Cap at 10px
+
+      setFontSize(`${Math.max(optimalFontSize, 4)}px`); // Minimum font size of 4px
+    };
+
+    // Adjust font size on mount and window resize
+    adjustFontSize();
+    window.addEventListener("resize", adjustFontSize);
+
+    return () => window.removeEventListener("resize", adjustFontSize);
+  }, []);
+
+  // Dynamically adjust progress bar length based on screen width
   const progressBar = () => {
-    const totalLength = 50; // Fixed width for consistent size
+    const screenWidth = window.innerWidth;
+    const totalLength = Math.max(20, Math.min(40, Math.floor(screenWidth / 30))); // Scale progress bar
     const filledLength = Math.round((progress / 100) * totalLength);
     const emptyLength = totalLength - filledLength;
     return `+${"#".repeat(filledLength)}${" ".repeat(emptyLength)}+`;
@@ -130,25 +159,45 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onComplete }) => {
         backgroundColor: "black",
         color: "white",
         position: "relative",
+        overflow: "hidden",
       }}
     >
-      {lines.map((line, i) => (
-        <pre key={i} style={{ margin: 0, lineHeight: 1.1 }}>{line}</pre>
-      ))}
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          textAlign: "center",
+          maxWidth: "95vw",
+          maxHeight: "95vh",
+          overflow: "hidden",
+          whiteSpace: "pre-wrap",
+          fontFamily: "monospace",
+          fontSize: fontSize, // Dynamically set font size
+          lineHeight: "1",
+          padding: "5px",
+        }}
+      >
+        <pre style={{ margin: "auto" }}>
+          {lines.map((line, i) => (
+            <div key={i}>{line}</div>
+          ))}
+        </pre>
+      </div>
 
-      {/* Progress Bar - Always centered */}
+      {/* Progress Bar - Always visible and scaled */}
       <div
         style={{
           position: "absolute",
-          bottom: "5%", // Adjusted for better visibility
+          bottom: "2vh",
           left: "50%",
-          transform: "translate(-50%, 0)", // Ensures it's always centered
-          maxWidth: "90%", // Prevents overflow on smaller screens
+          transform: "translateX(-50%)",
           textAlign: "center",
           color: "white",
           fontFamily: "monospace",
-          fontSize: "16px", // Ensures readability across devices
-          whiteSpace: "nowrap", // Prevents line breaks in the progress bar
+          fontSize: "clamp(6px, 1vw, 12px)", // Ensures visibility
+          whiteSpace: "nowrap",
+          width: "90vw",
         }}
       >
         <pre style={{ margin: 0 }}>{progressBar()}</pre>

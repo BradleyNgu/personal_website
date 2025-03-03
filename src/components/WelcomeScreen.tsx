@@ -67,21 +67,19 @@ const asciiArt = `
 
 
 
-██╗    ██╗███████╗██╗      ██████╗ ██████╗ ███╗   ███╗███████╗                                      
-██║    ██║██╔════╝██║     ██╔════╝██╔═══██╗████╗ ████║██╔════╝                                      
-██║ █╗ ██║█████╗  ██║     ██║     ██║   ██║██╔████╔██║█████╗                                        
-██║███╗██║██╔══╝  ██║     ██║     ██║   ██║██║╚██╔╝██║██╔══╝                                        
-╚███╔███╔╝███████╗███████╗╚██████╗╚██████╔╝██║ ╚═╝ ██║███████╗                                      
- ╚══╝╚══╝ ╚══════╝╚══════╝ ╚═════╝ ╚═════╝ ╚═╝     ╚═╝╚══════╝       
-                                                                                                    
-████████╗ ██████╗     ███╗   ███╗██╗   ██╗    ██╗    ██╗███████╗██████╗ ███████╗██╗████████╗███████╗
-╚══██╔══╝██╔═══██╗    ████╗ ████║╚██╗ ██╔╝    ██║    ██║██╔════╝██╔══██╗██╔════╝██║╚══██╔══╝██╔════╝
-   ██║   ██║   ██║    ██╔████╔██║ ╚████╔╝     ██║ █╗ ██║█████╗  ██████╔╝███████╗██║   ██║   █████╗  
-   ██║   ██║   ██║    ██║╚██╔╝██║  ╚██╔╝      ██║███╗██║██╔══╝  ██╔══██╗╚════██║██║   ██║   ██╔══╝  
-   ██║   ╚██████╔╝    ██║ ╚═╝ ██║   ██║       ╚███╔███╔╝███████╗██████╔╝███████║██║   ██║   ███████╗
-   ╚═╝    ╚═════╝     ╚═╝     ╚═╝   ╚═╝        ╚══╝╚══╝ ╚══════╝╚═════╝ ╚══════╝╚═╝   ╚═╝   ╚══════╝ 
-   
-   
+██╗    ██╗███████╗██╗      ██████╗ ██████╗ ███╗   ███╗███████╗    ████████╗ ██████╗     
+██║    ██║██╔════╝██║     ██╔════╝██╔═══██╗████╗ ████║██╔════╝    ╚══██╔══╝██╔═══██╗    
+██║ █╗ ██║█████╗  ██║     ██║     ██║   ██║██╔████╔██║█████╗         ██║   ██║   ██║    
+██║███╗██║██╔══╝  ██║     ██║     ██║   ██║██║╚██╔╝██║██╔══╝         ██║   ██║   ██║    
+╚███╔███╔╝███████╗███████╗╚██████╗╚██████╔╝██║ ╚═╝ ██║███████╗       ██║   ╚██████╔╝    
+ ╚══╝╚══╝ ╚══════╝╚══════╝ ╚═════╝ ╚═════╝ ╚═╝     ╚═╝╚══════╝       ╚═╝    ╚═════╝     
+                                                                                        
+███╗   ███╗██╗   ██╗    ██╗    ██╗███████╗██████╗ ███████╗██╗████████╗███████╗          
+████╗ ████║╚██╗ ██╔╝    ██║    ██║██╔════╝██╔══██╗██╔════╝██║╚══██╔══╝██╔════╝          
+██╔████╔██║ ╚████╔╝     ██║ █╗ ██║█████╗  ██████╔╝███████╗██║   ██║   █████╗            
+██║╚██╔╝██║  ╚██╔╝      ██║███╗██║██╔══╝  ██╔══██╗╚════██║██║   ██║   ██╔══╝            
+██║ ╚═╝ ██║   ██║       ╚███╔███╔╝███████╗██████╔╝███████║██║   ██║   ███████╗          
+╚═╝     ╚═╝   ╚═╝        ╚══╝╚══╝ ╚══════╝╚═════╝ ╚══════╝╚═╝   ╚═╝   ╚══════╝          
 `;
 
 interface WelcomeScreenProps {
@@ -111,7 +109,7 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onComplete }) => {
     return () => clearInterval(interval);
   }, [onComplete]);
 
-  // Function to adjust font size dynamically
+  // Function to adjust font size dynamically and center the ASCII art
   useEffect(() => {
     const adjustFontSize = () => {
       const screenWidth = window.innerWidth;
@@ -121,14 +119,14 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onComplete }) => {
       const numLines = asciiArt.trim().split("\n").length;
       const maxLineLength = Math.max(...asciiArt.split("\n").map((line) => line.length));
 
-      // Compute the smallest necessary font size
-      const maxFontSizeW = (screenWidth / maxLineLength) * 0.9; // Reduce width-based scaling
-      const maxFontSizeH = (screenHeight / numLines) * 0.85; // Reduce height-based scaling
+      // Compute font size to fit within screen width and height
+      const maxFontSizeW = (screenWidth / maxLineLength) * 0.85; // Reduced to ensure fit
+      const maxFontSizeH = (screenHeight / numLines) * 0.8; // Reduced to ensure fit
 
       // Choose the smallest value to fit everything on screen
-      const optimalFontSize = Math.min(maxFontSizeW, maxFontSizeH, 12); // Cap at 12px for readability
+      const optimalFontSize = Math.min(maxFontSizeW, maxFontSizeH, 10); // Cap at 10px
 
-      setFontSize(`${Math.max(optimalFontSize, 4)}px`); // Ensure a minimum font size of 4px
+      setFontSize(`${Math.max(optimalFontSize, 4)}px`); // Minimum font size of 4px
     };
 
     // Adjust font size on mount and window resize
@@ -141,7 +139,7 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onComplete }) => {
   // Dynamically adjust progress bar length based on screen width
   const progressBar = () => {
     const screenWidth = window.innerWidth;
-    const totalLength = Math.max(25, Math.min(40, Math.floor(screenWidth / 25))); // Scale progress bar
+    const totalLength = Math.max(20, Math.min(40, Math.floor(screenWidth / 30))); // Scale progress bar
     const filledLength = Math.round((progress / 100) * totalLength);
     const emptyLength = totalLength - filledLength;
     return `+${"#".repeat(filledLength)}${" ".repeat(emptyLength)}+`;
@@ -166,20 +164,25 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onComplete }) => {
     >
       <div
         style={{
-          maxWidth: "95vw", // More compact layout
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          textAlign: "center",
+          maxWidth: "95vw",
           maxHeight: "95vh",
           overflow: "hidden",
           whiteSpace: "pre-wrap",
           fontFamily: "monospace",
           fontSize: fontSize, // Dynamically set font size
           lineHeight: "1",
-          textAlign: "left",
           padding: "5px",
         }}
       >
-        {lines.map((line, i) => (
-          <pre key={i} style={{ margin: 0 }}>{line}</pre>
-        ))}
+        <pre style={{ margin: "auto" }}>
+          {lines.map((line, i) => (
+            <div key={i}>{line}</div>
+          ))}
+        </pre>
       </div>
 
       {/* Progress Bar - Always visible and scaled */}

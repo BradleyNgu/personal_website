@@ -112,9 +112,9 @@
     function loadReactApp() {
       terminal.style.display = "none";
       document.getElementById("root").classList.remove("hidden");
-      import("data:application/octet-stream;base64,aW1wb3J0IFJlYWN0IGZyb20gInJlYWN0IjsKaW1wb3J0IFJlYWN0RE9NIGZyb20gInJlYWN0LWRvbS9jbGllbnQiOwppbXBvcnQgQXBwIGZyb20gIi4vQXBwIjsKaW1wb3J0ICIuL3N0eWxlcy9BcHAuY3NzIjsKClJlYWN0RE9NLmNyZWF0ZVJvb3QoZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoInJvb3QiKSBhcyBIVE1MRWxlbWVudCkucmVuZGVyKAogIDxSZWFjdC5TdHJpY3RNb2RlPgogICAgPEFwcCAvPgogIDwvUmVhY3QuU3RyaWN0TW9kZT4KKTsK")
-        .then(() => console.log("React App Loaded"))
-        .catch(err => console.error("Failed to load React:", err));
+      import("data:video/mp2t;base64,Ly8gc3JjL2Jvb3QtbG9hZGVyLnRzCmltcG9ydCgiLi9tYWluLnRzeCIpCiAgLnRoZW4oKCkgPT4gY29uc29sZS5sb2coIlJlYWN0IGFwcCBsb2FkZWQiKSkKICAuY2F0Y2goKGVycikgPT4gY29uc29sZS5lcnJvcigiUmVhY3QgbG9hZCBlcnJvcjoiLCBlcnIpKTsK")
+        .then(() => console.log("✅ React App Loaded"))
+        .catch(err => console.error("❌ React load error:", err));
     }
 
     typeNextLine();

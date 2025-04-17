@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Booting Up...</title>
+  <style>
+    body {
+      background-color: black;
+      color: white;
+      font-family: monospace;
+      padding: 0; /* Remove default body padding */
+      margin: 0;  /* Remove default body margin */
+      overflow: hidden; /* We'll rely on the terminal container to handle scrolling */
+    }
+    #terminal {
+      white-space: pre-wrap;
+      font-size: 16px;
+      line-height: 1.4;
+      height: 100vh;
+      overflow-y: auto; /* Let the terminal container scroll on overflow */
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div id="terminal"></div>
+  <div id="root" class="hidden"></div>
+
+  <script>
+    const bootLines = [
+      "[System] Initializing boot sequence...",
+      "[Kernel] Loading core modules...",
+      "[Network] Establishing secure connection...",
+      "[Auth] Verifying user identity...",
+      "[Disk] Checking file system integrity...",
+      "[Services] Starting background processes...",
+      "[UI] Loading interface...",
+      "User@Bradley:~$ ls -la",
+      "total 64",
+      "drwxr-xr-x 7 user user 4096 Portfolio/",
+      "User@Bradley:~$ cat welcome.txt",
+      "Welcome to Bradley's Portfolio",
+      "User@Bradley:~$ echo \"Checking system status...\"",
+      "Checking system status...",
+      "User@Bradley:~$ ping -c 3 localhost",
+      "PING localhost (127.0.0.1): 56 data bytes",
+      "64 bytes from 127.0.0.1: icmp_seq=0 ttl=64 time=0.041 ms",
+      "64 bytes from 127.0.0.1: icmp_seq=1 ttl=64 time=0.039 ms",
+      "64 bytes from 127.0.0.1: icmp_seq=2 ttl=64 time=0.042 ms",
+      "--- localhost ping statistics ---",
+      "3 packets transmitted, 3 received, 0% packet loss, time 2000ms",
+      "User@Bradley:~$ df -h",
+      "Filesystem      Size  Used Avail Use% Mounted on",
+      "/dev/sda1       100G   40G   60G  40% /",
+      "User@Bradley:~$ ps aux | grep process",
+      "user       1234  0.0  0.1  123456  1234 ?        S    10:00   0:00 /bin/example",
+      "User@Bradley:~$ whoami",
+      "Bradley",
+      "User@Bradley:~$ uptime",
+      "10:00:00 up 1 day,  5:30,  1 user,  load average: 0.05, 0.10, 0.15",
+      "User@Bradley:~$ free -h",
+      "              total        used        free      shared  buff/cache   available",
+      "Mem:          16Gi       4Gi       10Gi       500Mi       2Gi       11Gi",
+      "User@Bradley:~$ top -n 1",
+      "Tasks: 150 total,   1 running, 149 sleeping,   0 stopped,   0 zombie",
+      "User@Bradley:~$ sudo apt update",
+      "Hit:1 http://archive.ubuntu.com/ubuntu focal InRelease",
+      "Reading package lists... Done",
+      "User@Bradley:~$ sudo apt upgrade",
+      "Calculating upgrade... Done",
+      "User@Bradley:~$ nano config.txt",
+      "User@Bradley:~$ cat config.txt",
+      "# Configuration file",
+      "Setting=Enabled",
+      "User@Bradley:~$ htop",
+      "User@Bradley:~$ history",
+      "1  ls -la",
+      "2  cd /var/logs",
+      "3  tail -f syslog",
+      "4  nano .bashrc",
+      "5  source .bashrc",
+      "User@Bradley:~$ ./launch.sh"
+    ];
+
+    let index = 0;
+    const terminal = document.getElementById("terminal");
+
+    function typeNextLine() {
+      if (index < bootLines.length) {
+        const line = document.createElement("div");
+        line.textContent = bootLines[index];
+        terminal.appendChild(line);
+
+        // Scroll so the newly added line is visible
+        // scrollTop = scrollHeight ensures auto‐scroll.
+        // scrollIntoView ensures that a single line is always visible in some browsers.
+        line.scrollIntoView(false);
+
+        index++;
+        setTimeout(typeNextLine, Math.random() * 30 + 20);
+      } else {
+        // Once finished, load the React app
+        setTimeout(() => loadReactApp(), 1500);
+      }
+    }
+
+    function loadReactApp() {
+      terminal.style.display = "none";
+      document.getElementById("root").classList.remove("hidden");
+      import("data:application/octet-stream;base64,aW1wb3J0IFJlYWN0IGZyb20gInJlYWN0IjsKaW1wb3J0IFJlYWN0RE9NIGZyb20gInJlYWN0LWRvbS9jbGllbnQiOwppbXBvcnQgQXBwIGZyb20gIi4vQXBwIjsKaW1wb3J0ICIuL3N0eWxlcy9BcHAuY3NzIjsKClJlYWN0RE9NLmNyZWF0ZVJvb3QoZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoInJvb3QiKSBhcyBIVE1MRWxlbWVudCkucmVuZGVyKAogIDxSZWFjdC5TdHJpY3RNb2RlPgogICAgPEFwcCAvPgogIDwvUmVhY3QuU3RyaWN0TW9kZT4KKTsK")
+        .then(() => console.log("React App Loaded"))
+        .catch(err => console.error("Failed to load React:", err));
+    }
+
+    typeNextLine();
+  </script>
+</body>
+</html>

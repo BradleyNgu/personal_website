@@ -42,7 +42,7 @@ function Taskbar({ windows, onWindowClick, onShutdown }: TaskbarProps) {
           <div className="start-menu-header">
             <div className="user-profile-section">
               <img 
-                src="https://api.dicebear.com/7.x/avataaars/svg?seed=Bradley" 
+                src="/assets/icons/profile_image.jpeg" 
                 alt="Bradley Nguyen"
                 className="user-avatar"
               />

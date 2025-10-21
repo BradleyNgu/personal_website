@@ -65,7 +65,7 @@ function WelcomeScreen({ onLogin }: WelcomeScreenProps) {
           <div className={`login-box ${stage === 'loggingIn' ? 'logging-in' : ''}`}>
             <div className="user-profile">
               <img 
-                src="https://api.dicebear.com/7.x/avataaars/svg?seed=Bradley" 
+                src="/assets/icons/profile_image.jpeg" 
                 alt="Bradley Nguyen" 
                 className="profile-pic"
               />
@@ -95,7 +95,7 @@ function WelcomeScreen({ onLogin }: WelcomeScreenProps) {
           <div className="user-selector" onClick={handleUserClick}>
             <div className="user-icon-container">
               <img 
-                src="https://api.dicebear.com/7.x/avataaars/svg?seed=Bradley" 
+                src="/assets/icons/profile_image.jpeg" 
                 alt="Bradley Nguyen" 
                 className="user-icon"
               />

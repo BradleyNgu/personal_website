@@ -10,22 +10,24 @@ interface DesktopIconProps {
 
 function DesktopIcon({ title, icon, onDoubleClick, position }: DesktopIconProps) {
   const [selected, setSelected] = useState(false)
-  const [clickCount, setClickCount] = useState(0)
+  const [clickTime, setClickTime] = useState(0)
 
   const handleClick = () => {
     setSelected(true)
-    setClickCount(prev => prev + 1)
-
-    setTimeout(() => {
-      setClickCount(prev => {
-        if (prev === 2) {
-          onDoubleClick()
-          setSelected(false)
-          return 0
-        }
-        return 0
-      })
-    }, 300)
+    const now = Date.now()
+    
+    if (now - clickTime < 300) {
+      // Double click detected
+      onDoubleClick()
+      setSelected(false)
+      setClickTime(0)
+    } else {
+      // Single click
+      setClickTime(now)
+      setTimeout(() => {
+        setClickTime(0)
+      }, 300)
+    }
   }
 
   return (

@@ -35,9 +35,12 @@ function Experiences() {
         {experiences.map(experience => (
           <div key={experience.id} className="experience-card">
             <div className="experience-header">
-              <div>
-                <h3>{experience.position}</h3>
-                <h4>{experience.company}</h4>
+              <div className="experience-company-info">
+                <img src="/assets/icons/dynacert.png" alt="dynaCERT Logo" className="company-logo" />
+                <div>
+                  <h3>{experience.position}</h3>
+                  <h4>{experience.company}</h4>
+                </div>
               </div>
               <span className="experience-period">{experience.period}</span>
             </div>

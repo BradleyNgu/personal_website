@@ -116,13 +116,13 @@ function Window({
         </div>
         <div className="window-controls">
           <button className="window-button minimize" onClick={onMinimize} title="Minimize">
-            <span>_</span>
+            <img src="/assets/icons/Windows XP Icons/Minimize.png" alt="Minimize" />
           </button>
           <button className="window-button maximize" onClick={onMaximize} title="Maximize">
-            <span>{window.isMaximized ? '❐' : '□'}</span>
+            <img src="/assets/icons/Windows XP Icons/Maximize.png" alt="Maximize" />
           </button>
           <button className="window-button close" onClick={onClose} title="Close">
-            <span>×</span>
+            <img src="/assets/icons/Windows XP Icons/Exit.png" alt="Close" />
           </button>
         </div>
       </div>

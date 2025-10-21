@@ -211,24 +211,27 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  padding: 6px 10px;
-  background: linear-gradient(180deg, #f0862b 0%, #d96816 100%);
-  border: 1px solid #8b4513;
+  padding: 0 10px;
+  height: 100%;
+  background: transparent;
+  border: none;
   border-radius: 3px;
   color: white;
   font-size: 11px;
   font-weight: bold;
   cursor: pointer;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  box-shadow: none;
 }
 
 .log-off-btn:hover,
 .turn-off-btn:hover {
-  background: linear-gradient(180deg, #ff963b 0%, #e9782f 100%);
+  background: rgba(255, 255, 255, 0.2);
 }
 
 .btn-icon {
-  font-size: 14px;
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
 }
 
 .taskbar-windows {

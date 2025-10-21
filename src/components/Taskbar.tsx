@@ -58,11 +58,11 @@ function Taskbar({ windows, onWindowClick, onShutdown, onEmailClick }: TaskbarPr
                   onEmailClick()
                   setShowStartMenu(false)
                 }}>
-                  <img src="/assets/icons/experiences.png" alt="" className="menu-icon-large" />
+                  <img src="/assets/icons/Windows XP Icons/Email.png" alt="" className="menu-icon-large" />
                   <span>Email</span>
                 </div>
                 <div className="start-menu-item">
-                  <img src="/assets/icons/projects.png" alt="" className="menu-icon-large" />
+                  <img src="/assets/icons/Windows XP Icons/Internet Explorer 6.png" alt="" className="menu-icon-large" />
                   <span>Internet</span>
                 </div>
               </div>
@@ -70,7 +70,7 @@ function Taskbar({ windows, onWindowClick, onShutdown, onEmailClick }: TaskbarPr
             
             <div className="start-menu-right">
               <div className="start-menu-item">
-                <img src="/assets/icons/folder.png" alt="" className="menu-icon-small" />
+                <img src="/assets/icons/Windows XP Icons/My Documents.png" alt="" className="menu-icon-small" />
                 <span>My Documents</span>
               </div>
               <div className="start-menu-item">
@@ -79,32 +79,32 @@ function Taskbar({ windows, onWindowClick, onShutdown, onEmailClick }: TaskbarPr
                 <span className="arrow">▶</span>
               </div>
               <div className="start-menu-item">
-                <img src="/assets/icons/folder.png" alt="" className="menu-icon-small" />
+                <img src="/assets/icons/Windows XP Icons/My Pictures.png" alt="" className="menu-icon-small" />
                 <span>My Pictures</span>
               </div>
               <div className="start-menu-item">
-                <img src="/assets/icons/folder.png" alt="" className="menu-icon-small" />
+                <img src="/assets/icons/Windows XP Icons/My Music.png" alt="" className="menu-icon-small" />
                 <span>My Music</span>
               </div>
               <div className="start-menu-item">
-                <img src="/assets/icons/projects.png" alt="" className="menu-icon-small" />
+                <img src="/assets/icons/Windows XP Icons/My Computer.png" alt="" className="menu-icon-small" />
                 <span>My Computer</span>
               </div>
               <div className="start-menu-divider"></div>
               <div className="start-menu-item">
-                <img src="/assets/icons/experiences.png" alt="" className="menu-icon-small" />
+                <img src="/assets/icons/Windows XP Icons/Control Panel.png" alt="" className="menu-icon-small" />
                 <span>Control Panel</span>
               </div>
               <div className="start-menu-item">
-                <img src="/assets/icons/experiences.png" alt="" className="menu-icon-small" />
+                <img src="/assets/icons/Windows XP Icons/Help and Support.png" alt="" className="menu-icon-small" />
                 <span>Help and Support</span>
               </div>
               <div className="start-menu-item">
-                <img src="/assets/icons/projects.png" alt="" className="menu-icon-small" />
+                <img src="/assets/icons/Windows XP Icons/Search.png" alt="" className="menu-icon-small" />
                 <span>Search</span>
               </div>
               <div className="start-menu-item">
-                <img src="/assets/icons/experiences.png" alt="" className="menu-icon-small" />
+                <img src="/assets/icons/Windows XP Icons/Run.png" alt="" className="menu-icon-small" />
                 <span>Run...</span>
               </div>
             </div>
@@ -117,11 +117,11 @@ function Taskbar({ windows, onWindowClick, onShutdown, onEmailClick }: TaskbarPr
             </div>
             <div className="bottom-buttons">
               <button className="log-off-btn">
-                <span className="btn-icon">👤</span>
+                <img src="/assets/icons/Windows XP Icons/Logout.png" alt="Log Off" className="btn-icon" />
                 Log Off
               </button>
               <button className="turn-off-btn" onClick={onShutdown}>
-                <span className="btn-icon">🔌</span>
+                <img src="/assets/icons/Windows XP Icons/Power.png" alt="Turn Off" className="btn-icon" />
                 Turn Off Computer
               </button>
             </div>

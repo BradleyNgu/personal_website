@@ -42,64 +42,50 @@ function WelcomeScreen({ onLogin }: WelcomeScreenProps) {
 
   return (
     <div className="welcome-screen">
-      <div className="welcome-content">
-        {stage === 'initial' && (
-          <>
-            <div className="windows-logo">
-              <img src="/assets/wallpaper.jpg" alt="Windows XP" style={{display: 'none'}} />
-              <div className="xp-flag">
-                <div className="flag-red"></div>
-                <div className="flag-green"></div>
-                <div className="flag-blue"></div>
-                <div className="flag-yellow"></div>
-              </div>
-              <div className="windows-text">
-                <span className="microsoft">Microsoft</span>
-                <span className="windows">Windows<sup>XP</sup></span>
-              </div>
-            </div>
-          </>
-        )}
-        
-        {stage !== 'initial' && (
-          <div className={`login-box ${stage === 'loggingIn' ? 'logging-in' : ''}`}>
-            <div className="user-profile">
-              <img 
-                src="/assets/icons/profile_image.jpeg" 
-                alt="Bradley Nguyen" 
-                className="profile-pic"
-              />
-            </div>
-            <div className="user-name">Bradley Nguyen</div>
-            {stage !== 'clicked' && (
-              <div className="password-container">
-                <input 
-                  type="password" 
-                  value={password} 
-                  readOnly 
-                  placeholder="Type your password"
-                  className="password-input"
-                />
-                <button className="login-btn">
-                  <span className="arrow">→</span>
-                </button>
-              </div>
-            )}
-            {stage === 'loggingIn' && (
-              <div className="loading-message">Logging in...</div>
-            )}
-          </div>
-        )}
+      <div className="welcome-top-bar"></div>
+      
+      <div className="welcome-main">
+        <div className="windows-logo-section">
+          <img src="/assets/icons/Window_XP.png" alt="Windows XP" className="windows-xp-logo" />
+        </div>
+        <div className="instruction-text">
+          To begin, click your user name
+        </div>
+      </div>
 
-        {stage === 'initial' && (
-          <div className="user-selector" onClick={handleUserClick}>
-            <div className="user-icon-container">
+      <div className="welcome-divider"></div>
+
+      <div className="welcome-right">
+        {stage === 'initial' ? (
+          <div className="user-account-tile" onClick={handleUserClick}>
+            <img 
+              src="/assets/icons/profile_image.jpeg" 
+              alt="Bradley Nguyen" 
+              className="user-account-icon"
+            />
+            <div className="user-account-label">Bradley Nguyen</div>
+          </div>
+        ) : (
+          <div className="password-section">
+            <div className="password-user-info">
               <img 
                 src="/assets/icons/profile_image.jpeg" 
                 alt="Bradley Nguyen" 
-                className="user-icon"
+                className="password-user-icon"
               />
-              <div className="user-label">Bradley Nguyen</div>
+              <div className="password-user-name">Bradley Nguyen</div>
+            </div>
+            <div className="password-input-container">
+              <input 
+                type="password" 
+                value={password} 
+                readOnly 
+                placeholder="Type your password"
+                className="password-input"
+              />
+              <button className="password-arrow-btn">
+                <img src="/assets/icons/Windows XP Icons/Go.png" alt="Go" className="arrow-icon" />
+              </button>
             </div>
           </div>
         )}
@@ -107,7 +93,7 @@ function WelcomeScreen({ onLogin }: WelcomeScreenProps) {
 
       <div className="welcome-footer">
         <button className="turn-off-btn" onClick={() => window.location.href = 'https://www.youtube.com/watch?v=ZtiQk-vqmBA'}>
-          <div className="shutdown-icon"></div>
+          <img src="/assets/icons/Windows XP Icons/Power.png" alt="Power" className="shutdown-icon" />
           Turn off computer
         </button>
         <div className="footer-info">

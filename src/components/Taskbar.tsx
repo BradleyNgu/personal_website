@@ -6,9 +6,10 @@ interface TaskbarProps {
   windows: WindowState[]
   onWindowClick: (id: string) => void
   onShutdown: () => void
+  onEmailClick: () => void
 }
 
-function Taskbar({ windows, onWindowClick, onShutdown }: TaskbarProps) {
+function Taskbar({ windows, onWindowClick, onShutdown, onEmailClick }: TaskbarProps) {
   const [showStartMenu, setShowStartMenu] = useState(false)
   const [currentTime, setCurrentTime] = useState(new Date())
 
@@ -39,8 +40,8 @@ function Taskbar({ windows, onWindowClick, onShutdown }: TaskbarProps) {
 
       {showStartMenu && (
         <div className="start-menu">
-          <div className="start-menu-header">
-            <div className="user-profile-section">
+          <div className="start-menu-top">
+            <div className="user-profile-banner">
               <img 
                 src="/assets/icons/profile_image.jpeg" 
                 alt="Bradley Nguyen"
@@ -49,31 +50,80 @@ function Taskbar({ windows, onWindowClick, onShutdown }: TaskbarProps) {
               <span className="user-name-text">Bradley Nguyen</span>
             </div>
           </div>
-          <div className="start-menu-content">
-            <div className="start-menu-item">
-              <span>📧 Email</span>
+          
+          <div className="start-menu-main">
+            <div className="start-menu-left">
+              <div className="pinned-items">
+                <div className="start-menu-item" onClick={() => {
+                  onEmailClick()
+                  setShowStartMenu(false)
+                }}>
+                  <img src="/assets/icons/experiences.png" alt="" className="menu-icon-large" />
+                  <span>Email</span>
+                </div>
+                <div className="start-menu-item">
+                  <img src="/assets/icons/projects.png" alt="" className="menu-icon-large" />
+                  <span>Internet</span>
+                </div>
+              </div>
             </div>
-            <div className="start-menu-item">
-              <span>🌐 Internet</span>
-            </div>
-            <div className="start-menu-divider"></div>
-            <div className="start-menu-item">
-              <span>📁 My Documents</span>
-            </div>
-            <div className="start-menu-item">
-              <span>🖼️ My Pictures</span>
-            </div>
-            <div className="start-menu-item">
-              <span>🎵 My Music</span>
-            </div>
-            <div className="start-menu-divider"></div>
-            <div className="start-menu-item">
-              <span>⚙️ Control Panel</span>
+            
+            <div className="start-menu-right">
+              <div className="start-menu-item">
+                <img src="/assets/icons/folder.png" alt="" className="menu-icon-small" />
+                <span>My Documents</span>
+              </div>
+              <div className="start-menu-item">
+                <img src="/assets/icons/folder.png" alt="" className="menu-icon-small" />
+                <span>My Recent Documents</span>
+                <span className="arrow">▶</span>
+              </div>
+              <div className="start-menu-item">
+                <img src="/assets/icons/folder.png" alt="" className="menu-icon-small" />
+                <span>My Pictures</span>
+              </div>
+              <div className="start-menu-item">
+                <img src="/assets/icons/folder.png" alt="" className="menu-icon-small" />
+                <span>My Music</span>
+              </div>
+              <div className="start-menu-item">
+                <img src="/assets/icons/projects.png" alt="" className="menu-icon-small" />
+                <span>My Computer</span>
+              </div>
+              <div className="start-menu-divider"></div>
+              <div className="start-menu-item">
+                <img src="/assets/icons/experiences.png" alt="" className="menu-icon-small" />
+                <span>Control Panel</span>
+              </div>
+              <div className="start-menu-item">
+                <img src="/assets/icons/experiences.png" alt="" className="menu-icon-small" />
+                <span>Help and Support</span>
+              </div>
+              <div className="start-menu-item">
+                <img src="/assets/icons/projects.png" alt="" className="menu-icon-small" />
+                <span>Search</span>
+              </div>
+              <div className="start-menu-item">
+                <img src="/assets/icons/experiences.png" alt="" className="menu-icon-small" />
+                <span>Run...</span>
+              </div>
             </div>
           </div>
-          <div className="start-menu-footer">
-            <div className="start-menu-item footer-item" onClick={onShutdown}>
-              <span>🔌 Turn Off Computer</span>
+          
+          <div className="start-menu-bottom">
+            <div className="all-programs-btn">
+              <span className="arrow-icon">▶</span>
+              <span>All Programs</span>
+            </div>
+            <div className="bottom-buttons">
+              <button className="log-off-btn">
+                <span className="btn-icon">👤</span>
+                Log Off
+              </button>
+              <button className="turn-off-btn" onClick={onShutdown}>
+                <span className="btn-icon">🔌</span>
+                Turn Off Computer
+              </button>
             </div>
           </div>
         </div>

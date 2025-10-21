@@ -5,6 +5,7 @@ import DesktopIcon from './DesktopIcon'
 import Projects from '../pages/Projects'
 import Experiences from '../pages/Experiences'
 import Autobiography from '../pages/Autobiography'
+import ContactEmail from '../pages/ContactEmail'
 import '../styles/desktop.css'
 
 export interface WindowState {
@@ -91,24 +92,34 @@ function Desktop({ onShutdown }: DesktopProps) {
     ))
   }
 
+  const openEmailWindow = () => {
+    openWindow('email', 'Email - Contact Bradley', '/assets/icons/experiences.png', <ContactEmail />)
+  }
+
   const desktopIcons = [
     {
       id: 'projects',
-      title: 'Projects',
+      title: 'My Projects',
       icon: '/assets/icons/projects.png',
-      onDoubleClick: () => openWindow('projects', 'Projects', '/assets/icons/projects.png', <Projects />),
+      onDoubleClick: () => openWindow('projects', 'My Projects', '/assets/icons/projects.png', <Projects />),
     },
     {
       id: 'experiences',
-      title: 'Experiences',
+      title: 'My Experience',
       icon: '/assets/icons/experiences.png',
-      onDoubleClick: () => openWindow('experiences', 'Experiences', '/assets/icons/experiences.png', <Experiences />),
+      onDoubleClick: () => openWindow('experiences', 'My Experience', '/assets/icons/experiences.png', <Experiences />),
     },
     {
       id: 'autobiography',
-      title: 'Autobiography',
+      title: 'My Documents',
       icon: '/assets/icons/folder.png',
-      onDoubleClick: () => openWindow('autobiography', 'Autobiography', '/assets/icons/folder.png', <Autobiography />),
+      onDoubleClick: () => openWindow('autobiography', 'My Documents', '/assets/icons/folder.png', <Autobiography />),
+    },
+    {
+      id: 'recycle-bin',
+      title: 'Recycle Bin',
+      icon: '/assets/icons/recyclin-bin.png',
+      onDoubleClick: () => {}, // Empty function - just for decoration
     },
   ]
 
@@ -151,6 +162,7 @@ function Desktop({ onShutdown }: DesktopProps) {
           }
         }}
         onShutdown={onShutdown}
+        onEmailClick={openEmailWindow}
       />
     </div>
   )

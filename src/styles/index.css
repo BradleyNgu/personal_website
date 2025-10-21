@@ -1,3 +1,6 @@
+/* Import responsive styles */
+@import './responsive.css';
+
 * {
   margin: 0;
   padding: 0;
@@ -11,11 +14,21 @@ body {
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
+  width: 100%;
+  height: 100%;
+  position: fixed;
+}
+
+html {
+  width: 100%;
+  height: 100%;
 }
 
 #root {
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
 }
 
 /* Windows XP Button styles */

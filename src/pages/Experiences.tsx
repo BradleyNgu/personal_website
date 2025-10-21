@@ -12,25 +12,14 @@ interface Experience {
 const experiences: Experience[] = [
   {
     id: '1',
-    company: 'Company Name',
-    position: 'Job Title',
-    period: '2023 - Present',
-    description: 'Brief description of your role and impact...',
+    company: 'dynaCERT Inc.',
+    position: 'Full Stack Developer Co-op',
+    period: 'May 2025 - Present',
+    description: 'Building enterprise-scale industrial IoT dashboard systems with React, TypeScript, Node.js, MySQL, Docker, and Postman',
     responsibilities: [
-      'Responsibility 1',
-      'Responsibility 2',
-      'Responsibility 3',
-    ],
-  },
-  {
-    id: '2',
-    company: 'Previous Company',
-    position: 'Previous Position',
-    period: '2021 - 2023',
-    description: 'Brief description of your role and impact...',
-    responsibilities: [
-      'Responsibility 1',
-      'Responsibility 2',
+      'Spearheaded a full-stack industrial IoT dashboard system serving 120+ enterprise customers and 450+ hydrogen generator units globally, delivering real-time monitoring capabilities that reduced equipment downtime by 20% and improved operational efficiency',
+      'Architected scalable React/TypeScript frontend and Node.js backend infrastructure with MySQL database integration, supporting concurrent monitoring of 25+ critical parameters (reactor states, temperatures, voltages, GPS telemetry) and reducing data processing latency by 65%',
+      'Developed advanced data visualization and export capabilities featuring real-time charts, filtering systems, and Excel export functionality, empowering field technicians and fleet managers to process service data 80% faster and reducing manual reporting overhead',
     ],
   },
 ]

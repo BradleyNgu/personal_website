@@ -1,0 +1,194 @@
+/* Responsive styles for all aspect ratios */
+
+/* Mobile devices (portrait) */
+@media (max-width: 480px) {
+  .windows-logo {
+    flex-direction: column;
+    gap: 10px !important;
+  }
+  
+  .xp-flag {
+    width: 60px !important;
+    height: 60px !important;
+  }
+  
+  .flag-red, .flag-green, .flag-blue, .flag-yellow {
+    width: 30px !important;
+    height: 30px !important;
+  }
+  
+  .windows {
+    font-size: 32px !important;
+  }
+  
+  .login-box {
+    min-width: 280px !important;
+    padding: 20px 30px !important;
+  }
+  
+  .profile-pic {
+    width: 80px !important;
+    height: 80px !important;
+  }
+  
+  .user-icon {
+    width: 60px !important;
+    height: 60px !important;
+  }
+  
+  .welcome-footer {
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    padding: 15px;
+  }
+  
+  .footer-info {
+    text-align: center;
+    max-width: 100%;
+  }
+  
+  /* Taskbar responsive */
+  .start-icon-img {
+    height: 36px !important;
+  }
+  
+  .taskbar-window {
+    min-width: 100px !important;
+    max-width: 120px !important;
+  }
+  
+  .system-tray {
+    padding: 0 3px 0 6px !important;
+  }
+  
+  .clock {
+    font-size: 10px !important;
+    min-width: 45px !important;
+  }
+  
+  /* Desktop icons */
+  .desktop-icon {
+    width: 60px !important;
+  }
+  
+  .icon-image-container {
+    width: 36px !important;
+    height: 36px !important;
+  }
+  
+  .icon-label {
+    font-size: 10px !important;
+  }
+}
+
+/* Tablets and small screens */
+@media (max-width: 768px) {
+  .window {
+    width: 95% !important;
+    max-width: 95vw !important;
+    left: 2.5vw !important;
+    top: 5vh !important;
+  }
+  
+  .page-container {
+    padding: 15px;
+  }
+  
+  .page-header h1 {
+    font-size: 20px;
+  }
+  
+  .project-card,
+  .experience-card,
+  .about-card {
+    padding: 15px;
+  }
+  
+  .start-menu {
+    width: 280px !important;
+  }
+}
+
+/* Ultra-wide screens */
+@media (min-width: 1920px) {
+  .window {
+    max-width: 1200px;
+  }
+}
+
+/* Very tall screens */
+@media (min-height: 1080px) {
+  .welcome-content {
+    gap: 60px;
+  }
+}
+
+/* Short screens */
+@media (max-height: 600px) {
+  .welcome-content {
+    gap: 20px;
+    margin-bottom: 50px;
+  }
+  
+  .windows-logo {
+    transform: scale(0.8);
+  }
+  
+  .welcome-footer {
+    position: relative;
+    margin-top: 20px;
+  }
+}
+
+/* Landscape mobile */
+@media (max-width: 768px) and (orientation: landscape) {
+  .welcome-screen {
+    justify-content: flex-start;
+    padding-top: 20px;
+  }
+  
+  .welcome-content {
+    gap: 15px;
+    margin-bottom: 20px;
+  }
+  
+  .windows-logo {
+    transform: scale(0.7);
+  }
+  
+  .login-box {
+    padding: 15px 30px !important;
+  }
+  
+  .profile-pic {
+    width: 80px !important;
+    height: 80px !important;
+  }
+  
+  .welcome-footer {
+    position: relative;
+    padding: 10px 20px;
+  }
+}
+
+/* Fix for very small screens */
+@media (max-width: 320px) {
+  .taskbar {
+    gap: 2px;
+  }
+  
+  .start-icon-img {
+    height: 32px !important;
+  }
+  
+  .taskbar-window-title {
+    display: none;
+  }
+  
+  .taskbar-window {
+    min-width: 40px !important;
+    padding: 0 6px !important;
+  }
+}
+

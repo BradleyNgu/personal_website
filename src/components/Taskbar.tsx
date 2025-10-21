@@ -1,88 +1,107 @@
-import React, { useState, useEffect, useRef } from "react";
-import "../styles/taskbar.css";
-import startIcon from "../assets/icons/start.png";
-import profilePlaceholder from "../assets/icons/profile_image.jpeg"; // Replace with actual profile image
+import { useState, useEffect } from 'react'
+import type { WindowState } from './Desktop'
+import '../styles/taskbar.css'
 
-const Taskbar: React.FC = () => {
-  const [showMenu, setShowMenu] = useState(false);
-  const [currentTime, setCurrentTime] = useState<string>("");
-  const menuRef = useRef<HTMLDivElement | null>(null);
-  const startButtonRef = useRef<HTMLButtonElement | null>(null);
+interface TaskbarProps {
+  windows: WindowState[]
+  onWindowClick: (id: string) => void
+}
 
-  // Live Clock Update
+function Taskbar({ windows, onWindowClick }: TaskbarProps) {
+  const [showStartMenu, setShowStartMenu] = useState(false)
+  const [currentTime, setCurrentTime] = useState(new Date())
+
+  // Update time every second
   useEffect(() => {
-    const updateClock = () => {
-      const now = new Date();
-      setCurrentTime(now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }));
-    };
-    updateClock();
-    const interval = setInterval(updateClock, 1000);
-    return () => clearInterval(interval);
-  }, []);
+    const timer = setInterval(() => {
+      setCurrentTime(new Date())
+    }, 1000)
+    return () => clearInterval(timer)
+  }, [])
 
-  // Handle clicks outside to close the Start Menu properly
-  useEffect(() => {
-    const handleClickOutside = (event: PointerEvent) => {
-      if (
-        menuRef.current &&
-        !menuRef.current.contains(event.target as Node) && // Click is outside menu
-        startButtonRef.current &&
-        !startButtonRef.current.contains(event.target as Node) // Click is not on Start Button
-      ) {
-        setShowMenu(false);
-      }
-    };
-
-    if (showMenu) {
-      document.addEventListener("pointerdown", handleClickOutside); // Use pointerdown for reliability
-    } else {
-      document.removeEventListener("pointerdown", handleClickOutside);
-    }
-
-    return () => document.removeEventListener("pointerdown", handleClickOutside);
-  }, [showMenu]); // Depend on showMenu state
+  const formatTime = (date: Date) => {
+    return date.toLocaleTimeString('en-US', { 
+      hour: 'numeric', 
+      minute: '2-digit',
+      hour12: true 
+    })
+  }
 
   return (
     <div className="taskbar">
-      {/* Start Button */}
-      <button
-        ref={startButtonRef}
-        className="start-button"
-        onClick={() => setShowMenu((prev) => !prev)} // Toggle menu on click
+      <button 
+        className={`start-button ${showStartMenu ? 'active' : ''}`}
+        onClick={() => setShowStartMenu(!showStartMenu)}
       >
-        <img src={startIcon} alt="Start" className="start-icon" />
+        <div className="start-icon"></div>
+        <span className="start-text">start</span>
       </button>
 
-      {/* Start Menu */}
-      {showMenu && (
-        <div ref={menuRef} className="start-menu">
-          {/* Profile Section */}
-          <div className="profile-section">
-            <img src={profilePlaceholder} alt="Profile" className="profile-img" />
-            <span className="profile-name">Bradley Nguyen</span>
+      {showStartMenu && (
+        <div className="start-menu">
+          <div className="start-menu-header">
+            <div className="user-profile-section">
+              <img 
+                src="https://api.dicebear.com/7.x/avataaars/svg?seed=Bradley" 
+                alt="Bradley Nguyen"
+                className="user-avatar"
+              />
+              <span className="user-name-text">Bradley Nguyen</span>
+            </div>
           </div>
-
-          {/* Menu Items */}
-          <ul className="start-menu-items">
-            <li>📝 Resume</li>
-            <li>📂 My Projects</li>
-            <li>📧 My Contact</li>
-            <li className="logoff">🚪 Log Off</li>
-          </ul>
+          <div className="start-menu-content">
+            <div className="start-menu-item">
+              <span>📧 Email</span>
+            </div>
+            <div className="start-menu-item">
+              <span>🌐 Internet</span>
+            </div>
+            <div className="start-menu-divider"></div>
+            <div className="start-menu-item">
+              <span>📁 My Documents</span>
+            </div>
+            <div className="start-menu-item">
+              <span>🖼️ My Pictures</span>
+            </div>
+            <div className="start-menu-item">
+              <span>🎵 My Music</span>
+            </div>
+            <div className="start-menu-divider"></div>
+            <div className="start-menu-item">
+              <span>⚙️ Control Panel</span>
+            </div>
+          </div>
+          <div className="start-menu-footer">
+            <div className="start-menu-item footer-item">
+              <span>🔌 Turn Off Computer</span>
+            </div>
+          </div>
         </div>
       )}
 
-      {/* Open Applications Section */}
-      <div className="open-apps">
-        <span className="no-open-apps">No Open Windows</span>
+      <div className="taskbar-windows">
+        {windows.map(window => (
+          <button
+            key={window.id}
+            className={`taskbar-window ${window.isMinimized ? '' : 'active'}`}
+            onClick={() => onWindowClick(window.id)}
+          >
+            <img src={window.icon} alt="" className="taskbar-window-icon" />
+            <span className="taskbar-window-title">{window.title}</span>
+          </button>
+        ))}
       </div>
 
-      {/* System Tray */}
       <div className="system-tray">
-        <span className="time-display">{currentTime}</span>
+        <div className="tray-icons">
+          <span className="tray-icon" title="Volume">🔊</span>
+          <span className="tray-icon" title="Network">📶</span>
+        </div>
+        <div className="clock">{formatTime(currentTime)}</div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Taskbar;
+export default Taskbar
+

@@ -1,184 +1,153 @@
-import React, { useState, useEffect } from "react";
-import Icon from "./Icon";
-import Taskbar from "./Taskbar";
-import "./../styles/desktop.css";
+import { useState } from 'react'
+import Taskbar from './Taskbar'
+import Window from './Window'
+import DesktopIcon from './DesktopIcon'
+import Projects from '../pages/Projects'
+import Experiences from '../pages/Experiences'
+import Autobiography from '../pages/Autobiography'
+import '../styles/desktop.css'
 
-import folderIcon from "../assets/icons/folder.png";
-import computerIcon from "../assets/icons/computer.png";
-import recycleBinIcon from "../assets/icons/recycle-bin.png";
-import browserIcon from "../assets/icons/browser.png";
-
-interface DraggableWindowProps {
-  name: string;
-  onClose: () => void;
-  bringToFront: () => void;
-  isActive: boolean;
-  onMinimize: () => void;
-  onMaximize: () => void;
-  isMaximized: boolean;
+export interface WindowState {
+  id: string
+  title: string
+  icon: string
+  component: React.ReactNode
+  isMinimized: boolean
+  isMaximized: boolean
+  position: { x: number; y: number }
+  size: { width: number; height: number }
+  zIndex: number
 }
 
-const DraggableWindow: React.FC<DraggableWindowProps> = ({
-  name,
-  onClose,
-  bringToFront,
-  isActive,
-  onMinimize,
-  onMaximize,
-  isMaximized,
-}) => {
-  const [position, setPosition] = useState<{ x: number; y: number }>({ x: 150, y: 150 });
-  const [isDragging, setIsDragging] = useState<boolean>(false);
-  const [offset, setOffset] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
+function Desktop() {
+  const [windows, setWindows] = useState<WindowState[]>([])
+  const [highestZIndex, setHighestZIndex] = useState(1)
 
-  const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
-    setIsDragging(true);
-    setOffset({
-      x: e.clientX - position.x,
-      y: e.clientY - position.y,
-    });
-    bringToFront();
-  };
-
-  const handleMouseMove = (e: MouseEvent) => {
-    if (!isDragging) return;
-    setPosition({
-      x: e.clientX - offset.x,
-      y: e.clientY - offset.y,
-    });
-  };
-
-  const handleMouseUp = () => {
-    setIsDragging(false);
-  };
-
-  useEffect(() => {
-    document.addEventListener("mousemove", handleMouseMove);
-    document.addEventListener("mouseup", handleMouseUp);
-    return () => {
-      document.removeEventListener("mousemove", handleMouseMove);
-      document.removeEventListener("mouseup", handleMouseUp);
-    };
-  }, [isDragging]);
-
-  return (
-    <div
-      className="window"
-      style={{
-        left: isMaximized ? 0 : position.x,
-        top: isMaximized ? 0 : position.y,
-        width: isMaximized ? "100%" : "400px",
-        height: isMaximized ? "calc(100vh - 50px)" : "300px",
-        zIndex: isActive ? 1000 : 1,
-        border: "2px solid #000080",
-        backgroundColor: "#F0F0F0",
-        boxShadow: "4px 4px 10px rgba(0, 0, 0, 0.3)",
-        display: isMaximized || isActive ? "block" : "none",
-      }}
-    >
-      <div
-        className="window-header"
-        onMouseDown={handleMouseDown}
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          padding: "4px 8px",
-          background: "linear-gradient(to bottom, #0A5CC0, #0854A0)",
-          color: "white",
-          position: "relative",
-          borderBottom: "1px solid white",
-        }}
-      >
-        <span>{name}</span>
-        <div className="window-controls" style={{ display: "flex", gap: "4px" }}>
-          <button
-            style={{
-              width: "24px",
-              height: "24px",
-              background: "#A0C0E0",
-              border: "1px solid white",
-              color: "black",
-            }}
-            onClick={onMinimize}
-          >
-            _
-          </button>
-          <button
-            style={{
-              width: "24px",
-              height: "24px",
-              background: "#A0C0E0",
-              border: "1px solid white",
-              color: "black",
-            }}
-            onClick={onMaximize}
-          >
-            {isMaximized ? "❐" : "□"}
-          </button>
-          <button
-            style={{
-              width: "24px",
-              height: "24px",
-              background: "red",
-              color: "white",
-              border: "1px solid white",
-            }}
-            onClick={onClose}
-          >
-            X
-          </button>
-        </div>
-      </div>
-      <div className="window-content" style={{ backgroundColor: "white", height: "calc(100% - 30px)", border: "1px solid #000080" }}>
-        {/* Blank canvas for future content */}
-      </div>
-    </div>
-  );
-};
-
-const Desktop: React.FC = () => {
-  const [openWindows, setOpenWindows] = useState<string[]>([]);
-  const [activeWindow, setActiveWindow] = useState<string | null>(null);
-  const [maximizedWindows, setMaximizedWindows] = useState<{ [key: string]: boolean }>({});
-  const [minimizedWindows, setMinimizedWindows] = useState<{ [key: string]: boolean }>({});
-
-  const openWindow = (windowName: string) => {
-    if (!openWindows.includes(windowName)) {
-      setOpenWindows([...openWindows, windowName]);
+  const openWindow = (id: string, title: string, icon: string, component: React.ReactNode) => {
+    // Check if window is already open
+    const existingWindow = windows.find(w => w.id === id)
+    if (existingWindow) {
+      // Bring to front and restore if minimized
+      bringToFront(id)
+      if (existingWindow.isMinimized) {
+        toggleMinimize(id)
+      }
+      return
     }
-    setMinimizedWindows((prev) => ({ ...prev, [windowName]: false }));
-    setActiveWindow(windowName);
-  };
 
-  const closeWindow = (windowName: string) => {
-    setOpenWindows(openWindows.filter((w) => w !== windowName));
-    setActiveWindow(null);
-  };
+    const newWindow: WindowState = {
+      id,
+      title,
+      icon,
+      component,
+      isMinimized: false,
+      isMaximized: false,
+      position: { x: 100 + windows.length * 30, y: 50 + windows.length * 30 },
+      size: { width: 800, height: 600 },
+      zIndex: highestZIndex + 1,
+    }
+
+    setWindows([...windows, newWindow])
+    setHighestZIndex(highestZIndex + 1)
+  }
+
+  const closeWindow = (id: string) => {
+    setWindows(windows.filter(w => w.id !== id))
+  }
+
+  const toggleMinimize = (id: string) => {
+    setWindows(windows.map(w => 
+      w.id === id ? { ...w, isMinimized: !w.isMinimized } : w
+    ))
+  }
+
+  const toggleMaximize = (id: string) => {
+    setWindows(windows.map(w => 
+      w.id === id ? { ...w, isMaximized: !w.isMaximized } : w
+    ))
+  }
+
+  const bringToFront = (id: string) => {
+    const newZIndex = highestZIndex + 1
+    setWindows(windows.map(w => 
+      w.id === id ? { ...w, zIndex: newZIndex } : w
+    ))
+    setHighestZIndex(newZIndex)
+  }
+
+  const updateWindowPosition = (id: string, position: { x: number; y: number }) => {
+    setWindows(windows.map(w => 
+      w.id === id ? { ...w, position } : w
+    ))
+  }
+
+  const updateWindowSize = (id: string, size: { width: number; height: number }) => {
+    setWindows(windows.map(w => 
+      w.id === id ? { ...w, size } : w
+    ))
+  }
+
+  const desktopIcons = [
+    {
+      id: 'projects',
+      title: 'Projects',
+      icon: '/assets/icons/projects.png',
+      onDoubleClick: () => openWindow('projects', 'Projects', '/assets/icons/projects.png', <Projects />),
+    },
+    {
+      id: 'experiences',
+      title: 'Experiences',
+      icon: '/assets/icons/experiences.png',
+      onDoubleClick: () => openWindow('experiences', 'Experiences', '/assets/icons/experiences.png', <Experiences />),
+    },
+    {
+      id: 'autobiography',
+      title: 'Autobiography',
+      icon: '/assets/icons/folder.png',
+      onDoubleClick: () => openWindow('autobiography', 'Autobiography', '/assets/icons/folder.png', <Autobiography />),
+    },
+  ]
 
   return (
     <div className="desktop">
-      <Icon name="Recycle Bin" image={recycleBinIcon} onClick={() => openWindow("Recycle Bin")} />
-      <Icon name="Projects" image={folderIcon} onClick={() => openWindow("Projects")} />
-      <Icon name="Experiences" image={folderIcon} onClick={() => openWindow("Experiences")} />
-      <Icon name="My Computer" image={computerIcon} onClick={() => openWindow("My Computer")} />
-      <Icon name="Browser" image={browserIcon} onClick={() => openWindow("Browser")} />
+      <div className="desktop-icons">
+        {desktopIcons.map((icon, index) => (
+          <DesktopIcon
+            key={icon.id}
+            title={icon.title}
+            icon={icon.icon}
+            onDoubleClick={icon.onDoubleClick}
+            position={{ x: 20, y: 20 + index * 100 }}
+          />
+        ))}
+      </div>
 
-      {openWindows.map((window) => (
-        <DraggableWindow
-          key={window}
-          name={window}
-          onClose={() => closeWindow(window)}
-          bringToFront={() => setActiveWindow(window)}
-          isActive={!minimizedWindows[window] && activeWindow === window}
-          onMinimize={() => setMinimizedWindows((prev) => ({ ...prev, [window]: true }))}
-          onMaximize={() => setMaximizedWindows((prev) => ({ ...prev, [window]: !prev[window] }))}
-          isMaximized={maximizedWindows[window] || false}
+      {windows.map(window => (
+        <Window
+          key={window.id}
+          window={window}
+          onClose={() => closeWindow(window.id)}
+          onMinimize={() => toggleMinimize(window.id)}
+          onMaximize={() => toggleMaximize(window.id)}
+          onFocus={() => bringToFront(window.id)}
+          onPositionChange={(pos) => updateWindowPosition(window.id, pos)}
+          onSizeChange={(size) => updateWindowSize(window.id, size)}
         />
       ))}
-      <Taskbar openWindows={openWindows} closeWindow={closeWindow} />
-    </div>
-  );
-};
 
-export default Desktop;
+      <Taskbar 
+        windows={windows}
+        onWindowClick={(id) => {
+          const window = windows.find(w => w.id === id)
+          if (window?.isMinimized) {
+            toggleMinimize(id)
+          }
+          bringToFront(id)
+        }}
+      />
+    </div>
+  )
+}
+
+export default Desktop
+

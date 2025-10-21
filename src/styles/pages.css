@@ -1,0 +1,278 @@
+.page-container {
+  padding: 20px;
+  min-height: 100%;
+  background: white;
+  font-family: 'Tahoma', sans-serif;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #d4d4d4;
+}
+
+.page-header h1 {
+  font-size: 24px;
+  color: #003c74;
+  margin: 0;
+}
+
+/* XP Buttons */
+.xp-button {
+  padding: 6px 16px;
+  background: linear-gradient(to bottom, #f0f0f0 0%, #e8e8e8 50%, #d8d8d8 100%);
+  border: 1px solid #a0a0a0;
+  border-radius: 3px;
+  font-size: 12px;
+  font-family: 'Tahoma', sans-serif;
+  cursor: pointer;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  transition: all 0.1s;
+}
+
+.xp-button:hover {
+  background: linear-gradient(to bottom, #f8f8f8 0%, #f0f0f0 50%, #e0e0e0 100%);
+}
+
+.xp-button:active {
+  background: linear-gradient(to bottom, #d0d0d0 0%, #d8d8d8 50%, #e0e0e0 100%);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.xp-button.primary {
+  background: linear-gradient(to bottom, #5c95d6 0%, #4f87cc 50%, #3b6fbc 100%);
+  border-color: #0831d9;
+  color: white;
+  font-weight: bold;
+}
+
+.xp-button.primary:hover {
+  background: linear-gradient(to bottom, #6ca5e6 0%, #5f97dc 50%, #4b7fcc 100%);
+}
+
+.xp-button.danger {
+  background: linear-gradient(to bottom, #e77f1f 0%, #d4691a 50%, #b85514 100%);
+  border-color: #8b3f0d;
+  color: white;
+  font-weight: bold;
+}
+
+.xp-button.danger:hover {
+  background: linear-gradient(to bottom, #f78f2f 0%, #e4793a 50%, #c86524 100%);
+}
+
+.xp-button.small {
+  padding: 4px 12px;
+  font-size: 11px;
+}
+
+/* Form Elements */
+.xp-input,
+.xp-textarea {
+  width: 100%;
+  padding: 6px 8px;
+  border: 2px inset #d4d4d4;
+  border-radius: 2px;
+  font-family: 'Tahoma', sans-serif;
+  font-size: 12px;
+  background: white;
+}
+
+.xp-input:focus,
+.xp-textarea:focus {
+  outline: none;
+  border-color: #0078d7;
+}
+
+.xp-textarea {
+  resize: vertical;
+  line-height: 1.4;
+}
+
+/* Projects Page */
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.project-card {
+  background: #f8f8f8;
+  border: 2px outset #d4d4d4;
+  padding: 20px;
+  border-radius: 4px;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.project-card h3 {
+  margin: 0 0 10px 0;
+  color: #003c74;
+  font-size: 18px;
+}
+
+.project-description {
+  color: #333;
+  font-size: 13px;
+  line-height: 1.5;
+  margin-bottom: 15px;
+}
+
+.tech-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 15px;
+}
+
+.tech-tag {
+  background: #e0e0e0;
+  border: 1px solid #a0a0a0;
+  padding: 3px 8px;
+  border-radius: 3px;
+  font-size: 11px;
+  color: #333;
+}
+
+.project-link {
+  display: inline-block;
+  color: #0066cc;
+  text-decoration: none;
+  font-size: 12px;
+  margin-bottom: 15px;
+}
+
+.project-link:hover {
+  text-decoration: underline;
+}
+
+/* Experiences Page */
+.experiences-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.experience-card {
+  background: #f8f8f8;
+  border: 2px outset #d4d4d4;
+  padding: 20px;
+  border-radius: 4px;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.experience-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  margin-bottom: 15px;
+}
+
+.experience-header h3 {
+  margin: 0;
+  color: #003c74;
+  font-size: 18px;
+}
+
+.experience-header h4 {
+  margin: 5px 0 0 0;
+  color: #555;
+  font-size: 14px;
+  font-weight: normal;
+}
+
+.experience-period {
+  background: #e0e0e0;
+  border: 1px solid #a0a0a0;
+  padding: 4px 10px;
+  border-radius: 3px;
+  font-size: 11px;
+  color: #333;
+  white-space: nowrap;
+}
+
+.experience-description {
+  color: #333;
+  font-size: 13px;
+  line-height: 1.5;
+  margin-bottom: 15px;
+}
+
+.responsibilities-list {
+  margin: 15px 0;
+  padding-left: 25px;
+}
+
+.responsibilities-list li {
+  margin-bottom: 8px;
+  color: #333;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+/* Autobiography Page */
+.about-sections {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.about-card {
+  background: #f8f8f8;
+  border: 2px outset #d4d4d4;
+  padding: 25px;
+  border-radius: 4px;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.about-card h2 {
+  margin: 0 0 15px 0;
+  color: #003c74;
+  font-size: 20px;
+  border-bottom: 2px solid #d4d4d4;
+  padding-bottom: 8px;
+}
+
+.about-content {
+  color: #333;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.about-content p {
+  margin: 8px 0;
+}
+
+/* Edit Form */
+.edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.form-group label {
+  font-size: 12px;
+  font-weight: bold;
+  color: #333;
+}
+
+.button-group {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.card-actions {
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px solid #d4d4d4;
+}
+

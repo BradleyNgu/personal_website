@@ -1,212 +1,242 @@
-/* ===================== */
-/* Taskbar - Stays at the Bottom (Unchanged) */
-/* ===================== */
 .taskbar {
-  position: fixed; /* Ensures the taskbar is always at the bottom */
+  position: absolute;
   bottom: 0;
   left: 0;
-  width: 100%;
-  height: 50px; /* Taskbar height */
-  background-color: #1c5aa6; /* Windows XP taskbar blue */
+  right: 0;
+  height: 40px;
+  background: linear-gradient(to bottom, #3c7dc4 0%, #2e5fa8 50%, #1e4a8a 100%);
   display: flex;
   align-items: center;
-  padding: 0;
-  z-index: 10;
+  padding: 0 5px;
+  gap: 5px;
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.3);
+  z-index: 10000;
 }
 
-/* ===================== */
-/* Start Button */
-/* ===================== */
 .start-button {
-  background: none;
-  border: none;
-  cursor: pointer;
-  height: 100%; /* Ensures it fits within the taskbar */
-  width: 150px; /* Adjusted width for proper scaling */
+  height: 32px;
+  padding: 0 12px 0 6px;
+  background: linear-gradient(to bottom, #5c95d6 0%, #4f87cc 50%, #3b6fbc 100%);
+  border: 1px solid #0831d9;
+  border-radius: 6px;
   display: flex;
   align-items: center;
-  justify-content: center;
-  background-color: #1c5aa6;
-  transition: background 0.2s ease-in-out;
-  padding: 0;
-  z-index: 15;
-  overflow: hidden; /* Prevents image overflow */
+  gap: 6px;
+  cursor: pointer;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  transition: all 0.1s;
 }
 
-/* Start Button Image */
-.start-button img {
-  width: auto;
-  height: 100%;
-  object-fit: contain; /* Ensures it fits properly */
+.start-button:hover {
+  background: linear-gradient(to bottom, #6ca5e6 0%, #5f97dc 50%, #4b7fcc 100%);
 }
 
-/* ===================== */
-/* Start Menu (XP Style) */
-/* ===================== */
+.start-button.active {
+  background: linear-gradient(to bottom, #2e5fa8 0%, #1e4a8a 50%, #0d3570 100%);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.start-icon {
+  width: 24px;
+  height: 24px;
+  background: radial-gradient(circle, #ff6b35 0%, #d84315 100%);
+  border-radius: 50%;
+  position: relative;
+  box-shadow: 0 0 8px rgba(255, 107, 53, 0.6);
+}
+
+.start-icon::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(45deg);
+  width: 12px;
+  height: 12px;
+  border: 2px solid white;
+  border-radius: 2px;
+}
+
+.start-text {
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
+  font-style: italic;
+}
+
 .start-menu {
   position: absolute;
-  bottom: 55px;
-  left: 5px;
-  width: 350px; /* Adjusted to fit two columns */
-  background: linear-gradient(to bottom, #eef5ff, #c5ddff); /* XP Gradient */
-  border: 2px solid #003399;
-  border-radius: 8px;
-  box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.4);
-  padding: 10px;
-  display: flex;
-  flex-direction: column;
-  z-index: 50;
-  font-family: "Tahoma", sans-serif;
+  bottom: 40px;
+  left: 0;
+  width: 350px;
+  background: linear-gradient(to right, #5c95d6 0px, #5c95d6 50px, #f0f0f0 50px);
+  border: 2px solid #1e3f7a;
+  border-radius: 8px 8px 0 0;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  animation: slideUp 0.2s ease-out;
 }
 
-/* ===================== */
-/* Profile Section (XP) */
-/* ===================== */
-.profile-section {
-  display: flex;
-  align-items: center;
-  background: #0047ab; /* Windows XP Blue */
-  color: white;
-  padding: 10px;
-  border-radius: 6px;
-  margin-bottom: 10px;
-}
-
-.profile-img {
-  width: 45px;
-  height: 45px;
-  border-radius: 50%;
-  margin-right: 10px;
-  border: 2px solid white;
-}
-
-.profile-name {
-  font-weight: bold;
-  font-size: 14px;
-  white-space: nowrap;
-}
-
-/* ===================== */
-/* Two Column Layout */
-/* ===================== */
-.menu-columns {
-  display: flex;
-  justify-content: space-between;
-}
-
-/* Left Menu Section */
-.menu-left {
-  width: 55%;
-  background: white;
-  padding: 5px;
-}
-
-/* Right Menu Section */
-.menu-right {
-  width: 40%;
-  background: #d6e8ff;
-  padding: 5px;
-  border-left: 1px solid rgba(0, 0, 0, 0.2);
-}
-
-/* ===================== */
-/* Start Menu Items */
-/* ===================== */
-.start-menu-items {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.start-menu-items li {
-  padding: 8px 12px;
-  cursor: pointer;
-  font-size: 13px;
-  display: flex;
-  align-items: center;
-  transition: background 0.2s ease-in-out;
-  color: black;
-}
-
-/* XP-Style Icons */
-.start-menu-items li img {
-  width: 20px;
-  height: 20px;
-  margin-right: 10px;
-}
-
-/* Hover Effect (XP Style) */
-.start-menu-items li:hover {
-  background: rgba(100, 149, 237, 0.3);
-  border-radius: 5px;
-}
-
-/* ===================== */
-/* Log Off & Shutdown Buttons */
-/* ===================== */
-.logoff {
-  background: linear-gradient(to bottom, #d9534f, #b52b27);
-  color: white;
-  text-align: center;
-  font-weight: bold;
-  padding: 10px;
-  border-radius: 5px;
-  margin-top: 10px;
-}
-
-.logoff:hover {
-  background: linear-gradient(to bottom, #b52b27, #921d1a);
-}
-
-/* ===================== */
-/* Taskbar Effects (Ensures Windows XP Look) */
-/* ===================== */
-.taskbar::after {
-  content: "";
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  width: 120px; /* Adjust width as needed */
-  height: 100%;
-  background-color: #1676e4;
-  z-index: -1;
-}
-
-/* ===================== */
-/* System Tray (Time Display) */
-/* ===================== */
-.system-tray {
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  width: 120px;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  font-weight: bold;
-}
-
-/* Time Display */
-.time-display {
-  font-size: 14px;
-  color: white;
-  font-weight: bold;
-  position: relative;
-  z-index: 2;
-}
-
-/* ===================== */
-/* Start Menu Animation */
-/* ===================== */
-@keyframes fadeIn {
+@keyframes slideUp {
   from {
     opacity: 0;
-    transform: translateY(5px);
+    transform: translateY(20px);
   }
   to {
     opacity: 1;
     transform: translateY(0);
   }
 }
+
+.start-menu-header {
+  padding: 15px 10px 10px 10px;
+  background: linear-gradient(to right, #5c95d6 0px, #5c95d6 50px, #3c7dc4 50px);
+  border-bottom: 1px solid #1e3f7a;
+}
+
+.user-profile-section {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-left: 50px;
+}
+
+.user-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 4px;
+  border: 2px solid white;
+  background: white;
+}
+
+.user-name-text {
+  color: white;
+  font-weight: bold;
+  font-size: 14px;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.start-menu-content {
+  padding: 5px 0;
+  background: white;
+}
+
+.start-menu-item {
+  padding: 8px 15px 8px 60px;
+  cursor: pointer;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.start-menu-item:hover {
+  background: rgba(51, 94, 168, 0.2);
+}
+
+.start-menu-divider {
+  height: 1px;
+  background: #d4d4d4;
+  margin: 3px 10px 3px 55px;
+}
+
+.start-menu-footer {
+  background: #4f87cc;
+  border-top: 1px solid #1e3f7a;
+}
+
+.footer-item {
+  color: white;
+  font-weight: bold;
+  padding: 10px 15px 10px 60px;
+}
+
+.footer-item:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.taskbar-windows {
+  flex: 1;
+  display: flex;
+  gap: 3px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0 5px;
+}
+
+.taskbar-windows::-webkit-scrollbar {
+  height: 0;
+}
+
+.taskbar-window {
+  height: 32px;
+  min-width: 150px;
+  max-width: 200px;
+  padding: 0 8px;
+  background: linear-gradient(to bottom, #5c95d6 0%, #4f87cc 50%, #3b6fbc 100%);
+  border: 1px solid #0831d9;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  transition: all 0.1s;
+}
+
+.taskbar-window:hover {
+  background: linear-gradient(to bottom, #6ca5e6 0%, #5f97dc 50%, #4b7fcc 100%);
+}
+
+.taskbar-window.active {
+  background: linear-gradient(to bottom, #2e5fa8 0%, #1e4a8a 50%, #0d3570 100%);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.taskbar-window-icon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+.taskbar-window-title {
+  color: white;
+  font-size: 11px;
+  font-weight: bold;
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.system-tray {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 8px;
+  height: 32px;
+  background: rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 3px;
+}
+
+.tray-icons {
+  display: flex;
+  gap: 6px;
+}
+
+.tray-icon {
+  cursor: pointer;
+  font-size: 14px;
+  filter: drop-shadow(1px 1px 1px rgba(0, 0, 0, 0.3));
+}
+
+.clock {
+  color: white;
+  font-size: 11px;
+  font-weight: bold;
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
+  min-width: 60px;
+  text-align: center;
+}
+

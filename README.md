@@ -1,54 +1,98 @@
-# React + TypeScript + Vite
+# Bradley Nguyen - Windows XP Portfolio
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A personal portfolio website with an authentic Windows XP experience, featuring:
 
-Currently, two official plugins are available:
+- 🖥️ Windows XP-style login screen with animated password entry
+- 🪟 Draggable, resizable, and minimizable windows
+- 📂 Three main applications: Projects, Experiences, and Autobiography
+- ✏️ Fully editable content for all sections
+- 🎨 Authentic Windows XP styling and animations
+- ⚡ Built with React, TypeScript, and Vite
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Getting Started
 
-## Expanding the ESLint configuration
+### Prerequisites
+- Node.js (v16 or higher)
+- npm or yarn
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### Installation
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+1. Clone the repository
+```bash
+git clone <repository-url>
+cd personal_website
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+2. Install dependencies
+```bash
+npm install
 ```
+
+3. Start the development server
+```bash
+npm run dev
+```
+
+4. Build for production
+```bash
+npm run build
+```
+
+## Features
+
+### Login Screen
+- Authentic Windows XP login animation
+- Automatic password typing animation
+- Smooth transition to desktop
+
+### Desktop
+- Classic Windows XP wallpaper
+- Desktop icons with double-click functionality
+- Taskbar with Start menu
+- System tray with clock
+
+### Windows
+- Fully draggable windows
+- Minimize, maximize, and close buttons
+- Resizable windows with drag handles
+- Z-index management (click to bring to front)
+
+### Applications
+
+#### Projects
+- Add, edit, and delete project entries
+- Include title, description, technologies, and links
+- Tech tags with visual styling
+
+#### Experiences
+- Add, edit, and delete work experience entries
+- Include company, position, period, and responsibilities
+- Timeline-style layout
+
+#### Autobiography
+- Add, edit, and delete about sections
+- Rich text content with line breaks
+- Customizable section titles
+
+## Customization
+
+To personalize the website:
+
+1. **Profile Information**: Update the user name in `WelcomeScreen.tsx` and `Desktop.tsx`
+2. **Profile Image**: Replace the avatar URL in the components
+3. **Content**: Use the edit buttons in each application to update your information
+4. **Icons**: Replace icons in `/public/assets/icons/`
+5. **Wallpaper**: Replace `/public/assets/wallpaper.jpg`
+
+## Technology Stack
+
+- **React 18** - UI library
+- **TypeScript** - Type safety
+- **Vite** - Build tool and dev server
+- **CSS3** - Styling with Windows XP-inspired design
+
+## Credits
+
+Created by Bradley Nguyen
+
+Inspired by Windows XP design © Microsoft Corporation

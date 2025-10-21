@@ -1,26 +1,21 @@
-import React, { useState, useEffect } from "react";
-import WelcomeScreen from "./components/WelcomeScreen";
-import Desktop from "./components/Desktop";
+import { useState } from 'react'
+import WelcomeScreen from './components/WelcomeScreen'
+import Desktop from './components/Desktop'
+import './styles/App.css'
 
-const App: React.FC = () => {
-  const [showDesktop, setShowDesktop] = useState(false);
-
-  // Effect to change the tab title dynamically
-  useEffect(() => {
-    if (showDesktop) {
-      document.title = "Bradley's Profile"; // Set title after welcome screen
-    } else {
-      document.title = "Welcome to My Website"; // Initial title
-    }
-  }, [showDesktop]); // Runs when showDesktop changes
+function App() {
+  const [loggedIn, setLoggedIn] = useState(false)
 
   return (
-    <div className="App">
-      {!showDesktop ? <WelcomeScreen onComplete={() => setShowDesktop(true)} /> : <Desktop />}
+    <div className="app">
+      {!loggedIn ? (
+        <WelcomeScreen onLogin={() => setLoggedIn(true)} />
+      ) : (
+        <Desktop />
+      )}
     </div>
-  );
-};
+  )
+}
 
-export default App;
+export default App
 
-//test

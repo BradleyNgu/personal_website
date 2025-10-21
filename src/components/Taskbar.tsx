@@ -5,9 +5,10 @@ import '../styles/taskbar.css'
 interface TaskbarProps {
   windows: WindowState[]
   onWindowClick: (id: string) => void
+  onShutdown: () => void
 }
 
-function Taskbar({ windows, onWindowClick }: TaskbarProps) {
+function Taskbar({ windows, onWindowClick, onShutdown }: TaskbarProps) {
   const [showStartMenu, setShowStartMenu] = useState(false)
   const [currentTime, setCurrentTime] = useState(new Date())
 
@@ -33,8 +34,7 @@ function Taskbar({ windows, onWindowClick }: TaskbarProps) {
         className={`start-button ${showStartMenu ? 'active' : ''}`}
         onClick={() => setShowStartMenu(!showStartMenu)}
       >
-        <div className="start-icon"></div>
-        <span className="start-text">start</span>
+        <img src="/assets/icons/start_2.png" alt="Start" className="start-icon-img" />
       </button>
 
       {showStartMenu && (
@@ -72,7 +72,7 @@ function Taskbar({ windows, onWindowClick }: TaskbarProps) {
             </div>
           </div>
           <div className="start-menu-footer">
-            <div className="start-menu-item footer-item">
+            <div className="start-menu-item footer-item" onClick={onShutdown}>
               <span>🔌 Turn Off Computer</span>
             </div>
           </div>

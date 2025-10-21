@@ -58,7 +58,6 @@ function WelcomeScreen({ onLogin }: WelcomeScreenProps) {
                 <span className="windows">Windows<sup>XP</sup></span>
               </div>
             </div>
-            <div className="welcome-message">To begin, click your user name</div>
           </>
         )}
         
@@ -107,7 +106,7 @@ function WelcomeScreen({ onLogin }: WelcomeScreenProps) {
       </div>
 
       <div className="welcome-footer">
-        <button className="turn-off-btn">
+        <button className="turn-off-btn" onClick={() => window.location.href = 'https://www.youtube.com/watch?v=ZtiQk-vqmBA'}>
           <div className="shutdown-icon"></div>
           Turn off computer
         </button>

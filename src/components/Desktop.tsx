@@ -19,7 +19,11 @@ export interface WindowState {
   zIndex: number
 }
 
-function Desktop() {
+interface DesktopProps {
+  onShutdown: () => void
+}
+
+function Desktop({ onShutdown }: DesktopProps) {
   const [windows, setWindows] = useState<WindowState[]>([])
   const [highestZIndex, setHighestZIndex] = useState(1)
 
@@ -141,9 +145,12 @@ function Desktop() {
           const window = windows.find(w => w.id === id)
           if (window?.isMinimized) {
             toggleMinimize(id)
+            bringToFront(id)
+          } else {
+            bringToFront(id)
           }
-          bringToFront(id)
         }}
+        onShutdown={onShutdown}
       />
     </div>
   )

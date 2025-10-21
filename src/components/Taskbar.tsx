@@ -6,10 +6,11 @@ interface TaskbarProps {
   windows: WindowState[]
   onWindowClick: (id: string) => void
   onShutdown: () => void
+  onLogOff: () => void
   onEmailClick: () => void
 }
 
-function Taskbar({ windows, onWindowClick, onShutdown, onEmailClick }: TaskbarProps) {
+function Taskbar({ windows, onWindowClick, onShutdown, onLogOff, onEmailClick }: TaskbarProps) {
   const [showStartMenu, setShowStartMenu] = useState(false)
   const [currentTime, setCurrentTime] = useState(new Date())
 
@@ -116,7 +117,7 @@ function Taskbar({ windows, onWindowClick, onShutdown, onEmailClick }: TaskbarPr
               <span>All Programs</span>
             </div>
             <div className="bottom-buttons">
-              <button className="log-off-btn">
+              <button className="log-off-btn" onClick={onLogOff}>
                 <img src="/assets/icons/Windows XP Icons/Logout.png" alt="Log Off" className="btn-icon" />
                 Log Off
               </button>

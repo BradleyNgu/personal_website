@@ -1,25 +1,45 @@
 .shutdown-screen {
   width: 100%;
-  height: 100%;
-  background: linear-gradient(to bottom, #5a7fbe 0%, #3d5a99 50%, #5a7fbe 100%);
+  height: 100vh;
+  background: linear-gradient(to bottom, #5a8fc7 0%, #4a7eb8 50%, #3a6ea5 100%);
   display: flex;
-  align-items: center;
-  justify-content: center;
+  flex-direction: column;
   animation: fadeIn 0.3s ease-in;
+  position: relative;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.shutdown-top-bar {
+  height: 80px;
+  background: linear-gradient(to bottom, #3159af 0%, #2347a5 100%);
+  width: 100%;
+  border-bottom: 1px solid #1a3580;
 }
 
 .shutdown-content {
+  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   gap: 30px;
-  animation: slideUp 0.5s ease-out;
 }
 
-@keyframes slideUp {
+.shutdown-logo {
+  width: 250px;
+  height: auto;
+  object-fit: contain;
+  animation: slideDown 0.5s ease-out;
+}
+
+@keyframes slideDown {
   from {
     opacity: 0;
-    transform: translateY(30px);
+    transform: translateY(-30px);
   }
   to {
     opacity: 1;
@@ -27,59 +47,43 @@
   }
 }
 
-.windows-logo-shutdown {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-}
-
 .shutdown-message {
   color: white;
-  font-size: 18px;
-  font-weight: bold;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-  animation: pulse 2s ease-in-out infinite;
+  font-size: 20px;
+  font-weight: normal;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+  font-family: 'Tahoma', sans-serif;
+  animation: fadeInText 0.5s ease-out 0.3s both;
 }
 
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.6; }
-}
-
-.shutdown-spinner {
-  display: flex;
-  gap: 12px;
-}
-
-.spinner-dot {
-  width: 12px;
-  height: 12px;
-  background: white;
-  border-radius: 50%;
-  animation: bounce 1.4s infinite ease-in-out;
-  box-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
-}
-
-.spinner-dot:nth-child(1) {
-  animation-delay: 0s;
-}
-
-.spinner-dot:nth-child(2) {
-  animation-delay: 0.2s;
-}
-
-.spinner-dot:nth-child(3) {
-  animation-delay: 0.4s;
-}
-
-@keyframes bounce {
-  0%, 80%, 100% {
-    transform: scale(0.8);
-    opacity: 0.5;
+@keyframes fadeInText {
+  from {
+    opacity: 0;
   }
-  40% {
-    transform: scale(1.2);
+  to {
     opacity: 1;
   }
 }
 
+.shutdown-bottom-bar {
+  height: 80px;
+  background: linear-gradient(to bottom, #1e3a5f 0%, #0f2442 100%);
+  width: 100%;
+  border-top: 1px solid #0d1f3a;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .shutdown-top-bar,
+  .shutdown-bottom-bar {
+    height: 60px;
+  }
+  
+  .shutdown-logo {
+    width: 200px;
+  }
+  
+  .shutdown-message {
+    font-size: 16px;
+  }
+}

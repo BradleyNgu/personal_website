@@ -22,9 +22,10 @@ export interface WindowState {
 
 interface DesktopProps {
   onShutdown: () => void
+  onLogOff: () => void
 }
 
-function Desktop({ onShutdown }: DesktopProps) {
+function Desktop({ onShutdown, onLogOff }: DesktopProps) {
   const [windows, setWindows] = useState<WindowState[]>([])
   const [highestZIndex, setHighestZIndex] = useState(1)
 
@@ -162,6 +163,7 @@ function Desktop({ onShutdown }: DesktopProps) {
           }
         }}
         onShutdown={onShutdown}
+        onLogOff={onLogOff}
         onEmailClick={openEmailWindow}
       />
     </div>

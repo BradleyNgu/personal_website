@@ -3,9 +3,10 @@ import '../styles/welcome.css'
 
 interface WelcomeScreenProps {
   onLogin: () => void
+  onShutdown: () => void
 }
 
-function WelcomeScreen({ onLogin }: WelcomeScreenProps) {
+function WelcomeScreen({ onLogin, onShutdown }: WelcomeScreenProps) {
   const [stage, setStage] = useState<'initial' | 'clicked' | 'typing' | 'loggingIn'>('initial')
   const [password, setPassword] = useState('')
 
@@ -56,31 +57,23 @@ function WelcomeScreen({ onLogin }: WelcomeScreenProps) {
       <div className="welcome-divider"></div>
 
       <div className="welcome-right">
-        {stage === 'initial' ? (
-          <div className="user-account-tile" onClick={handleUserClick}>
-            <img 
-              src="/assets/icons/profile_image.jpeg" 
-              alt="Bradley Nguyen" 
-              className="user-account-icon"
-            />
-            <div className="user-account-label">Bradley Nguyen</div>
-          </div>
-        ) : (
+        <div className={`user-account-tile ${stage !== 'initial' ? 'active' : ''}`} onClick={handleUserClick}>
+          <img 
+            src="/assets/icons/profile_image.jpeg" 
+            alt="Bradley Nguyen" 
+            className="user-account-icon"
+          />
+          <div className="user-account-label">Bradley Nguyen</div>
+        </div>
+        {stage !== 'initial' && (
           <div className="password-section">
-            <div className="password-user-info">
-              <img 
-                src="/assets/icons/profile_image.jpeg" 
-                alt="Bradley Nguyen" 
-                className="password-user-icon"
-              />
-              <div className="password-user-name">Bradley Nguyen</div>
-            </div>
+            <div className="password-label">Type your password</div>
             <div className="password-input-container">
               <input 
                 type="password" 
                 value={password} 
                 readOnly 
-                placeholder="Type your password"
+                placeholder=""
                 className="password-input"
               />
               <button className="password-arrow-btn">
@@ -92,7 +85,7 @@ function WelcomeScreen({ onLogin }: WelcomeScreenProps) {
       </div>
 
       <div className="welcome-footer">
-        <button className="turn-off-btn" onClick={() => window.location.href = 'https://www.youtube.com/watch?v=ZtiQk-vqmBA'}>
+        <button className="turn-off-btn" onClick={onShutdown}>
           <img src="/assets/icons/Windows XP Icons/Power.png" alt="Power" className="shutdown-icon" />
           Turn off computer
         </button>

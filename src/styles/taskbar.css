@@ -104,6 +104,9 @@
   width: 200px;
   background: white;
   padding: 10px 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .pinned-items {
@@ -175,30 +178,26 @@
   background: linear-gradient(180deg, #5991d6 0%, #2e6ab7 100%);
   padding: 8px;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
   border-top: 2px solid #1e4a8a;
 }
 
-.all-programs-btn {
-  display: flex;
+.start-menu-left .all-programs {
+  color: #000000;
+  font-weight: normal;
+  position: relative;
+  top: 10px;
+  justify-content: center;
+}
+
+.start-menu-left .all-programs .arrow-icon {
+  margin-left: 5px;
+  color: #4caf50;
+  font-size: 11px;
+  line-height: 1;
+  display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 6px 12px;
-  color: white;
-  font-size: 12px;
-  font-weight: bold;
-  cursor: pointer;
-  border-radius: 3px;
-}
-
-.all-programs-btn:hover {
-  background: rgba(255, 255, 255, 0.2);
-}
-
-.arrow-icon {
-  color: #b3ff99;
-  font-size: 10px;
 }
 
 .bottom-buttons {
@@ -218,7 +217,7 @@
   border-radius: 3px;
   color: white;
   font-size: 11px;
-  font-weight: bold;
+  font-weight: normal;
   cursor: pointer;
   box-shadow: none;
 }
@@ -234,6 +233,34 @@
   object-fit: contain;
 }
 
+.quick-launch {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 8px;
+  height: 40px;
+  border-right: 1px solid rgba(255, 255, 255, 0.2);
+  margin-right: 8px;
+}
+
+.quick-launch-icon {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 3px;
+  transition: background 0.1s;
+}
+
+.quick-launch-icon:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.quick-launch-icon:active {
+  background: rgba(0, 0, 0, 0.1);
+}
+
 .taskbar-windows {
   flex: 1;
   display: flex;
@@ -242,6 +269,7 @@
   overflow-y: hidden;
   padding: 0;
   align-items: stretch;
+  margin-left: -8px;
 }
 
 .taskbar-windows::-webkit-scrollbar {
@@ -270,8 +298,10 @@
 }
 
 .taskbar-window.active {
-  background: linear-gradient(to bottom, #2e5fa8 0%, #1e4a8a 50%, #0d3570 100%);
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+  background: linear-gradient(to bottom, #2678c1 0%, #6db3f2 50%, #5f9fe6 100%);
+  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.4), 0 2px 4px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 3px;
 }
 
 .taskbar-window-icon {
@@ -312,7 +342,9 @@
 
 .tray-icon {
   cursor: pointer;
-  font-size: 14px;
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
   filter: drop-shadow(1px 1px 1px rgba(0, 0, 0, 0.3));
 }
 

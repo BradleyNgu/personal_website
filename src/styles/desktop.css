@@ -24,17 +24,3 @@
   }
 }
 
-/* Windows XP Desktop animations */
-@keyframes desktopFadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-.desktop {
-  animation: desktopFadeIn 0.8s ease-in;
-}
-

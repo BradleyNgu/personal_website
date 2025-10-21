@@ -67,6 +67,11 @@ function Taskbar({ windows, onWindowClick, onShutdown, onLogOff, onEmailClick }:
                   <span>Internet</span>
                 </div>
               </div>
+              <div className="start-menu-divider"></div>
+              <div className="start-menu-item all-programs">
+                <span>All Programs</span>
+                <span className="arrow-icon">▶</span>
+              </div>
             </div>
             
             <div className="start-menu-right">
@@ -112,10 +117,6 @@ function Taskbar({ windows, onWindowClick, onShutdown, onLogOff, onEmailClick }:
           </div>
           
           <div className="start-menu-bottom">
-            <div className="all-programs-btn">
-              <span className="arrow-icon">▶</span>
-              <span>All Programs</span>
-            </div>
             <div className="bottom-buttons">
               <button className="log-off-btn" onClick={onLogOff}>
                 <img src="/assets/icons/Windows XP Icons/Logout.png" alt="Log Off" className="btn-icon" />
@@ -129,6 +130,11 @@ function Taskbar({ windows, onWindowClick, onShutdown, onLogOff, onEmailClick }:
           </div>
         </div>
       )}
+
+      <div className="quick-launch">
+        <img src="/assets/icons/Windows XP Icons/Internet Explorer 6.png" alt="Internet Explorer" className="quick-launch-icon" title="Internet Explorer" />
+        <img src="/assets/icons/Windows XP Icons/Command Prompt.png" alt="Command Prompt" className="quick-launch-icon" title="Command Prompt" />
+      </div>
 
       <div className="taskbar-windows">
         {windows.map(window => (
@@ -145,8 +151,8 @@ function Taskbar({ windows, onWindowClick, onShutdown, onLogOff, onEmailClick }:
 
       <div className="system-tray">
         <div className="tray-icons">
-          <span className="tray-icon" title="Volume">🔊</span>
-          <span className="tray-icon" title="Network">📶</span>
+          <img src="/assets/icons/Windows XP Icons/Volume.png" alt="Volume" className="tray-icon" title="Volume" />
+          <img src="/assets/icons/Windows XP Icons/Wireless Network Connection.png" alt="Network" className="tray-icon" title="Network" />
         </div>
         <div className="clock">{formatTime(currentTime)}</div>
       </div>

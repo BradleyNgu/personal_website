@@ -4,13 +4,7 @@
   background: linear-gradient(to bottom, #5a8fc7 0%, #4a7eb8 50%, #3a6ea5 100%);
   display: flex;
   flex-direction: column;
-  animation: fadeIn 0.3s ease-in;
   position: relative;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
 }
 
 .shutdown-top-bar {
@@ -53,16 +47,6 @@
   font-weight: normal;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
   font-family: 'Tahoma', sans-serif;
-  animation: fadeInText 0.5s ease-out 0.3s both;
-}
-
-@keyframes fadeInText {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
 }
 
 .shutdown-bottom-bar {

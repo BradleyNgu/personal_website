@@ -186,9 +186,18 @@
     height: 14px !important;
   }
   
+  .window-controls {
+    display: flex !important;
+    gap: 1px !important;
+    flex-shrink: 0 !important;
+  }
+  
   .window-button {
     width: 14px !important;
     height: 14px !important;
+    min-width: 14px !important;
+    min-height: 14px !important;
+    flex-shrink: 0 !important;
   }
   
   .window-button img {
@@ -315,11 +324,16 @@
   /* Touch-friendly interactions */
   .desktop-icon,
   .taskbar-window,
-  .window-button,
   .start-menu-item,
   .menu-item {
     min-height: 44px !important; /* iOS touch target minimum */
     min-width: 44px !important;
+  }
+  
+  /* Window buttons - keep compact for mobile */
+  .window-button {
+    min-height: 14px !important;
+    min-width: 14px !important;
   }
   
   /* Prevent zoom on double tap */
@@ -409,9 +423,18 @@
     font-size: 12px !important;
   }
   
+  .window-controls {
+    display: flex !important;
+    gap: 2px !important;
+    flex-shrink: 0 !important;
+  }
+  
   .window-button {
     width: 16px !important;
     height: 16px !important;
+    min-width: 16px !important;
+    min-height: 16px !important;
+    flex-shrink: 0 !important;
   }
   
   /* Start menu tablet */

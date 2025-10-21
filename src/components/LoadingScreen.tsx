@@ -9,6 +9,7 @@ function LoadingScreen({ onComplete }: LoadingScreenProps) {
   useEffect(() => {
     // Play startup sound
     const audio = new Audio('/assets/Microsoft Windows XP Startup Sound.mp3')
+    audio.volume = 0.05 // Set volume to 50% (0.0 = silent, 1.0 = full volume)
     audio.play().catch(error => {
       console.log('Audio playback failed:', error)
     })

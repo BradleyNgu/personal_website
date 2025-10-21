@@ -11,16 +11,19 @@
   gap: 0;
   box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.3);
   z-index: 10000;
+  margin: 0;
+  border: none;
 }
 
 .start-button {
   height: 40px;
   padding: 0;
+  margin: 0;
   background: transparent;
   border: none;
   border-radius: 0;
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   cursor: pointer;
   transition: all 0.1s;
   flex-shrink: 0;
@@ -35,9 +38,9 @@
 }
 
 .start-icon-img {
-  height: 40px;
+  height: 100%;
   width: auto;
-  object-fit: cover;
+  object-fit: fill;
   display: block;
 }
 
@@ -324,7 +327,8 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 0 5px 0 8px;
+  padding: 0 0 0 8px;
+  margin: 0;
   height: 40px;
   background: linear-gradient(to bottom, #5db3e8 0%, #4fa5d6 50%, #3d8dc1 100%);
   border-left: 2px solid #1a5c8a;
@@ -332,7 +336,6 @@
   border-bottom: none;
   border-right: none;
   border-radius: 0;
-  margin-right: 0;
 }
 
 .tray-icons {

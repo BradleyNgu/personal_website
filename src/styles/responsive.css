@@ -2,6 +2,11 @@
 
 /* Mobile devices (portrait) */
 @media (max-width: 480px) {
+  /* Ensure no gaps at bottom */
+  body, html {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
   /* Welcome Screen Mobile */
   .windows-logo {
     flex-direction: column;
@@ -51,19 +56,58 @@
   
   /* Taskbar Mobile */
   .taskbar {
-    height: 50px !important;
-    padding: 0 5px !important;
-    gap: 3px !important;
+    height: 40px !important;
+    padding: 0 !important;
+    gap: 0 !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+  }
+  
+  .start-button {
+    height: 40px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    display: flex !important;
+    align-items: flex-end !important;
+    justify-content: center !important;
+    min-width: 40px !important;
+    flex: 0 0 auto !important;
   }
   
   .start-icon-img {
-    height: 36px !important;
+    height: 100% !important;
+    width: auto !important;
+    object-fit: fill !important;
+    display: block !important;
+  }
+  
+  .system-tray {
+    height: 40px !important;
+    margin: 0 !important;
+    padding: 0 0 0 8px !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+  }
+  
+  .tray-icons {
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
   }
   
   .taskbar-window {
     min-width: 80px !important;
     max-width: 100px !important;
     padding: 2px 4px !important;
+    height: 40px !important;
+    margin: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
   }
   
   .taskbar-window-title {
@@ -76,19 +120,23 @@
     height: 16px !important;
   }
   
-  .system-tray {
-    padding: 0 3px 0 6px !important;
-    gap: 3px !important;
-  }
-  
   .clock {
     font-size: 9px !important;
     min-width: 40px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    height: 100% !important;
   }
   
   .tray-icon {
     width: 14px !important;
     height: 14px !important;
+    min-width: 14px !important;
+    min-height: 14px !important;
+    object-fit: contain !important;
+    display: block !important;
+    flex-shrink: 0 !important;
   }
   
   /* Desktop Mobile */
@@ -321,6 +369,8 @@
   /* Taskbar tablet */
   .taskbar {
     height: 45px !important;
+    padding: 0 !important;
+    margin: 0 !important;
   }
   
   .start-icon-img {
@@ -446,19 +496,49 @@
 @media (max-width: 320px) {
   .taskbar {
     gap: 2px;
+    height: 40px !important;
+  }
+  
+  .start-button {
+    height: 40px !important;
+    min-width: 40px !important;
+    display: flex !important;
+    align-items: flex-end !important;
+    justify-content: center !important;
+    flex: 0 0 auto !important;
   }
   
   .start-icon-img {
-    height: 32px !important;
+    height: 100% !important;
+    width: auto !important;
+    object-fit: fill !important;
+    display: block !important;
+  }
+  
+  .system-tray {
+    height: 40px !important;
+    display: flex !important;
+    align-items: center !important;
+  }
+  
+  .taskbar-window {
+    height: 40px !important;
+    min-width: 40px !important;
+    padding: 0 6px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
   }
   
   .taskbar-window-title {
     display: none;
   }
   
-  .taskbar-window {
-    min-width: 40px !important;
-    padding: 0 6px !important;
+  .clock {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    height: 100% !important;
   }
 }
 

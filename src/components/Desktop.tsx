@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import Taskbar from './Taskbar'
 import Window from './Window'
 import DesktopIcon from './DesktopIcon'
@@ -20,6 +20,12 @@ export interface WindowState {
   zIndex: number
 }
 
+export interface IconPosition {
+  id: string
+  x: number
+  y: number
+}
+
 interface DesktopProps {
   onShutdown: () => void
   onLogOff: () => void
@@ -28,6 +34,24 @@ interface DesktopProps {
 function Desktop({ onShutdown, onLogOff }: DesktopProps) {
   const [windows, setWindows] = useState<WindowState[]>([])
   const [highestZIndex, setHighestZIndex] = useState(1)
+  const [iconPositions, setIconPositions] = useState<IconPosition[]>([
+    { id: 'projects', x: 20, y: 20 },
+    { id: 'experiences', x: 20, y: 120 },
+    { id: 'autobiography', x: 20, y: 220 },
+    { id: 'recycle-bin', x: 20, y: 320 },
+  ])
+  const [selectedIcons, setSelectedIcons] = useState<string[]>([])
+  const [selectionBox, setSelectionBox] = useState<{
+    startX: number
+    startY: number
+    endX: number
+    endY: number
+  } | null>(null)
+  const [deletedIcons, setDeletedIcons] = useState<string[]>([])
+  const [isRecycleBinHovered, setIsRecycleBinHovered] = useState(false)
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
+  const [itemsToDelete, setItemsToDelete] = useState<string[]>([])
+  const desktopRef = useRef<HTMLDivElement>(null)
 
   const openWindow = (id: string, title: string, icon: string, component: React.ReactNode) => {
     // Check if window is already open
@@ -97,6 +121,111 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
     openWindow('email', 'Email - Contact Bradley', '/assets/icons/experiences.png', <ContactEmail />)
   }
 
+  const updateIconPosition = (id: string, x: number, y: number) => {
+    setIconPositions(prev => 
+      prev.map(icon => icon.id === id ? { ...icon, x, y } : icon)
+    )
+  }
+
+  const handleIconDragOver = (iconId: string, x: number, y: number) => {
+    // Check if dragging over recycle bin
+    const recycleBinPos = iconPositions.find(p => p.id === 'recycle-bin')
+    if (recycleBinPos && iconId !== 'recycle-bin') {
+      const distance = Math.sqrt(
+        Math.pow(x - recycleBinPos.x, 2) + Math.pow(y - recycleBinPos.y, 2)
+      )
+      setIsRecycleBinHovered(distance < 100)
+    } else {
+      setIsRecycleBinHovered(false)
+    }
+  }
+
+  const handleIconDropOnRecycleBin = (iconId: string) => {
+    if (isRecycleBinHovered) {
+      // Get all items to delete (selected items or just the dragged item)
+      const toDelete = selectedIcons.includes(iconId) 
+        ? selectedIcons.filter(id => id !== 'recycle-bin')
+        : [iconId]
+      
+      if (toDelete.length > 0) {
+        setItemsToDelete(toDelete)
+        setShowDeleteConfirm(true)
+      }
+      setIsRecycleBinHovered(false)
+    }
+  }
+
+  const confirmDelete = () => {
+    setDeletedIcons(prev => [...prev, ...itemsToDelete])
+    setSelectedIcons([])
+    setShowDeleteConfirm(false)
+    setItemsToDelete([])
+  }
+
+  const cancelDelete = () => {
+    setShowDeleteConfirm(false)
+    setItemsToDelete([])
+  }
+
+  const handleDesktopMouseDown = (e: React.MouseEvent) => {
+    if (e.target === desktopRef.current || (e.target as HTMLElement).classList.contains('desktop-icons')) {
+      setSelectedIcons([])
+      setSelectionBox({
+        startX: e.clientX,
+        startY: e.clientY,
+        endX: e.clientX,
+        endY: e.clientY,
+      })
+    }
+  }
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      if (selectionBox) {
+        setSelectionBox(prev => prev ? {
+          ...prev,
+          endX: e.clientX,
+          endY: e.clientY,
+        } : null)
+      }
+    }
+
+    const handleMouseUp = () => {
+      if (selectionBox) {
+        // Calculate which icons are within the selection box
+        const box = {
+          left: Math.min(selectionBox.startX, selectionBox.endX),
+          right: Math.max(selectionBox.startX, selectionBox.endX),
+          top: Math.min(selectionBox.startY, selectionBox.endY),
+          bottom: Math.max(selectionBox.startY, selectionBox.endY),
+        }
+
+        const selected = iconPositions.filter(icon => {
+          const iconRight = icon.x + 80
+          const iconBottom = icon.y + 80
+          return (
+            icon.x < box.right &&
+            iconRight > box.left &&
+            icon.y < box.bottom &&
+            iconBottom > box.top
+          )
+        }).map(icon => icon.id)
+
+        setSelectedIcons(selected)
+        setSelectionBox(null)
+      }
+    }
+
+    if (selectionBox) {
+      document.addEventListener('mousemove', handleMouseMove)
+      document.addEventListener('mouseup', handleMouseUp)
+      return () => {
+        document.removeEventListener('mousemove', handleMouseMove)
+        document.removeEventListener('mouseup', handleMouseUp)
+      }
+    }
+  }, [selectionBox, iconPositions])
+
   const desktopIcons = [
     {
       id: 'projects',
@@ -125,18 +254,71 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
   ]
 
   return (
-    <div className="desktop">
+    <div 
+      ref={desktopRef}
+      className="desktop" 
+      onMouseDown={handleDesktopMouseDown}
+    >
       <div className="desktop-icons">
-        {desktopIcons.map((icon, index) => (
-          <DesktopIcon
-            key={icon.id}
-            title={icon.title}
-            icon={icon.icon}
-            onDoubleClick={icon.onDoubleClick}
-            position={{ x: 20, y: 20 + index * 100 }}
-          />
-        ))}
+        {desktopIcons
+          .filter(icon => !deletedIcons.includes(icon.id))
+          .map((icon) => {
+            const position = iconPositions.find(p => p.id === icon.id) || { x: 20, y: 20 }
+            const isRecycleBin = icon.id === 'recycle-bin'
+            return (
+              <DesktopIcon
+                key={icon.id}
+                id={icon.id}
+                title={icon.title}
+                icon={icon.icon}
+                onDoubleClick={icon.onDoubleClick}
+                position={position}
+                isSelected={selectedIcons.includes(icon.id)}
+                isRecycleBin={isRecycleBin}
+                isRecycleBinHovered={isRecycleBin && isRecycleBinHovered}
+                onPositionChange={updateIconPosition}
+                onDragOver={handleIconDragOver}
+                onDropOnRecycleBin={handleIconDropOnRecycleBin}
+                onSelect={(iconId: string, addToSelection: boolean) => {
+                  if (addToSelection) {
+                    setSelectedIcons(prev => 
+                      prev.includes(iconId) ? prev.filter(i => i !== iconId) : [...prev, iconId]
+                    )
+                  } else {
+                    setSelectedIcons([iconId])
+                  }
+                }}
+              />
+            )
+          })}
       </div>
+
+      {selectionBox && (
+        <div
+          className="selection-box"
+          style={{
+            left: Math.min(selectionBox.startX, selectionBox.endX),
+            top: Math.min(selectionBox.startY, selectionBox.endY),
+            width: Math.abs(selectionBox.endX - selectionBox.startX),
+            height: Math.abs(selectionBox.endY - selectionBox.startY),
+          }}
+        />
+      )}
+
+      {showDeleteConfirm && (
+        <div className="delete-confirm-overlay">
+          <div className="delete-confirm-dialog">
+            <div className="dialog-title">Confirm Delete</div>
+            <div className="dialog-message">
+              Are you sure you want to delete {itemsToDelete.length} item{itemsToDelete.length > 1 ? 's' : ''}?
+            </div>
+            <div className="dialog-buttons">
+              <button className="dialog-button confirm" onClick={confirmDelete}>Yes</button>
+              <button className="dialog-button cancel" onClick={cancelDelete}>No</button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {windows.map(window => (
         <Window

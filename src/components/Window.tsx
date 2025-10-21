@@ -107,7 +107,12 @@ function Window({
       ref={windowRef}
       className="window"
       style={style}
-      onMouseDown={onFocus}
+      onMouseDown={(e) => {
+        onFocus()
+        if (e.target === windowRef.current) {
+          handleMouseDownTitle(e)
+        }
+      }}
     >
       <div className="window-title-bar" onMouseDown={handleMouseDownTitle}>
         <div className="window-title">

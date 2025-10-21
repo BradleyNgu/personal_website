@@ -29,7 +29,7 @@ const projects: Project[] = [
     title: 'X2 Insulin Pump Simulator',
     description: 'Fully functional desktop simulator of the Tandem t:slim X2 insulin pump with Control-IQ algorithm',
     technologies: ['C++', 'Qt'],
-    link: 'https://https://github.com/BradleyNgu/COMP3004-W25',
+    link: 'https://github.com/BradleyNgu/COMP3004-W25',
     award: '🎓 Academic Project - 97.5% Grade',
     highlights: [
       'Developed a fully functional desktop simulator of the Tandem t:slim X2 insulin pump, replicating core functionalities and interface of the real-world device',

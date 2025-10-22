@@ -170,6 +170,8 @@
   font-family: 'Tahoma', sans-serif;
   outline: none;
   background: white;
+  height: 32px;
+  box-sizing: border-box;
 }
 
 .password-input:focus {
@@ -192,6 +194,7 @@
   cursor: pointer;
   padding: 0;
   transition: all 0.2s ease;
+  flex-shrink: 0;
 }
 
 .password-arrow-btn:hover {
@@ -322,6 +325,8 @@
   .password-input {
     width: 250px;
     max-width: 90vw;
+    height: 32px;
+    box-sizing: border-box;
   }
   
   .welcome-footer {
@@ -375,6 +380,8 @@
     width: 200px;
     max-width: 85vw;
     font-size: 16px; /* Prevents zoom on iOS */
+    height: 36px; /* Slightly taller for mobile */
+    box-sizing: border-box;
   }
   
   .password-section {
@@ -382,13 +389,13 @@
   }
   
   .password-arrow-btn {
-    width: 28px;
-    height: 28px;
+    width: 36px;
+    height: 36px;
   }
   
   .arrow-icon {
-    width: 28px;
-    height: 28px;
+    width: 36px;
+    height: 36px;
   }
   
   .windows-xp-logo {

@@ -86,33 +86,40 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
   }
 
   const toggleMinimize = (id: string) => {
-    setWindows(windows.map(w => 
-      w.id === id ? { ...w, isMinimized: !w.isMinimized } : w
-    ))
+    console.log('toggleMinimize called for:', id)
+    setWindows(prevWindows => prevWindows.map(w => {
+      if (w.id === id) {
+        console.log('Toggling minimized state for:', id, 'from', w.isMinimized, 'to', !w.isMinimized)
+        return { ...w, isMinimized: !w.isMinimized }
+      }
+      return w
+    }))
   }
 
   const toggleMaximize = (id: string) => {
-    setWindows(windows.map(w => 
+    setWindows(prevWindows => prevWindows.map(w => 
       w.id === id ? { ...w, isMaximized: !w.isMaximized } : w
     ))
   }
 
   const bringToFront = (id: string) => {
-    const newZIndex = highestZIndex + 1
-    setWindows(windows.map(w => 
-      w.id === id ? { ...w, zIndex: newZIndex } : w
-    ))
-    setHighestZIndex(newZIndex)
+    setHighestZIndex(prevZIndex => {
+      const newZIndex = prevZIndex + 1
+      setWindows(prevWindows => prevWindows.map(w => 
+        w.id === id ? { ...w, zIndex: newZIndex } : w
+      ))
+      return newZIndex
+    })
   }
 
   const updateWindowPosition = (id: string, position: { x: number; y: number }) => {
-    setWindows(windows.map(w => 
+    setWindows(prevWindows => prevWindows.map(w => 
       w.id === id ? { ...w, position } : w
     ))
   }
 
   const updateWindowSize = (id: string, size: { width: number; height: number }) => {
-    setWindows(windows.map(w => 
+    setWindows(prevWindows => prevWindows.map(w => 
       w.id === id ? { ...w, size } : w
     ))
   }
@@ -337,10 +344,13 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
         windows={windows}
         onWindowClick={(id) => {
           const window = windows.find(w => w.id === id)
+          console.log('Taskbar click on window:', id, 'isMinimized:', window?.isMinimized)
           if (window?.isMinimized) {
+            console.log('Restoring minimized window:', id)
             toggleMinimize(id)
             bringToFront(id)
           } else {
+            console.log('Focusing window:', id)
             bringToFront(id)
           }
         }}

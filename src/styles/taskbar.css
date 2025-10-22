@@ -273,6 +273,8 @@
   padding: 0;
   align-items: stretch;
   margin-left: -8px;
+  pointer-events: auto;
+  position: relative;
 }
 
 .taskbar-windows::-webkit-scrollbar {
@@ -294,6 +296,9 @@
   cursor: pointer;
   box-shadow: none;
   transition: all 0.1s;
+  pointer-events: auto;
+  position: relative;
+  z-index: 1;
 }
 
 .taskbar-window:hover {

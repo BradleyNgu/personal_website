@@ -141,7 +141,10 @@ function Taskbar({ windows, onWindowClick, onShutdown, onLogOff, onEmailClick }:
           <button
             key={window.id}
             className={`taskbar-window ${window.isMinimized ? '' : 'active'}`}
-            onClick={() => onWindowClick(window.id)}
+            onClick={() => {
+              console.log('Taskbar button clicked for window:', window.id, 'isMinimized:', window.isMinimized)
+              onWindowClick(window.id)
+            }}
           >
             <img src={window.icon} alt="" className="taskbar-window-icon" />
             <span className="taskbar-window-title">{window.title}</span>

@@ -148,6 +148,19 @@ function Resume() {
           setIsLoading(false)
         }}
       />
+      <div style={{ 
+        position: 'absolute',
+        bottom: '10px',
+        right: '10px',
+        padding: '8px 12px',
+        background: 'rgba(0, 0, 0, 0.7)',
+        color: 'white',
+        fontSize: '11px',
+        borderRadius: '4px',
+        zIndex: 5
+      }}>
+        If PDF doesn't load, try <a href="/assets/BradleyNguyen.pdf" target="_blank" style={{ color: '#4fc3f7' }}>opening in new tab</a>
+      </div>
     </div>
   )
 }

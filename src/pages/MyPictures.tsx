@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import PhotoViewer from '../components/PhotoViewer'
 
 interface Photo {
   name: string
@@ -14,6 +15,8 @@ function MyPictures() {
   const [viewMode, setViewMode] = useState<'large' | 'small' | 'list'>('large')
   const [currentPath] = useState('My Pictures')
   const [loading, setLoading] = useState(true)
+  const [viewerOpen, setViewerOpen] = useState(false)
+  const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0)
 
   // Load photos from the MyPictures folder
   useEffect(() => {
@@ -67,6 +70,30 @@ function MyPictures() {
       )
     } else {
       setSelectedPhotos([photoName])
+    }
+  }
+
+  const handlePhotoDoubleClick = (photoName: string) => {
+    const photoIndex = photos.findIndex(photo => photo.name === photoName)
+    if (photoIndex !== -1) {
+      setCurrentPhotoIndex(photoIndex)
+      setViewerOpen(true)
+    }
+  }
+
+  const handleViewerClose = () => {
+    setViewerOpen(false)
+  }
+
+  const handleNextPhoto = () => {
+    if (currentPhotoIndex < photos.length - 1) {
+      setCurrentPhotoIndex(prev => prev + 1)
+    }
+  }
+
+  const handlePreviousPhoto = () => {
+    if (currentPhotoIndex > 0) {
+      setCurrentPhotoIndex(prev => prev - 1)
     }
   }
 
@@ -181,6 +208,7 @@ function MyPictures() {
                   key={index}
                   className={`photo-item ${selectedPhotos.includes(photo.name) ? 'selected' : ''}`}
                   onClick={(e) => handlePhotoClick(photo.name, e.ctrlKey || e.metaKey)}
+                  onDoubleClick={() => handlePhotoDoubleClick(photo.name)}
                 >
                   <div className="photo-thumbnail">
                     <img 
@@ -205,6 +233,16 @@ function MyPictures() {
           )}
         </div>
       </div>
+
+      {viewerOpen && (
+        <PhotoViewer
+          photos={photos}
+          currentPhotoIndex={currentPhotoIndex}
+          onClose={handleViewerClose}
+          onNext={handleNextPhoto}
+          onPrevious={handlePreviousPhoto}
+        />
+      )}
     </div>
   )
 }

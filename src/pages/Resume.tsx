@@ -1,7 +1,22 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 function Resume() {
   const [showFallback, setShowFallback] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    // Check if we're on mobile or if PDF viewing might be problematic
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent)
+    
+    if (isMobile || isIOS) {
+      setShowFallback(true)
+      setIsLoading(false)
+    } else {
+      // For desktop, just set loading to false - let the PDF load naturally
+      setIsLoading(false)
+    }
+  }, [])
 
   const handleDownload = () => {
     const link = document.createElement('a')
@@ -14,10 +29,6 @@ function Resume() {
 
   const handleOpenInNewTab = () => {
     window.open('/assets/BradleyNguyen.pdf', '_blank')
-  }
-
-  const handleShowFallback = () => {
-    setShowFallback(true)
   }
 
   if (showFallback) {
@@ -92,7 +103,8 @@ function Resume() {
           <div style={{ textAlign: 'center', color: '#666' }}>
             <div style={{ fontSize: '48px', marginBottom: '10px' }}>📄</div>
             <p style={{ margin: '0', fontSize: '14px' }}>
-              Choose an option above to view or download your resume.
+              PDF viewer not available on this device.<br/>
+              Use the buttons above to view or download your resume.
             </p>
           </div>
         </div>
@@ -102,29 +114,25 @@ function Resume() {
 
   return (
     <div style={{ width: '100%', height: '100%', position: 'relative' }}>
-      <div style={{
-        position: 'absolute',
-        top: '11px',
-        right: '10px',
-        zIndex: 10
-      }}>
-        <button
-          onClick={handleShowFallback}
-          style={{
-            padding: '5px 10px',
-            background: 'linear-gradient(to bottom, #5c95d6 0%, #4f87cc 50%, #3b6fbc 100%)',
-            border: '1px solid #0831d9',
-            borderRadius: '3px',
-            color: 'white',
-            fontSize: '11px',
-            fontWeight: 'bold',
-            cursor: 'pointer',
-            boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.3)'
-          }}
-        >
-          Alternative View / Download
-        </button>
-      </div>
+      {isLoading && (
+        <div style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: 'white',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          zIndex: 10
+        }}>
+          <div style={{ textAlign: 'center', color: '#666' }}>
+            <div style={{ fontSize: '24px', marginBottom: '10px' }}>⏳</div>
+            <p>Loading PDF...</p>
+          </div>
+        </div>
+      )}
       <iframe
         src="/assets/BradleyNguyen.pdf"
         width="100%"
@@ -134,6 +142,11 @@ function Resume() {
           background: 'white'
         }}
         title="Bradley Nguyen Resume"
+        onLoad={() => setIsLoading(false)}
+        onError={() => {
+          setShowFallback(true)
+          setIsLoading(false)
+        }}
       />
     </div>
   )

@@ -9,9 +9,11 @@ interface TaskbarProps {
   onLogOff: () => void
   onEmailClick: () => void
   onCommandPromptClick: () => void
+  onMyPicturesClick: () => void
+  onMyMusicClick: () => void
 }
 
-function Taskbar({ windows, onWindowClick, onShutdown, onLogOff, onEmailClick, onCommandPromptClick }: TaskbarProps) {
+function Taskbar({ windows, onWindowClick, onShutdown, onLogOff, onEmailClick, onCommandPromptClick, onMyPicturesClick, onMyMusicClick }: TaskbarProps) {
   const [showStartMenu, setShowStartMenu] = useState(false)
   const [currentTime, setCurrentTime] = useState(new Date())
 
@@ -85,11 +87,17 @@ function Taskbar({ windows, onWindowClick, onShutdown, onLogOff, onEmailClick, o
                 <span>My Recent Documents</span>
                 <span className="arrow">▶</span>
               </div>
-              <div className="start-menu-item">
+              <div className="start-menu-item" onClick={() => {
+                onMyPicturesClick()
+                setShowStartMenu(false)
+              }}>
                 <img src="/assets/icons/Windows XP Icons/My Pictures.png" alt="" className="menu-icon-small" />
                 <span>My Pictures</span>
               </div>
-              <div className="start-menu-item">
+              <div className="start-menu-item" onClick={() => {
+                onMyMusicClick()
+                setShowStartMenu(false)
+              }}>
                 <img src="/assets/icons/Windows XP Icons/My Music.png" alt="" className="menu-icon-small" />
                 <span>My Music</span>
               </div>

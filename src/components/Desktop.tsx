@@ -8,6 +8,8 @@ import Autobiography from '../pages/Autobiography'
 import ContactEmail from '../pages/ContactEmail'
 import RecycleBin from '../pages/RecycleBin'
 import CommandPrompt from '../pages/CommandPrompt'
+import MyPictures from '../pages/MyPictures'
+import MyMusic from '../pages/MyMusic'
 import '../styles/desktop.css'
 
 export interface WindowState {
@@ -49,7 +51,7 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
     { id: 'autobiography', x: 20, y: 220 },
     { id: 'recycle-bin', x: 20, y: 320 },
   ])
-  const [initialIconPositions, setInitialIconPositions] = useState<IconPosition[]>([
+  const [initialIconPositions] = useState<IconPosition[]>([
     { id: 'projects', x: 20, y: 20 },
     { id: 'experiences', x: 20, y: 120 },
     { id: 'autobiography', x: 20, y: 220 },
@@ -140,11 +142,19 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
   }
 
   const openEmailWindow = () => {
-    openWindow('email', 'Email - Contact Bradley', '/assets/icons/experiences.png', <ContactEmail />)
+    openWindow('email', 'Email - Contact Bradley', '/assets/icons/Windows XP Icons/Email.png', <ContactEmail />)
   }
 
   const openCommandPrompt = () => {
     openWindow('cmd', 'C:\\WINDOWS\\system32\\cmd.exe', '/assets/icons/Windows XP Icons/Command Prompt.png', <CommandPrompt />)
+  }
+
+  const openMyPictures = () => {
+    openWindow('my-pictures', 'My Pictures', '/assets/icons/Windows XP Icons/My Pictures.png', <MyPictures />)
+  }
+
+  const openMyMusic = () => {
+    openWindow('my-music', 'My Music', '/assets/icons/Windows XP Icons/My Music.png', <MyMusic />)
   }
 
   const updateIconPosition = (id: string, x: number, y: number) => {
@@ -484,6 +494,8 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
         onLogOff={onLogOff}
         onEmailClick={openEmailWindow}
         onCommandPromptClick={openCommandPrompt}
+        onMyPicturesClick={openMyPictures}
+        onMyMusicClick={openMyMusic}
       />
     </div>
   )

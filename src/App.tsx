@@ -29,7 +29,7 @@ function App() {
   }
 
   const handleShutdownComplete = () => {
-    window.location.href = 'https://www.youtube.com/watch?v=ZtiQk-vqmBA'
+    window.location.href = 'https://www.linkedin.com/in/bradley-nguyen-cs/'
   }
 
   return (

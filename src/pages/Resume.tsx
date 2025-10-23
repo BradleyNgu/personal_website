@@ -92,8 +92,7 @@ function Resume() {
           <div style={{ textAlign: 'center', color: '#666' }}>
             <div style={{ fontSize: '48px', marginBottom: '10px' }}>📄</div>
             <p style={{ margin: '0', fontSize: '14px' }}>
-              PDF viewer not available on this device.<br/>
-              Use the buttons above to view or download your resume.
+              Choose an option above to view or download your resume.
             </p>
           </div>
         </div>

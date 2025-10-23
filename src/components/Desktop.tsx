@@ -10,6 +10,7 @@ import RecycleBin from '../pages/RecycleBin'
 import CommandPrompt from '../pages/CommandPrompt'
 import MyPictures from '../pages/MyPictures'
 import MyMusic from '../pages/MyMusic'
+import Resume from '../pages/Resume'
 import '../styles/desktop.css'
 
 export interface WindowState {
@@ -49,13 +50,15 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
     { id: 'projects', x: 20, y: 20 },
     { id: 'experiences', x: 20, y: 120 },
     { id: 'autobiography', x: 20, y: 220 },
-    { id: 'recycle-bin', x: 20, y: 320 },
+    { id: 'resume', x: 20, y: 320 },
+    { id: 'recycle-bin', x: 20, y: 420 },
   ])
   const [initialIconPositions] = useState<IconPosition[]>([
     { id: 'projects', x: 20, y: 20 },
     { id: 'experiences', x: 20, y: 120 },
     { id: 'autobiography', x: 20, y: 220 },
-    { id: 'recycle-bin', x: 20, y: 320 },
+    { id: 'resume', x: 20, y: 320 },
+    { id: 'recycle-bin', x: 20, y: 420 },
   ])
   const [selectedIcons, setSelectedIcons] = useState<string[]>([])
   const [selectionBox, setSelectionBox] = useState<{
@@ -393,6 +396,12 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
       title: 'My Documents',
       icon: '/assets/icons/folder.png',
       onDoubleClick: () => openWindow('autobiography', 'My Documents', '/assets/icons/folder.png', <Autobiography />),
+    },
+    {
+      id: 'resume',
+      title: 'My Resume',
+      icon: '/assets/icons/Windows XP Icons/pdf.png',
+      onDoubleClick: () => openWindow('resume', 'My Resume', '/assets/icons/Windows XP Icons/pdf.png', <Resume />),
     },
     {
       id: 'recycle-bin',

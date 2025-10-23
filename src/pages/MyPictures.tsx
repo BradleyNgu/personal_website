@@ -20,11 +20,10 @@ function MyPictures() {
     const loadPhotos = async () => {
       setLoading(true)
       
-      // Based on the files you have in the folder
       const knownPhotos = [
-        'dynacert.png',
-        'dynacert 2.png', 
-        'dynacert 3.png'
+        'SolutionHacks.png',
+        'The_gang.jpg', 
+        'uOttaHacks.jpg'
       ]
       
       const detectedPhotos: Photo[] = []

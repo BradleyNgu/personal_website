@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 import '../styles/generic-viewer.css'
 
 interface GenericViewerProps {
@@ -21,7 +21,6 @@ function GenericViewer({
   showStatusBar = true,
   statusInfo = { left: [], right: [] }
 }: GenericViewerProps) {
-  const [isFullscreen, setIsFullscreen] = useState(false)
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -45,10 +44,8 @@ function GenericViewer({
       document.documentElement.requestFullscreen().catch(err => {
         console.log('Error attempting to enable fullscreen:', err)
       })
-      setIsFullscreen(true)
     } else {
       document.exitFullscreen()
-      setIsFullscreen(false)
     }
   }
 

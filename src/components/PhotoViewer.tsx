@@ -18,7 +18,6 @@ interface PhotoViewerProps {
 function PhotoViewer({ photos, currentPhotoIndex, onClose, onNext, onPrevious }: PhotoViewerProps) {
   const [isLoading, setIsLoading] = useState(true)
   const [zoom, setZoom] = useState(100)
-  const [isFullscreen, setIsFullscreen] = useState(false)
   const [rotation, setRotation] = useState(0)
 
   const currentPhoto = photos[currentPhotoIndex]
@@ -59,10 +58,8 @@ function PhotoViewer({ photos, currentPhotoIndex, onClose, onNext, onPrevious }:
       document.documentElement.requestFullscreen().catch(err => {
         console.log('Error attempting to enable fullscreen:', err)
       })
-      setIsFullscreen(true)
     } else {
       document.exitFullscreen()
-      setIsFullscreen(false)
     }
   }
 

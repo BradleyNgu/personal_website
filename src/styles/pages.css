@@ -850,13 +850,14 @@
 }
 
 .photo-item.selected {
-  background: rgba(51, 153, 255, 0.2);
-  border-color: #0066cc;
+  background: transparent;
+  border-color: transparent;
 }
 
 .photo-item.selected .photo-thumbnail {
   border-color: #0066cc;
   box-shadow: 0 0 0 1px #0066cc;
+  background: #e6f2ff;
 }
 
 .photo-gallery.list-view .photo-item {
@@ -1056,8 +1057,8 @@
 }
 
 .music-item:hover {
-  background: #f0f8ff;
-  border-color: #0066cc;
+  background: transparent;
+  border-color: transparent;
 }
 
 .music-item:hover .music-thumbnail {
@@ -1066,11 +1067,21 @@
 }
 
 .music-item.selected {
+  background: transparent;
+  border-color: transparent;
+}
+
+.music-item.selected .music-thumbnail {
   background: #e6f2ff;
   border-color: #0066cc;
 }
 
 .music-item.playing {
+  background: transparent;
+  border-color: transparent;
+}
+
+.music-item.playing .music-thumbnail {
   background: #fff2cc;
   border-color: #ffcc00;
 }

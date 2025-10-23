@@ -105,7 +105,7 @@ function Window({
   return (
     <div
       ref={windowRef}
-      className="window"
+      className={`window ${window.isMaximized ? 'maximized' : ''}`}
       style={style}
       onMouseDown={(e) => {
         onFocus()

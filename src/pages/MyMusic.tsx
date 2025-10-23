@@ -27,7 +27,7 @@ function MyMusic() {
       
       // Sample music files that could be in the folder
       const knownMusicFiles = [
-        'sample1.mp3',
+        'Max Verstappen meme (4K).mp3',
         'sample2.mp3', 
         'sample3.mp3',
         'favorite_song.wav',

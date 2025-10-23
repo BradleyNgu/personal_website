@@ -21,9 +21,9 @@ function MyPictures() {
       setLoading(true)
       
       const knownPhotos = [
-        'SolutionHacks.png',
+        'SolutionHacks.jpg',
         'The_gang.jpg', 
-        'uOttaHacks.jpg'
+        'uOttaHack.jpg'
       ]
       
       const detectedPhotos: Photo[] = []

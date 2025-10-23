@@ -367,4 +367,263 @@
   }
 }
 
+/* Recycle Bin Page */
+.recycle-bin-page {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: white;
+}
+
+.recycle-bin-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  background: linear-gradient(to bottom, #f8f9fa 0%, #e9ecef 100%);
+  border-bottom: 1px solid #d4d4d4;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.toolbar-section {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.toolbar-button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: linear-gradient(to bottom, #ffffff 0%, #f0f0f0 100%);
+  border: 1px solid #999;
+  border-radius: 3px;
+  cursor: pointer;
+  font-family: 'Tahoma', sans-serif;
+  font-size: 11px;
+  color: #333;
+  transition: all 0.1s;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.toolbar-button:hover:not(:disabled) {
+  background: linear-gradient(to bottom, #ffffff 0%, #e5f3ff 100%);
+  border-color: #0066cc;
+}
+
+.toolbar-button:active:not(:disabled) {
+  background: linear-gradient(to bottom, #d0e8ff 0%, #c0deff 100%);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.toolbar-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: linear-gradient(to bottom, #f5f5f5 0%, #e8e8e8 100%);
+}
+
+.toolbar-button img {
+  width: 16px;
+  height: 16px;
+}
+
+.toolbar-button.delete-button:hover:not(:disabled) {
+  background: linear-gradient(to bottom, #ffe5e5 0%, #ffd0d0 100%);
+  border-color: #cc0000;
+}
+
+.toolbar-info {
+  font-size: 11px;
+  color: #555;
+  padding: 4px 8px;
+  background: #f0f0f0;
+  border: 1px solid #d4d4d4;
+  border-radius: 3px;
+}
+
+.recycle-bin-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+}
+
+.empty-bin-message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: #999;
+  gap: 20px;
+}
+
+.empty-bin-icon {
+  width: 80px;
+  height: 80px;
+  opacity: 0.3;
+}
+
+.empty-bin-message p {
+  font-size: 16px;
+  color: #999;
+  margin: 0;
+}
+
+.recycle-bin-items {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 20px;
+  padding: 10px;
+}
+
+.recycle-bin-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 15px;
+  cursor: pointer;
+  border: 2px solid transparent;
+  border-radius: 4px;
+  transition: all 0.1s;
+  user-select: none;
+}
+
+.recycle-bin-item:hover {
+  background: rgba(51, 153, 255, 0.1);
+}
+
+.recycle-bin-item.selected {
+  background: rgba(51, 153, 255, 0.2);
+  border: 2px solid #0066cc;
+}
+
+.recycle-bin-item .item-icon {
+  width: 48px;
+  height: 48px;
+  margin-bottom: 8px;
+}
+
+.recycle-bin-item .item-title {
+  font-size: 11px;
+  text-align: center;
+  word-wrap: break-word;
+  max-width: 100%;
+  color: #333;
+}
+
+/* Command Prompt Page */
+.command-prompt {
+  width: 100%;
+  height: 100%;
+  background: #000000;
+  color: #c0c0c0;
+  font-family: 'Consolas', 'Courier New', monospace;
+  font-size: 12px;
+  line-height: 1.2;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.terminal-content {
+  flex: 1;
+  padding: 8px;
+  overflow-y: auto;
+  background: #000000;
+  color: #c0c0c0;
+  font-family: 'Consolas', 'Courier New', monospace;
+  font-size: 12px;
+  line-height: 1.2;
+}
+
+.command-block {
+  margin-bottom: 0;
+}
+
+.command-line {
+  margin-bottom: 0;
+  white-space: pre-wrap;
+}
+
+.prompt {
+  color: #c0c0c0;
+  font-weight: normal;
+}
+
+.command {
+  color: #ffffff;
+  font-weight: normal;
+}
+
+.output-line {
+  color: #c0c0c0;
+  margin: 0;
+  white-space: pre-wrap;
+  font-family: 'Consolas', 'Courier New', monospace;
+}
+
+.current-line {
+  display: flex;
+  align-items: center;
+  margin: 0;
+}
+
+.command-input {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #ffffff;
+  font-family: 'Consolas', 'Courier New', monospace;
+  font-size: 12px;
+  flex: 1;
+  margin-left: 0;
+  padding: 0;
+  caret-color: #ffffff;
+}
+
+.command-input:disabled {
+  opacity: 0.7;
+}
+
+/* Scrollbar styling for terminal */
+.terminal-content::-webkit-scrollbar {
+  width: 16px;
+}
+
+.terminal-content::-webkit-scrollbar-track {
+  background: #2d2d2d;
+  border: 1px solid #404040;
+}
+
+.terminal-content::-webkit-scrollbar-thumb {
+  background: #666666;
+  border: 1px solid #404040;
+  border-radius: 0;
+}
+
+.terminal-content::-webkit-scrollbar-thumb:hover {
+  background: #777777;
+}
+
+.terminal-content::-webkit-scrollbar-button {
+  background: #404040;
+  border: 1px solid #666666;
+  height: 16px;
+  width: 16px;
+}
+
+.terminal-content::-webkit-scrollbar-button:vertical:decrement {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8' viewBox='0 0 8 8'%3E%3Cpath fill='%23c0c0c0' d='M0 2l4 4 4-4z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.terminal-content::-webkit-scrollbar-button:vertical:increment {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8' viewBox='0 0 8 8'%3E%3Cpath fill='%23c0c0c0' d='M0 6l4-4 4 4z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
 

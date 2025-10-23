@@ -6,6 +6,8 @@ import Projects from '../pages/Projects'
 import Experiences from '../pages/Experiences'
 import Autobiography from '../pages/Autobiography'
 import ContactEmail from '../pages/ContactEmail'
+import RecycleBin from '../pages/RecycleBin'
+import CommandPrompt from '../pages/CommandPrompt'
 import '../styles/desktop.css'
 
 export interface WindowState {
@@ -26,6 +28,13 @@ export interface IconPosition {
   y: number
 }
 
+export interface RecycleBinItem {
+  id: string
+  title: string
+  icon: string
+  originalPosition: { x: number; y: number }
+}
+
 interface DesktopProps {
   onShutdown: () => void
   onLogOff: () => void
@@ -40,6 +49,12 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
     { id: 'autobiography', x: 20, y: 220 },
     { id: 'recycle-bin', x: 20, y: 320 },
   ])
+  const [initialIconPositions, setInitialIconPositions] = useState<IconPosition[]>([
+    { id: 'projects', x: 20, y: 20 },
+    { id: 'experiences', x: 20, y: 120 },
+    { id: 'autobiography', x: 20, y: 220 },
+    { id: 'recycle-bin', x: 20, y: 320 },
+  ])
   const [selectedIcons, setSelectedIcons] = useState<string[]>([])
   const [selectionBox, setSelectionBox] = useState<{
     startX: number
@@ -47,10 +62,10 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
     endX: number
     endY: number
   } | null>(null)
-  const [deletedIcons, setDeletedIcons] = useState<string[]>([])
+  const [recycleBinItems, setRecycleBinItems] = useState<RecycleBinItem[]>([])
   const [isRecycleBinHovered, setIsRecycleBinHovered] = useState(false)
-  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
-  const [itemsToDelete, setItemsToDelete] = useState<string[]>([])
+  const [isDraggingSelected, setIsDraggingSelected] = useState(false)
+  const [dragOffset, setDragOffset] = useState<{ x: number; y: number } | null>(null)
   const desktopRef = useRef<HTMLDivElement>(null)
 
   const openWindow = (id: string, title: string, icon: string, component: React.ReactNode) => {
@@ -128,6 +143,10 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
     openWindow('email', 'Email - Contact Bradley', '/assets/icons/experiences.png', <ContactEmail />)
   }
 
+  const openCommandPrompt = () => {
+    openWindow('cmd', 'C:\\WINDOWS\\system32\\cmd.exe', '/assets/icons/Windows XP Icons/Command Prompt.png', <CommandPrompt />)
+  }
+
   const updateIconPosition = (id: string, x: number, y: number) => {
     setIconPositions(prev => 
       prev.map(icon => icon.id === id ? { ...icon, x, y } : icon)
@@ -149,33 +168,95 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
 
   const handleIconDropOnRecycleBin = (iconId: string) => {
     if (isRecycleBinHovered) {
-      // Get all items to delete (selected items or just the dragged item)
-      const toDelete = selectedIcons.includes(iconId) 
+      // Get all items to move to bin (selected items or just the dragged item)
+      const toRecycle = selectedIcons.includes(iconId) 
         ? selectedIcons.filter(id => id !== 'recycle-bin')
         : [iconId]
       
-      if (toDelete.length > 0) {
-        setItemsToDelete(toDelete)
-        setShowDeleteConfirm(true)
+      if (toRecycle.length > 0) {
+        // Move items to recycle bin
+        const itemsToAdd: RecycleBinItem[] = toRecycle.map(id => {
+          const icon = desktopIcons.find(i => i.id === id)
+          const originalPosition = initialIconPositions.find(p => p.id === id)
+          return {
+            id,
+            title: icon?.title || '',
+            icon: icon?.icon || '',
+            originalPosition: originalPosition || { x: 20, y: 20 }
+          }
+        })
+        
+        setRecycleBinItems(prev => [...prev, ...itemsToAdd])
+        setSelectedIcons([])
       }
       setIsRecycleBinHovered(false)
     }
   }
 
-  const confirmDelete = () => {
-    setDeletedIcons(prev => [...prev, ...itemsToDelete])
-    setSelectedIcons([])
-    setShowDeleteConfirm(false)
-    setItemsToDelete([])
+  const handleDeleteFromBin = (itemId: string) => {
+    setRecycleBinItems(prev => prev.filter(item => item.id !== itemId))
   }
 
-  const cancelDelete = () => {
-    setShowDeleteConfirm(false)
-    setItemsToDelete([])
+  const handleRestoreFromBin = (itemId: string) => {
+    const item = recycleBinItems.find(i => i.id === itemId)
+    if (item) {
+      // Restore the icon to its original position from when the page first loaded
+      setIconPositions(prev => {
+        const existingIndex = prev.findIndex(p => p.id === itemId)
+        if (existingIndex >= 0) {
+          // Update existing position
+          const updated = [...prev]
+          updated[existingIndex] = { id: itemId, x: item.originalPosition.x, y: item.originalPosition.y }
+          return updated
+        } else {
+          // Add new position
+          return [...prev, { id: itemId, x: item.originalPosition.x, y: item.originalPosition.y }]
+        }
+      })
+      // Remove from recycle bin
+      setRecycleBinItems(prev => prev.filter(i => i.id !== itemId))
+    }
   }
+
+  // Update RecycleBin window when items change
+  useEffect(() => {
+    const recycleBinWindow = windows.find(w => w.id === 'recycle-bin')
+    if (recycleBinWindow) {
+      setWindows(prevWindows => prevWindows.map(w => 
+        w.id === 'recycle-bin' 
+          ? {
+              ...w,
+              component: (
+                <RecycleBin 
+                  items={recycleBinItems}
+                  onDelete={handleDeleteFromBin}
+                  onRestore={handleRestoreFromBin}
+                />
+              )
+            }
+          : w
+      ))
+    }
+  }, [recycleBinItems])
 
   const handleDesktopMouseDown = (e: React.MouseEvent) => {
     if (e.target === desktopRef.current || (e.target as HTMLElement).classList.contains('desktop-icons')) {
+      // Check if clicking on a selected icon
+      const clickedIcon = (e.target as HTMLElement).closest('.desktop-icon')
+      if (clickedIcon && selectedIcons.length > 0) {
+        const iconId = clickedIcon.getAttribute('data-icon-id')
+        if (iconId && selectedIcons.includes(iconId)) {
+          // Start dragging selected icons
+          setIsDraggingSelected(true)
+          setDragOffset({
+            x: e.clientX,
+            y: e.clientY
+          })
+          return
+        }
+      }
+      
+      // Start selection box
       setSelectedIcons([])
       setSelectionBox({
         startX: e.clientX,
@@ -194,6 +275,31 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
           endX: e.clientX,
           endY: e.clientY,
         } : null)
+      }
+      
+      if (isDraggingSelected && dragOffset && selectedIcons.length > 0) {
+        const deltaX = e.clientX - dragOffset.x
+        const deltaY = e.clientY - dragOffset.y
+        
+        // Update positions of all selected icons
+        setIconPositions(prev => 
+          prev.map(icon => 
+            selectedIcons.includes(icon.id)
+              ? { ...icon, x: Math.max(0, icon.x + deltaX), y: Math.max(0, icon.y + deltaY) }
+              : icon
+          )
+        )
+        
+        // Check if hovering over recycle bin
+        const recycleBinPos = iconPositions.find(p => p.id === 'recycle-bin')
+        if (recycleBinPos) {
+          const distance = Math.sqrt(
+            Math.pow(e.clientX - recycleBinPos.x, 2) + Math.pow(e.clientY - recycleBinPos.y, 2)
+          )
+          setIsRecycleBinHovered(distance < 100)
+        }
+        
+        setDragOffset({ x: e.clientX, y: e.clientY })
       }
     }
 
@@ -221,9 +327,35 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
         setSelectedIcons(selected)
         setSelectionBox(null)
       }
+      
+      if (isDraggingSelected) {
+        // Check if dropped on recycle bin
+        if (isRecycleBinHovered && selectedIcons.length > 0) {
+          const toRecycle = selectedIcons.filter(id => id !== 'recycle-bin')
+          if (toRecycle.length > 0) {
+            const itemsToAdd: RecycleBinItem[] = toRecycle.map(id => {
+              const icon = desktopIcons.find(i => i.id === id)
+              const originalPosition = initialIconPositions.find(p => p.id === id)
+              return {
+                id,
+                title: icon?.title || '',
+                icon: icon?.icon || '',
+                originalPosition: originalPosition || { x: 20, y: 20 }
+              }
+            })
+            
+            setRecycleBinItems(prev => [...prev, ...itemsToAdd])
+            setSelectedIcons([])
+          }
+        }
+        
+        setIsDraggingSelected(false)
+        setDragOffset(null)
+        setIsRecycleBinHovered(false)
+      }
     }
 
-    if (selectionBox) {
+    if (selectionBox || isDraggingSelected) {
       document.addEventListener('mousemove', handleMouseMove)
       document.addEventListener('mouseup', handleMouseUp)
       return () => {
@@ -231,7 +363,7 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
         document.removeEventListener('mouseup', handleMouseUp)
       }
     }
-  }, [selectionBox, iconPositions])
+  }, [selectionBox, iconPositions, isDraggingSelected, dragOffset, selectedIcons])
 
   const desktopIcons = [
     {
@@ -256,19 +388,28 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
       id: 'recycle-bin',
       title: 'Recycle Bin',
       icon: '/assets/icons/recyclin-bin.png',
-      onDoubleClick: () => {}, // Empty function - just for decoration
+      onDoubleClick: () => openWindow(
+        'recycle-bin', 
+        'Recycle Bin', 
+        '/assets/icons/recyclin-bin.png', 
+        <RecycleBin 
+          items={recycleBinItems}
+          onDelete={handleDeleteFromBin}
+          onRestore={handleRestoreFromBin}
+        />
+      ),
     },
   ]
 
   return (
     <div 
       ref={desktopRef}
-      className="desktop" 
+      className={`desktop ${isDraggingSelected ? 'multi-drag-active' : ''}`}
       onMouseDown={handleDesktopMouseDown}
     >
       <div className="desktop-icons">
         {desktopIcons
-          .filter(icon => !deletedIcons.includes(icon.id))
+          .filter(icon => !recycleBinItems.some(item => item.id === icon.id))
           .map((icon) => {
             const position = iconPositions.find(p => p.id === icon.id) || { x: 20, y: 20 }
             const isRecycleBin = icon.id === 'recycle-bin'
@@ -312,21 +453,6 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
         />
       )}
 
-      {showDeleteConfirm && (
-        <div className="delete-confirm-overlay">
-          <div className="delete-confirm-dialog">
-            <div className="dialog-title">Confirm Delete</div>
-            <div className="dialog-message">
-              Are you sure you want to delete {itemsToDelete.length} item{itemsToDelete.length > 1 ? 's' : ''}?
-            </div>
-            <div className="dialog-buttons">
-              <button className="dialog-button confirm" onClick={confirmDelete}>Yes</button>
-              <button className="dialog-button cancel" onClick={cancelDelete}>No</button>
-            </div>
-          </div>
-        </div>
-      )}
-
       {windows.map(window => (
         <Window
           key={window.id}
@@ -357,6 +483,7 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
         onShutdown={onShutdown}
         onLogOff={onLogOff}
         onEmailClick={openEmailWindow}
+        onCommandPromptClick={openCommandPrompt}
       />
     </div>
   )

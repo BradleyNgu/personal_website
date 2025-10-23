@@ -47,12 +47,14 @@ function DesktopIcon({
       setClickTime(now)
       onSelect(id, e.ctrlKey || e.metaKey)
       
-      // Start dragging
-      setIsDragging(true)
-      setDragStart({
-        x: e.clientX - position.x,
-        y: e.clientY - position.y,
-      })
+      // Only start individual dragging if not part of a multi-selection
+      if (!e.ctrlKey && !e.metaKey) {
+        setIsDragging(true)
+        setDragStart({
+          x: e.clientX - position.x,
+          y: e.clientY - position.y,
+        })
+      }
       
       setTimeout(() => {
         setClickTime(0)
@@ -62,17 +64,21 @@ function DesktopIcon({
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
-      if (isDragging && !isRecycleBin) {
+      if (isDragging) {
         const newX = Math.max(0, e.clientX - dragStart.x)
         const newY = Math.max(0, e.clientY - dragStart.y)
         onPositionChange(id, newX, newY)
-        onDragOver(id, newX, newY)
+        if (!isRecycleBin) {
+          onDragOver(id, newX, newY)
+        }
       }
     }
 
     const handleMouseUp = () => {
-      if (isDragging && !isRecycleBin) {
-        onDropOnRecycleBin(id)
+      if (isDragging) {
+        if (!isRecycleBin) {
+          onDropOnRecycleBin(id)
+        }
       }
       setIsDragging(false)
     }
@@ -92,6 +98,7 @@ function DesktopIcon({
       className={`desktop-icon ${isSelected ? 'selected' : ''} ${isRecycleBinHovered ? 'recycle-bin-hovered' : ''}`}
       style={{ left: `${position.x}px`, top: `${position.y}px` }}
       onMouseDown={handleMouseDown}
+      data-icon-id={id}
     >
       <div className="icon-image-container">
         <img src={icon} alt={title} className="icon-image" />

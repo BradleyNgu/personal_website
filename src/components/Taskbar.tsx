@@ -8,9 +8,10 @@ interface TaskbarProps {
   onShutdown: () => void
   onLogOff: () => void
   onEmailClick: () => void
+  onCommandPromptClick: () => void
 }
 
-function Taskbar({ windows, onWindowClick, onShutdown, onLogOff, onEmailClick }: TaskbarProps) {
+function Taskbar({ windows, onWindowClick, onShutdown, onLogOff, onEmailClick, onCommandPromptClick }: TaskbarProps) {
   const [showStartMenu, setShowStartMenu] = useState(false)
   const [currentTime, setCurrentTime] = useState(new Date())
 
@@ -133,7 +134,13 @@ function Taskbar({ windows, onWindowClick, onShutdown, onLogOff, onEmailClick }:
 
       <div className="quick-launch">
         <img src="/assets/icons/Windows XP Icons/Internet Explorer 6.png" alt="Internet Explorer" className="quick-launch-icon" title="Internet Explorer" />
-        <img src="/assets/icons/Windows XP Icons/Command Prompt.png" alt="Command Prompt" className="quick-launch-icon" title="Command Prompt" />
+        <img 
+          src="/assets/icons/Windows XP Icons/Command Prompt.png" 
+          alt="Command Prompt" 
+          className="quick-launch-icon" 
+          title="Command Prompt"
+          onClick={onCommandPromptClick}
+        />
       </div>
 
       <div className="taskbar-windows">

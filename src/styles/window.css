@@ -12,6 +12,15 @@
   padding: 3px;
 }
 
+.window.maximized {
+  border-radius: 0;
+  box-shadow: none;
+  border: none;
+  padding: 0;
+  max-width: none;
+  max-height: none;
+}
+
 @keyframes windowOpen {
   from {
     opacity: 0;

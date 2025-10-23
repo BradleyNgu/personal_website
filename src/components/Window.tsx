@@ -86,12 +86,13 @@ function Window({
 
   const style: React.CSSProperties = window.isMaximized
     ? {
-        position: 'absolute',
+        position: 'fixed',
         top: 0,
         left: 0,
-        width: '100%',
-        height: 'calc(100% - 40px)',
+        width: '100vw',
+        height: '100vh',
         zIndex: window.zIndex,
+        borderRadius: 0,
       }
     : {
         position: 'absolute',
@@ -123,8 +124,8 @@ function Window({
           <button className="window-button minimize" onClick={onMinimize} title="Minimize">
             <img src="/assets/icons/Windows XP Icons/Minimize.png" alt="Minimize" />
           </button>
-          <button className="window-button maximize" onClick={onMaximize} title="Maximize">
-            <img src="/assets/icons/Windows XP Icons/Maximize.png" alt="Maximize" />
+          <button className="window-button maximize" onClick={onMaximize} title={window.isMaximized ? "Restore" : "Maximize"}>
+            <img src={window.isMaximized ? "/assets/icons/Windows XP Icons/Restore.png" : "/assets/icons/Windows XP Icons/Maximize.png"} alt={window.isMaximized ? "Restore" : "Maximize"} />
           </button>
           <button className="window-button close" onClick={onClose} title="Close">
             <img src="/assets/icons/Windows XP Icons/Exit.png" alt="Close" />

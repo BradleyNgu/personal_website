@@ -212,6 +212,8 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
 
   const handleDeleteFromBin = (itemId: string) => {
     setRecycleBinItems(prev => prev.filter(item => item.id !== itemId))
+    // Also remove the icon position to prevent it from reappearing
+    setIconPositions(prev => prev.filter(pos => pos.id !== itemId))
   }
 
   const handleRestoreFromBin = (itemId: string) => {

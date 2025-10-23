@@ -105,7 +105,7 @@ function Resume() {
     <div style={{ width: '100%', height: '100%', position: 'relative' }}>
       <div style={{
         position: 'absolute',
-        top: '10px',
+        top: '11px',
         right: '10px',
         zIndex: 10
       }}>
@@ -123,7 +123,7 @@ function Resume() {
             boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.3)'
           }}
         >
-          Alternative View
+          Alternative View / Download
         </button>
       </div>
       <iframe

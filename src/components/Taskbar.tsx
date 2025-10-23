@@ -11,9 +11,10 @@ interface TaskbarProps {
   onCommandPromptClick: () => void
   onMyPicturesClick: () => void
   onMyMusicClick: () => void
+  onResumeClick: () => void
 }
 
-function Taskbar({ windows, onWindowClick, onShutdown, onLogOff, onEmailClick, onCommandPromptClick, onMyPicturesClick, onMyMusicClick }: TaskbarProps) {
+function Taskbar({ windows, onWindowClick, onShutdown, onLogOff, onEmailClick, onCommandPromptClick, onMyPicturesClick, onMyMusicClick, onResumeClick }: TaskbarProps) {
   const [showStartMenu, setShowStartMenu] = useState(false)
   const [currentTime, setCurrentTime] = useState(new Date())
 
@@ -68,6 +69,13 @@ function Taskbar({ windows, onWindowClick, onShutdown, onLogOff, onEmailClick, o
                 <div className="start-menu-item">
                   <img src="/assets/icons/Windows XP Icons/Internet Explorer 6.png" alt="" className="menu-icon-large" />
                   <span>Internet</span>
+                </div>
+                <div className="start-menu-item" onClick={() => {
+                  onResumeClick()
+                  setShowStartMenu(false)
+                }}>
+                  <img src="/assets/icons/Windows XP Icons/pdf.png" alt="" className="menu-icon-large" />
+                  <span>My Resume</span>
                 </div>
               </div>
               <div className="start-menu-divider"></div>

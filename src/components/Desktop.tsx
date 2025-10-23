@@ -160,6 +160,10 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
     openWindow('my-music', 'My Music', '/assets/icons/Windows XP Icons/My Music.png', <MyMusic />)
   }
 
+  const openResume = () => {
+    openWindow('resume', 'My Resume', '/assets/icons/Windows XP Icons/pdf.png', <Resume />)
+  }
+
   const updateIconPosition = (id: string, x: number, y: number) => {
     setIconPositions(prev => 
       prev.map(icon => icon.id === id ? { ...icon, x, y } : icon)
@@ -505,6 +509,7 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
         onCommandPromptClick={openCommandPrompt}
         onMyPicturesClick={openMyPictures}
         onMyMusicClick={openMyMusic}
+        onResumeClick={openResume}
       />
     </div>
   )

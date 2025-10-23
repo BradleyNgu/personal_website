@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 
 interface Photo {
   name: string
@@ -12,7 +12,7 @@ function MyPictures() {
   const [photos, setPhotos] = useState<Photo[]>([])
   const [selectedPhotos, setSelectedPhotos] = useState<string[]>([])
   const [viewMode, setViewMode] = useState<'large' | 'small' | 'list'>('large')
-  const [currentPath, setCurrentPath] = useState('My Pictures')
+  const [currentPath] = useState('My Pictures')
   const [loading, setLoading] = useState(true)
 
   // Load photos from the MyPictures folder

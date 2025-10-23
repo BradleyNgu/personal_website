@@ -99,7 +99,7 @@ function CommandPrompt() {
     }
   ])
   const [currentCommand, setCurrentCommand] = useState('')
-  const [currentPath, setCurrentPath] = useState('C:\\Users\\Bradley>')
+  const [currentPath] = useState('C:\\Users\\Bradley>')
   const [isExecuting, setIsExecuting] = useState(false)
   const terminalRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 
 interface MusicFile {
   name: string
@@ -15,7 +15,7 @@ function MyMusic() {
   const [musicFiles, setMusicFiles] = useState<MusicFile[]>([])
   const [selectedFiles, setSelectedFiles] = useState<string[]>([])
   const [viewMode, setViewMode] = useState<'large' | 'small' | 'list'>('large')
-  const [currentPath, setCurrentPath] = useState('My Music')
+  const [currentPath] = useState('My Music')
   const [loading, setLoading] = useState(true)
   const [isPlaying, setIsPlaying] = useState(false)
   const [currentTrack, setCurrentTrack] = useState<string | null>(null)
@@ -56,6 +56,7 @@ function MyMusic() {
         }
         audio.onerror = () => {
           // Music file doesn't exist, skip it
+          console.log(`Music file not found: ${filename}`)
         }
         audio.src = `/MyMusic/${filename}`
       }

@@ -214,6 +214,8 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
     setRecycleBinItems(prev => prev.filter(item => item.id !== itemId))
     // Also remove the icon position to prevent it from reappearing
     setIconPositions(prev => prev.filter(pos => pos.id !== itemId))
+    // Remove from selected icons if it was selected
+    setSelectedIcons(prev => prev.filter(id => id !== itemId))
   }
 
   const handleRestoreFromBin = (itemId: string) => {
@@ -436,7 +438,8 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
         {desktopIcons
           .filter(icon => !recycleBinItems.some(item => item.id === icon.id))
           .map((icon) => {
-            const position = iconPositions.find(p => p.id === icon.id) || { x: 20, y: 20 }
+            const position = iconPositions.find(p => p.id === icon.id)
+            if (!position) return null // Don't render if no position found
             const isRecycleBin = icon.id === 'recycle-bin'
             return (
               <DesktopIcon
@@ -463,7 +466,8 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
                 }}
               />
             )
-          })}
+          })
+          .filter(Boolean)}
       </div>
 
       {selectionBox && (

@@ -24,6 +24,7 @@ function ShutdownScreen({ onComplete }: ShutdownScreenProps) {
     <div className="shutdown-screen">
       <div className="shutdown-top-bar"></div>
       <div className="shutdown-content">
+        <div className="inspired-by-text">Inspired by:</div>
         <img src="/assets/icons/Window_XP.png" alt="Windows XP" className="shutdown-logo" />
         <div className="shutdown-message">
           Windows is shutting down...

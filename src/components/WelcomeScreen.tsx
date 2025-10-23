@@ -47,6 +47,7 @@ function WelcomeScreen({ onLogin, onShutdown }: WelcomeScreenProps) {
       
       <div className="welcome-main">
         <div className="windows-logo-section">
+          <div className="inspired-by-text">Inspired by:</div>
           <img src="/assets/icons/Window_XP.png" alt="Windows XP" className="windows-xp-logo" />
         </div>
         <div className="instruction-text">

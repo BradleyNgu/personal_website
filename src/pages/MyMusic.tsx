@@ -19,6 +19,7 @@ function MyMusic() {
   const [loading, setLoading] = useState(true)
   const [isPlaying, setIsPlaying] = useState(false)
   const [currentTrack, setCurrentTrack] = useState<string | null>(null)
+  const [audioElement, setAudioElement] = useState<HTMLAudioElement | null>(null)
 
   // Load music files from the MyMusic folder
   useEffect(() => {
@@ -83,10 +84,36 @@ function MyMusic() {
   }
 
   const handlePlayMusic = (musicName: string) => {
+    // Stop current audio if playing
+    if (audioElement) {
+      audioElement.pause()
+      audioElement.currentTime = 0
+    }
+
+    // Create new audio element
+    const audio = new Audio(`/MyMusic/${musicName}`)
+    setAudioElement(audio)
     setCurrentTrack(musicName)
     setIsPlaying(true)
-    // In a real implementation, you would play the actual audio file
-    console.log(`Playing: ${musicName}`)
+
+    // Set up event listeners
+    audio.onended = () => {
+      setIsPlaying(false)
+      setCurrentTrack(null)
+    }
+
+    audio.onerror = () => {
+      console.log(`Error playing: ${musicName}`)
+      setIsPlaying(false)
+      setCurrentTrack(null)
+    }
+
+    // Play the audio
+    audio.play().catch(error => {
+      console.log(`Playback failed: ${error}`)
+      setIsPlaying(false)
+      setCurrentTrack(null)
+    })
   }
 
   const handleViewModeChange = (mode: 'large' | 'small' | 'list') => {
@@ -263,15 +290,32 @@ function MyMusic() {
               <div className="player-controls">
                 <button 
                   className="control-btn"
-                  onClick={() => setIsPlaying(!isPlaying)}
+                  onClick={() => {
+                    if (audioElement) {
+                      if (isPlaying) {
+                        audioElement.pause()
+                        setIsPlaying(false)
+                      } else {
+                        audioElement.play().catch(error => {
+                          console.log(`Playback failed: ${error}`)
+                        })
+                        setIsPlaying(true)
+                      }
+                    }
+                  }}
                 >
                   {isPlaying ? '⏸️' : '▶️'}
                 </button>
                 <button 
                   className="control-btn"
                   onClick={() => {
+                    if (audioElement) {
+                      audioElement.pause()
+                      audioElement.currentTime = 0
+                    }
                     setCurrentTrack(null)
                     setIsPlaying(false)
+                    setAudioElement(null)
                   }}
                 >
                   ⏹️

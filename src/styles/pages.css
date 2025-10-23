@@ -1181,20 +1181,26 @@
 }
 
 .control-btn {
-  background: linear-gradient(to bottom, #f0f0f0, #e0e0e0);
-  border: 1px outset #d4d4d4;
-  border-radius: 2px;
-  padding: 4px 8px;
+  background: none;
+  border: none;
+  padding: 0;
   cursor: pointer;
-  font-size: 12px;
+  font-size: 18px;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #333;
+  transition: color 0.2s ease;
 }
 
 .control-btn:hover {
-  background: linear-gradient(to bottom, #e0e0e0, #d0d0d0);
+  color: #0066cc;
 }
 
 .control-btn:active {
-  border: 1px inset #d4d4d4;
+  color: #004499;
 }
 
 /* Scrollbar styling for music gallery */

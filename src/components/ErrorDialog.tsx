@@ -1,4 +1,3 @@
-import React from 'react'
 import '../styles/error-dialog.css'
 
 interface ErrorDialogProps {

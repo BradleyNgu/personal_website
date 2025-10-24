@@ -486,9 +486,9 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
     },
     {
       id: 'autobiography',
-      title: 'My Documents',
+      title: 'About Me',
       icon: '/assets/icons/folder.png',
-      onDoubleClick: () => openWindow('autobiography', 'My Documents', '/assets/icons/folder.png', <Autobiography />),
+      onDoubleClick: () => openWindow('autobiography', 'About Me', '/assets/icons/folder.png', <Autobiography />),
     },
     {
       id: 'resume',

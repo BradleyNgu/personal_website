@@ -200,7 +200,7 @@ function MyMusic() {
             </div>
             <div className="place-item">
               <img src="/assets/icons/Windows XP Icons/My Documents.png" alt="" />
-              <span>My Documents</span>
+              <span>About Me</span>
             </div>
             <div className="place-item">
               <img src="/assets/icons/Windows XP Icons/Shared Documents.png" alt="" />

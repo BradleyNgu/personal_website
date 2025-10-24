@@ -88,7 +88,7 @@ function Taskbar({ windows, onWindowClick, onShutdown, onLogOff, onEmailClick, o
             <div className="start-menu-right">
               <div className="start-menu-item">
                 <img src="/assets/icons/Windows XP Icons/My Documents.png" alt="" className="menu-icon-small" />
-                <span>My Documents</span>
+                <span>About Me</span>
               </div>
               <div className="start-menu-item">
                 <img src="/assets/icons/folder.png" alt="" className="menu-icon-small" />

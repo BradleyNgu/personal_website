@@ -10,7 +10,7 @@ const sections: AboutSection[] = [
   {
     id: '1',
     title: 'About Me',
-    content: 'Hi! I\'m Bradley Nguyen, a Computer Science student at Carleton University pursuing a Bachelor\'s degree in the Honours Co-op program with a Software Engineering stream. I\'m passionate about building innovative software solutions that solve real-world problems.\n\nWith a major CGPA of 3.77/4.0, I\'ve been recognized for my technical skills and innovation at multiple hackathons, winning over $2,700 in prizes and competing against 1000+ participants.',
+    content: 'Hi! I\'m Bradley Nguyen, a Computer Science student at Carleton University pursuing a Bachelor\'s degree in the Honours Co-op program with a Software Engineering stream. I\'m passionate about building IoT systems and software/hardware solutions that solve real-world problems.\n\n Outside of school, I do a lot of hackathons on the side, in which I have won over $2,700 in prizes competing against 1000+ participants. Other than working with tech, I\'m interested in F1, Sim Racing, and playing volleyball.',
   },
   {
     id: '2',
@@ -25,7 +25,7 @@ const sections: AboutSection[] = [
   {
     id: '4',
     title: 'Achievements',
-    content: '🏆 Winner at SolutionHacks 2025 - $200 prize\n🏆 Challenge Winner at cuHacking 6 - $300 prize\n🥈 2nd Place at uOttaHack 7 (Best Use of Starknet) - $2,200 prize\n\nCompeted against 1000+ participants across multiple hackathons, demonstrating strong problem-solving skills, technical expertise, and ability to deliver innovative solutions under tight deadlines.',
+    content: '🏆 Winner at SolutionHacks 2025 - $200 prize\n🏆 Challenge Winner at cuHacking 6 - $300 prize\n🥈 2nd Place at uOttaHack 7 (Best Use of Starknet) - $2,200 prize',
   },
   {
     id: '5',
@@ -46,9 +46,21 @@ function Autobiography() {
           <div key={section.id} className="about-card">
             <h2>{section.title}</h2>
             <div className="about-content">
-              {section.content.split('\n').map((line, idx) => (
-                <p key={idx}>{line || '\u00A0'}</p>
-              ))}
+              {section.id === '5' ? (
+                // Special handling for contact section with hyperlinks
+                <div>
+                  <p>📧 Email: <a href="mailto:bradleynguyen2004@gmail.com">bradleynguyen2004@gmail.com</a></p>
+                  <p>📱 Phone: <a href="tel:647-686-9717">647-686-9717</a></p>
+                  <p>💼 LinkedIn: <a href="https://linkedin.com/in/bradley-nguyen-cs" target="_blank" rel="noopener noreferrer">linkedin.com/in/bradley-nguyen-cs</a></p>
+                  <p>👨‍💻 GitHub: <a href="https://github.com/bradleyngu" target="_blank" rel="noopener noreferrer">github.com/bradleyngu</a></p>
+                  <p></p>
+                  <p>Feel free to reach out for collaboration opportunities, project discussions, or just to connect!</p>
+                </div>
+              ) : (
+                section.content.split('\n').map((line, idx) => (
+                  <p key={idx}>{line || '\u00A0'}</p>
+                ))
+              )}
             </div>
           </div>
         ))}

@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react'
 import Taskbar from './Taskbar'
 import Window from './Window'
 import DesktopIcon from './DesktopIcon'
+import ErrorDialog from './ErrorDialog'
 import Projects from '../pages/Projects'
 import Experiences from '../pages/Experiences'
 import Autobiography from '../pages/Autobiography'
@@ -71,6 +72,15 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
   const [isRecycleBinHovered, setIsRecycleBinHovered] = useState(false)
   const [isDraggingSelected, setIsDraggingSelected] = useState(false)
   const [dragOffset, setDragOffset] = useState<{ x: number; y: number } | null>(null)
+  const [errorDialog, setErrorDialog] = useState<{
+    isOpen: boolean
+    title: string
+    message: string
+  }>({
+    isOpen: false,
+    title: '',
+    message: ''
+  })
   const desktopRef = useRef<HTMLDivElement>(null)
 
   const openWindow = (id: string, title: string, icon: string, component: React.ReactNode) => {
@@ -183,12 +193,61 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
     }
   }
 
+  const isApplicationOpen = (iconId: string): boolean => {
+    return windows.some(window => window.id === iconId)
+  }
+
+  const showErrorDialog = (title: string, message: string) => {
+    setErrorDialog({
+      isOpen: true,
+      title,
+      message
+    })
+  }
+
+  const closeErrorDialog = () => {
+    setErrorDialog({
+      isOpen: false,
+      title: '',
+      message: ''
+    })
+  }
+
   const handleIconDropOnRecycleBin = (iconId: string) => {
     if (isRecycleBinHovered) {
       // Get all items to move to bin (selected items or just the dragged item)
       const toRecycle = selectedIcons.includes(iconId) 
         ? selectedIcons.filter(id => id !== 'recycle-bin')
         : [iconId]
+      
+      // Check if any of the items to recycle are currently open
+      const openApplications = toRecycle.filter(id => isApplicationOpen(id))
+      
+      if (openApplications.length > 0) {
+        // Show error dialog for open applications
+        const appNames = openApplications.map(id => {
+          const icon = desktopIcons.find(i => i.id === id)
+          return icon?.title || id
+        }).join(', ')
+        
+        // Reset positions of items that couldn't be moved
+        setIconPositions(prev => 
+          prev.map(icon => {
+            if (toRecycle.includes(icon.id)) {
+              const originalPosition = initialIconPositions.find(p => p.id === icon.id)
+              return originalPosition ? { ...icon, ...originalPosition } : icon
+            }
+            return icon
+          })
+        )
+        
+        showErrorDialog(
+          'Cannot Move Items',
+          `Cannot move ${appNames} to the Recycle Bin because ${openApplications.length === 1 ? 'it is' : 'they are'} currently open. Please close the application${openApplications.length > 1 ? 's' : ''} and try again.`
+        )
+        setIsRecycleBinHovered(false)
+        return
+      }
       
       if (toRecycle.length > 0) {
         // Move items to recycle bin
@@ -353,7 +412,33 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
         // Check if dropped on recycle bin
         if (isRecycleBinHovered && selectedIcons.length > 0) {
           const toRecycle = selectedIcons.filter(id => id !== 'recycle-bin')
-          if (toRecycle.length > 0) {
+          
+          // Check if any of the items to recycle are currently open
+          const openApplications = toRecycle.filter(id => isApplicationOpen(id))
+          
+          if (openApplications.length > 0) {
+            // Show error dialog for open applications
+            const appNames = openApplications.map(id => {
+              const icon = desktopIcons.find(i => i.id === id)
+              return icon?.title || id
+            }).join(', ')
+            
+            // Reset positions of items that couldn't be moved
+            setIconPositions(prev => 
+              prev.map(icon => {
+                if (toRecycle.includes(icon.id)) {
+                  const originalPosition = initialIconPositions.find(p => p.id === icon.id)
+                  return originalPosition ? { ...icon, ...originalPosition } : icon
+                }
+                return icon
+              })
+            )
+            
+            showErrorDialog(
+              'Cannot Move Items',
+              `Cannot move ${appNames} to the Recycle Bin because ${openApplications.length === 1 ? 'it is' : 'they are'} currently open. Please close the application${openApplications.length > 1 ? 's' : ''} and try again.`
+            )
+          } else if (toRecycle.length > 0) {
             const itemsToAdd: RecycleBinItem[] = toRecycle.map(id => {
               const icon = desktopIcons.find(i => i.id === id)
               const originalPosition = initialIconPositions.find(p => p.id === id)
@@ -516,6 +601,13 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
         onMyPicturesClick={openMyPictures}
         onMyMusicClick={openMyMusic}
         onResumeClick={openResume}
+      />
+
+      <ErrorDialog
+        isOpen={errorDialog.isOpen}
+        title={errorDialog.title}
+        message={errorDialog.message}
+        onClose={closeErrorDialog}
       />
     </div>
   )

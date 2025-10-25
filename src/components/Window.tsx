@@ -29,7 +29,7 @@ function Window({
   
   // Detect if device is mobile
   const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || 
-                  ('ontouchstart' in window && window.innerWidth <= 768)
+                  ('ontouchstart' in globalThis && globalThis.innerWidth <= 768)
 
   const handleMouseDownTitle = (e: React.MouseEvent) => {
     if (window.isMaximized) return

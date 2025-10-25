@@ -31,7 +31,13 @@ function Taskbar({ windows, onWindowClick, onShutdown, onLogOff, onEmailClick, o
   // Close start menu when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (showStartMenu && startMenuRef.current && !startMenuRef.current.contains(event.target as Node)) {
+      const target = event.target as Node
+      const startButton = document.querySelector('.start-button')
+      
+      if (showStartMenu && 
+          startMenuRef.current && 
+          !startMenuRef.current.contains(target) &&
+          !startButton?.contains(target)) {
         setShowStartMenu(false)
       }
     }
@@ -53,11 +59,18 @@ function Taskbar({ windows, onWindowClick, onShutdown, onLogOff, onEmailClick, o
     })
   }
 
+  const handleStartButtonClick = (e: React.MouseEvent | React.TouchEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    setShowStartMenu(!showStartMenu)
+  }
+
   return (
     <div className="taskbar">
       <button 
         className={`start-button ${showStartMenu ? 'active' : ''}`}
-        onClick={() => setShowStartMenu(!showStartMenu)}
+        onClick={handleStartButtonClick}
+        onTouchStart={handleStartButtonClick}
       >
         <img src="/assets/icons/start_2.png" alt="Start" className="start-icon-img" />
       </button>

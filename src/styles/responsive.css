@@ -9,6 +9,9 @@
   .start-button {
     height: 35px !important;
     min-width: 35px !important;
+    touch-action: manipulation !important;
+    -webkit-user-select: none !important;
+    user-select: none !important;
   }
   
   .system-tray {
@@ -120,6 +123,9 @@
   .start-button {
     height: 38px !important;
     min-width: 38px !important;
+    touch-action: manipulation !important;
+    -webkit-user-select: none !important;
+    user-select: none !important;
   }
   
   .system-tray {
@@ -376,6 +382,9 @@
     box-sizing: border-box !important;
     border-radius: 0 !important;
     border: none !important;
+    touch-action: manipulation !important;
+    -webkit-user-select: none !important;
+    user-select: none !important;
   }
   
   .start-icon-img {

@@ -668,6 +668,31 @@
     justify-content: center !important;
   }
   
+  /* Mobile touch support for window dragging */
+  .window-title-bar {
+    touch-action: none !important;
+    -webkit-user-select: none !important;
+    user-select: none !important;
+  }
+  
+  .window-resize-handle {
+    touch-action: none !important;
+    -webkit-user-select: none !important;
+    user-select: none !important;
+  }
+  
+  /* Prevent text selection during drag on mobile */
+  .window {
+    -webkit-user-select: none !important;
+    user-select: none !important;
+  }
+  
+  /* Allow text selection in window content */
+  .window-content {
+    -webkit-user-select: text !important;
+    user-select: text !important;
+  }
+  
   /* Ensure consistent button sizing across all mobile breakpoints */
   @media (max-width: 480px) {
     .menu-item {

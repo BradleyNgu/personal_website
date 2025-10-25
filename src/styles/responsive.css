@@ -231,6 +231,7 @@
     height: 100vh !important;
     height: 100dvh !important; /* Dynamic viewport height for mobile */
     overflow-x: hidden !important;
+    overflow-y: auto !important;
   }
   
   /* Handle safe area insets for devices with notches */
@@ -690,10 +691,22 @@
     max-width: 300px !important;
     left: 0 !important;
     right: auto !important;
+    bottom: 40px !important;
+    z-index: 10001 !important;
+    position: fixed !important;
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    max-height: calc(100vh - 100px) !important;
+    overflow-y: auto !important;
+    animation: slideUp 0.2s ease-out !important;
+    transform: translateY(0) !important;
   }
   
   .start-menu-main {
     min-height: 250px !important;
+    max-height: calc(100vh - 120px) !important;
+    overflow-y: auto !important;
   }
   
   .start-menu-left {
@@ -931,6 +944,10 @@
   
   .start-menu {
     width: 320px !important;
+    z-index: 10001 !important;
+    position: fixed !important;
+    max-height: calc(100vh - 80px) !important;
+    overflow-y: auto !important;
   }
   
   /* Taskbar tablet */

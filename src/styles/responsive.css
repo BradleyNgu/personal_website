@@ -385,6 +385,7 @@
     touch-action: manipulation !important;
     -webkit-user-select: none !important;
     user-select: none !important;
+    cursor: pointer !important;
   }
   
   .start-icon-img {
@@ -710,6 +711,8 @@
     overflow-y: auto !important;
     animation: slideUp 0.2s ease-out !important;
     transform: translateY(0) !important;
+    touch-action: auto !important;
+    pointer-events: auto !important;
   }
   
   .start-menu-main {
@@ -729,6 +732,8 @@
   .start-menu-item {
     padding: 8px 12px !important;
     font-size: 12px !important;
+    touch-action: manipulation !important;
+    pointer-events: auto !important;
   }
   
   .menu-icon-large {

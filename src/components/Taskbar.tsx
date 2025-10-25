@@ -59,7 +59,7 @@ function Taskbar({ windows, onWindowClick, onShutdown, onLogOff, onEmailClick, o
     })
   }
 
-  const handleStartButtonClick = (e: React.MouseEvent | React.TouchEvent) => {
+  const handleStartButtonClick = (e: React.MouseEvent) => {
     e.preventDefault()
     e.stopPropagation()
     setShowStartMenu(!showStartMenu)
@@ -70,7 +70,6 @@ function Taskbar({ windows, onWindowClick, onShutdown, onLogOff, onEmailClick, o
       <button 
         className={`start-button ${showStartMenu ? 'active' : ''}`}
         onClick={handleStartButtonClick}
-        onTouchStart={handleStartButtonClick}
       >
         <img src="/assets/icons/start_2.png" alt="Start" className="start-icon-img" />
       </button>
@@ -91,10 +90,16 @@ function Taskbar({ windows, onWindowClick, onShutdown, onLogOff, onEmailClick, o
           <div className="start-menu-main">
             <div className="start-menu-left">
               <div className="pinned-items">
-                <div className="start-menu-item" onClick={() => {
-                  onEmailClick()
-                  setShowStartMenu(false)
-                }}>
+                <div className="start-menu-item" 
+                  onClick={() => {
+                    onEmailClick()
+                    setShowStartMenu(false)
+                  }}
+                  onTouchStart={() => {
+                    onEmailClick()
+                    setShowStartMenu(false)
+                  }}
+                >
                   <img src="/assets/icons/Windows XP Icons/Email.png" alt="" className="menu-icon-large" />
                   <span>Email</span>
                 </div>
@@ -102,10 +107,16 @@ function Taskbar({ windows, onWindowClick, onShutdown, onLogOff, onEmailClick, o
                   <img src="/assets/icons/Windows XP Icons/Internet Explorer 6.png" alt="" className="menu-icon-large" />
                   <span>Internet</span>
                 </div>
-                <div className="start-menu-item" onClick={() => {
-                  onResumeClick()
-                  setShowStartMenu(false)
-                }}>
+                <div className="start-menu-item" 
+                  onClick={() => {
+                    onResumeClick()
+                    setShowStartMenu(false)
+                  }}
+                  onTouchStart={() => {
+                    onResumeClick()
+                    setShowStartMenu(false)
+                  }}
+                >
                   <img src="/assets/icons/Windows XP Icons/pdf.png" alt="" className="menu-icon-large" />
                   <span>My Resume</span>
                 </div>
@@ -118,24 +129,42 @@ function Taskbar({ windows, onWindowClick, onShutdown, onLogOff, onEmailClick, o
             </div>
             
             <div className="start-menu-right">
-              <div className="start-menu-item" onClick={() => {
-                onAutobiographyClick()
-                setShowStartMenu(false)
-              }}>
+              <div className="start-menu-item" 
+                onClick={() => {
+                  onAutobiographyClick()
+                  setShowStartMenu(false)
+                }}
+                onTouchStart={() => {
+                  onAutobiographyClick()
+                  setShowStartMenu(false)
+                }}
+              >
                 <img src="/assets/icons/Windows XP Icons/My Documents.png" alt="" className="menu-icon-small" />
                 <span>About Me</span>
               </div>
-              <div className="start-menu-item" onClick={() => {
-                onMyPicturesClick()
-                setShowStartMenu(false)
-              }}>
+              <div className="start-menu-item" 
+                onClick={() => {
+                  onMyPicturesClick()
+                  setShowStartMenu(false)
+                }}
+                onTouchStart={() => {
+                  onMyPicturesClick()
+                  setShowStartMenu(false)
+                }}
+              >
                 <img src="/assets/icons/Windows XP Icons/My Pictures.png" alt="" className="menu-icon-small" />
                 <span>My Pictures</span>
               </div>
-              <div className="start-menu-item" onClick={() => {
-                onMyMusicClick()
-                setShowStartMenu(false)
-              }}>
+              <div className="start-menu-item" 
+                onClick={() => {
+                  onMyMusicClick()
+                  setShowStartMenu(false)
+                }}
+                onTouchStart={() => {
+                  onMyMusicClick()
+                  setShowStartMenu(false)
+                }}
+              >
                 <img src="/assets/icons/Windows XP Icons/My Music.png" alt="" className="menu-icon-small" />
                 <span>My Music</span>
               </div>
@@ -165,11 +194,17 @@ function Taskbar({ windows, onWindowClick, onShutdown, onLogOff, onEmailClick, o
           
           <div className="start-menu-bottom">
             <div className="bottom-buttons">
-              <button className="log-off-btn" onClick={onLogOff}>
+              <button className="log-off-btn" 
+                onClick={onLogOff}
+                onTouchStart={onLogOff}
+              >
                 <img src="/assets/icons/Windows XP Icons/Logout.png" alt="Log Off" className="btn-icon" />
                 Log Off
               </button>
-              <button className="turn-off-btn" onClick={onShutdown}>
+              <button className="turn-off-btn" 
+                onClick={onShutdown}
+                onTouchStart={onShutdown}
+              >
                 <img src="/assets/icons/Windows XP Icons/Power.png" alt="Turn Off" className="btn-icon" />
                 Turn Off Computer
               </button>

@@ -14,6 +14,19 @@
     user-select: none !important;
   }
   
+  /* Mobile viewport handling for very small screens */
+  .welcome-screen {
+    height: 100vh !important;
+    height: 100dvh !important;
+    width: 100vw !important;
+    width: 100dvw !important;
+    padding-top: env(safe-area-inset-top) !important;
+    padding-bottom: env(safe-area-inset-bottom) !important;
+    padding-left: env(safe-area-inset-left) !important;
+    padding-right: env(safe-area-inset-right) !important;
+    box-sizing: border-box !important;
+  }
+  
   .system-tray {
     height: 35px !important;
   }
@@ -126,6 +139,19 @@
     touch-action: manipulation !important;
     -webkit-user-select: none !important;
     user-select: none !important;
+  }
+  
+  /* Mobile viewport handling for small screens */
+  .welcome-screen {
+    height: 100vh !important;
+    height: 100dvh !important;
+    width: 100vw !important;
+    width: 100dvw !important;
+    padding-top: env(safe-area-inset-top) !important;
+    padding-bottom: env(safe-area-inset-bottom) !important;
+    padding-left: env(safe-area-inset-left) !important;
+    padding-right: env(safe-area-inset-right) !important;
+    box-sizing: border-box !important;
   }
   
   .system-tray {
@@ -246,7 +272,104 @@
     padding-left: env(safe-area-inset-left) !important;
     padding-right: env(safe-area-inset-right) !important;
   }
-  /* Welcome Screen Mobile */
+  /* Welcome Screen Mobile - Center like shutdown page */
+  .welcome-screen {
+    display: flex !important;
+    flex-direction: column !important;
+    grid-template-columns: none !important;
+    grid-template-rows: none !important;
+  }
+  
+  .welcome-main {
+    flex: 1 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0 !important;
+    gap: 30px !important;
+  }
+  
+  .welcome-right {
+    display: none !important; /* Hide right side on mobile */
+  }
+  
+  .welcome-divider {
+    display: none !important; /* Hide divider on mobile */
+  }
+  
+  /* Mobile viewport handling for top bar and footer */
+  .welcome-top-bar {
+    height: 80px !important;
+    min-height: 80px !important;
+    max-height: 80px !important;
+    flex-shrink: 0 !important;
+  }
+  
+  .welcome-footer {
+    height: auto !important;
+    min-height: 60px !important;
+    flex-shrink: 0 !important;
+    padding: 10px 20px !important;
+    box-sizing: border-box !important;
+  }
+  
+  /* Show user button in main content on mobile */
+  .mobile-user-section {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 15px !important;
+    margin-top: 20px !important;
+  }
+  
+  .mobile-user-section .user-account-tile {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 15px !important;
+  }
+  
+  /* Welcome Screen Mobile - Center like shutdown page */
+  .welcome-screen {
+    display: flex !important;
+    flex-direction: column !important;
+    grid-template-columns: none !important;
+    grid-template-rows: none !important;
+    height: 100vh !important;
+    height: 100dvh !important; /* Dynamic viewport height for mobile */
+    min-height: 100vh !important;
+    min-height: 100dvh !important;
+    width: 100vw !important;
+    width: 100dvw !important; /* Dynamic viewport width for mobile */
+    padding-top: env(safe-area-inset-top) !important;
+    padding-bottom: env(safe-area-inset-bottom) !important;
+    padding-left: env(safe-area-inset-left) !important;
+    padding-right: env(safe-area-inset-right) !important;
+    box-sizing: border-box !important;
+  }
+  
+  .welcome-main {
+    flex: 1 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0 !important;
+    gap: 30px !important;
+    min-height: 0 !important; /* Allow flex shrinking */
+  }
+  
+  .welcome-right {
+    display: none !important; /* Hide right side on mobile */
+  }
+  
+  .welcome-divider {
+    display: none !important; /* Hide divider on mobile */
+  }
+  
   .windows-logo {
     flex-direction: column;
     gap: 10px !important;
@@ -903,6 +1026,43 @@
   
   /* Ensure consistent button sizing across all mobile breakpoints */
   @media (max-width: 480px) {
+    /* Welcome Screen Mobile - Center like shutdown page */
+    .welcome-screen {
+      display: flex !important;
+      flex-direction: column !important;
+      grid-template-columns: none !important;
+      grid-template-rows: none !important;
+      height: 100vh !important;
+      height: 100dvh !important; /* Dynamic viewport height for mobile */
+      min-height: 100vh !important;
+      min-height: 100dvh !important;
+      width: 100vw !important;
+      width: 100dvw !important; /* Dynamic viewport width for mobile */
+      padding-top: env(safe-area-inset-top) !important;
+      padding-bottom: env(safe-area-inset-bottom) !important;
+      padding-left: env(safe-area-inset-left) !important;
+      padding-right: env(safe-area-inset-right) !important;
+      box-sizing: border-box !important;
+    }
+    
+    .welcome-main {
+      flex: 1 !important;
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: center !important;
+      justify-content: center !important;
+      padding: 0 !important;
+      gap: 30px !important;
+    }
+    
+    .welcome-right {
+      display: none !important; /* Hide right side on mobile */
+    }
+    
+    .welcome-divider {
+      display: none !important; /* Hide divider on mobile */
+    }
+    
     .menu-item {
       height: 22px !important;
       min-height: 22px !important;

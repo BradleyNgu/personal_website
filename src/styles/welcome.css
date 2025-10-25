@@ -11,6 +11,11 @@
   overflow: hidden;
 }
 
+/* Hide mobile user section on desktop */
+.mobile-user-section {
+  display: none;
+}
+
 .welcome-top-bar {
   grid-column: 1 / -1;
   grid-row: 1;

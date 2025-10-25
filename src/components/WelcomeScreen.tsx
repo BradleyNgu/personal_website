@@ -53,6 +53,34 @@ function WelcomeScreen({ onLogin, onShutdown }: WelcomeScreenProps) {
         <div className="instruction-text">
           To begin, click your user name
         </div>
+        {/* Mobile user button - shown only on mobile */}
+        <div className="mobile-user-section">
+          <div className={`user-account-tile ${stage !== 'initial' ? 'active' : ''}`} onClick={handleUserClick}>
+            <img 
+              src="/assets/icons/profile_image.jpeg" 
+              alt="Bradley Nguyen" 
+              className="user-account-icon"
+            />
+            <div className="user-account-label">Bradley Nguyen</div>
+          </div>
+          {stage !== 'initial' && (
+            <div className="password-section">
+              <div className="password-label">Type your password</div>
+              <div className="password-input-container">
+                <input 
+                  type="password" 
+                  value={password} 
+                  readOnly 
+                  placeholder=""
+                  className="password-input"
+                />
+                <button className="password-arrow-btn">
+                  <img src="/assets/icons/Windows XP Icons/Go.png" alt="Go" className="arrow-icon" />
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
 
       <div className="welcome-divider"></div>

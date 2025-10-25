@@ -22,6 +22,52 @@
   .desktop {
     padding-bottom: 35px !important;
   }
+  
+  /* Window Mobile Styles for Very Small Screens */
+  .window-menu-bar {
+    gap: 1px !important;
+    padding: 1px !important;
+    font-size: 8px !important;
+    height: 20px !important;
+    min-height: 20px !important;
+    max-height: 20px !important;
+  }
+  
+  .menu-item {
+    padding: 1px 2px !important;
+    font-size: 8px !important;
+    height: 18px !important;
+    min-height: 18px !important;
+    max-height: 18px !important;
+    line-height: 1.2 !important;
+  }
+  
+  .window-title-bar {
+    height: 24px !important;
+    min-height: 24px !important;
+    max-height: 24px !important;
+    padding: 1px 2px !important;
+  }
+  
+  .window-title {
+    font-size: 9px !important;
+    gap: 2px !important;
+  }
+  
+  .window-icon {
+    width: 10px !important;
+    height: 10px !important;
+  }
+  
+  .window-button {
+    width: 10px !important;
+    height: 10px !important;
+  }
+  
+  .window-button img {
+    width: 10px !important;
+    height: 10px !important;
+  }
 }
 
 /* Small mobile devices */
@@ -45,6 +91,52 @@
   
   .desktop {
     padding-bottom: 38px !important;
+  }
+  
+  /* Window Mobile Styles for Small Screens */
+  .window-menu-bar {
+    gap: 2px !important;
+    padding: 1px 2px !important;
+    font-size: 9px !important;
+    height: 22px !important;
+    min-height: 22px !important;
+    max-height: 22px !important;
+  }
+  
+  .menu-item {
+    padding: 1px 3px !important;
+    font-size: 9px !important;
+    height: 20px !important;
+    min-height: 20px !important;
+    max-height: 20px !important;
+    line-height: 1.2 !important;
+  }
+  
+  .window-title-bar {
+    height: 26px !important;
+    min-height: 26px !important;
+    max-height: 26px !important;
+    padding: 1px 3px !important;
+  }
+  
+  .window-title {
+    font-size: 10px !important;
+    gap: 3px !important;
+  }
+  
+  .window-icon {
+    width: 12px !important;
+    height: 12px !important;
+  }
+  
+  .window-button {
+    width: 12px !important;
+    height: 12px !important;
+  }
+  
+  .window-button img {
+    width: 12px !important;
+    height: 12px !important;
   }
 }
 
@@ -247,6 +339,95 @@
     max-height: 40px !important;
   }
   
+  /* Window Mobile Styles */
+  .window-menu-bar {
+    gap: 4px !important;
+    padding: 2px 4px !important;
+    font-size: 10px !important;
+    height: 24px !important;
+    min-height: 24px !important;
+    max-height: 24px !important;
+  }
+  
+  .menu-item {
+    padding: 1px 4px !important;
+    font-size: 10px !important;
+    line-height: 1.2 !important;
+    white-space: nowrap !important;
+    flex-shrink: 0 !important;
+    height: 22px !important;
+    min-height: 22px !important;
+    max-height: 22px !important;
+  }
+  
+  .window-title-bar {
+    height: 28px !important;
+    min-height: 28px !important;
+    max-height: 28px !important;
+    padding: 2px 4px !important;
+  }
+  
+  .window-title {
+    font-size: 11px !important;
+    gap: 4px !important;
+  }
+  
+  .window-icon {
+    width: 14px !important;
+    height: 14px !important;
+  }
+  
+  .window-button {
+    width: 14px !important;
+    height: 14px !important;
+  }
+  
+  .window-button img {
+    width: 14px !important;
+    height: 14px !important;
+  }
+  
+  .window-controls {
+    gap: 1px !important;
+  }
+  
+  /* Additional mobile window optimizations */
+  .window {
+    max-width: 100vw !important;
+    max-height: calc(100vh - 40px) !important;
+  }
+  
+  .window.maximized {
+    max-width: 100vw !important;
+    max-height: calc(100vh - 40px) !important;
+  }
+  
+  /* Ensure menu items don't wrap or get too large */
+  .menu-item {
+    max-width: 60px !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+  
+  /* Prevent toolbar buttons from getting too large on mobile */
+  .toolbar-button {
+    height: 24px !important;
+    min-height: 24px !important;
+    max-height: 24px !important;
+    padding: 2px 6px !important;
+    font-size: 10px !important;
+    line-height: 1.2 !important;
+  }
+  
+  .toolbar-btn {
+    height: 20px !important;
+    min-height: 20px !important;
+    max-height: 20px !important;
+    width: 20px !important;
+    min-width: 20px !important;
+    max-width: 20px !important;
+  }
+
   /* Desktop Mobile */
   .desktop-icons {
     padding: 8px !important;
@@ -442,10 +623,17 @@
   /* Touch-friendly interactions */
   .desktop-icon,
   .taskbar-window,
-  .start-menu-item,
-  .menu-item {
+  .start-menu-item {
     min-height: 44px !important; /* iOS touch target minimum */
     min-width: 44px !important;
+  }
+  
+  /* Menu items should stay compact on mobile */
+  .menu-item {
+    min-height: 20px !important;
+    max-height: 24px !important;
+    height: 22px !important;
+    line-height: 1.2 !important;
   }
   
   /* Window buttons - keep compact for mobile */
@@ -467,6 +655,38 @@
   .window-button:active {
     transform: scale(0.95) !important;
     transition: transform 0.1s ease !important;
+  }
+  
+  /* Prevent any button from expanding vertically on mobile */
+  .menu-item,
+  .toolbar-button,
+  .toolbar-btn,
+  .window-button {
+    box-sizing: border-box !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+  
+  /* Ensure consistent button sizing across all mobile breakpoints */
+  @media (max-width: 480px) {
+    .menu-item {
+      height: 22px !important;
+      min-height: 22px !important;
+      max-height: 22px !important;
+    }
+    
+    .toolbar-button {
+      height: 24px !important;
+      min-height: 24px !important;
+      max-height: 24px !important;
+    }
+    
+    .toolbar-btn {
+      height: 20px !important;
+      min-height: 20px !important;
+      max-height: 20px !important;
+    }
   }
 }
 

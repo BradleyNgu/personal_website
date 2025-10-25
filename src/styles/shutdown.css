@@ -9,9 +9,12 @@
 
 .shutdown-top-bar {
   height: 80px;
+  min-height: 80px;
   background: linear-gradient(to bottom, #3159af 0%, #2347a5 100%);
   width: 100%;
   border-bottom: 1px solid #1a3580;
+  display: block;
+  flex-shrink: 0;
 }
 
 .shutdown-content {
@@ -61,9 +64,12 @@
 
 .shutdown-bottom-bar {
   height: 80px;
+  min-height: 80px;
   background: linear-gradient(to bottom, #1e3a5f 0%, #0f2442 100%);
   width: 100%;
   border-top: 1px solid #0d1f3a;
+  display: block;
+  flex-shrink: 0;
 }
 
 /* Responsive */
@@ -71,6 +77,9 @@
   .shutdown-top-bar,
   .shutdown-bottom-bar {
     height: 60px;
+    min-height: 60px;
+    display: block;
+    flex-shrink: 0;
   }
   
   .shutdown-logo {
@@ -79,5 +88,51 @@
   
   .shutdown-message {
     font-size: 16px;
+  }
+}
+
+/* Mobile devices (portrait) */
+@media (max-width: 480px) {
+  .shutdown-top-bar,
+  .shutdown-bottom-bar {
+    height: 50px;
+    min-height: 50px;
+    display: block;
+    flex-shrink: 0;
+  }
+  
+  .shutdown-logo {
+    width: 150px;
+  }
+  
+  .shutdown-message {
+    font-size: 14px;
+  }
+  
+  .shutdown-content {
+    gap: 20px;
+  }
+}
+
+/* Very small screens */
+@media (max-width: 320px) {
+  .shutdown-top-bar,
+  .shutdown-bottom-bar {
+    height: 40px;
+    min-height: 40px;
+    display: block;
+    flex-shrink: 0;
+  }
+  
+  .shutdown-logo {
+    width: 120px;
+  }
+  
+  .shutdown-message {
+    font-size: 12px;
+  }
+  
+  .shutdown-content {
+    gap: 15px;
   }
 }

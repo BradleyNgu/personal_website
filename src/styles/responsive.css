@@ -228,8 +228,8 @@
   .start-menu {
     width: 90vw !important;
     max-width: 300px !important;
-    left: 5vw !important;
-    right: 5vw !important;
+    left: 0 !important;
+    right: auto !important;
   }
   
   .start-menu-main {

@@ -51,9 +51,8 @@
   left: 0;
   width: 420px;
   background: white;
-  border: 2px solid #0831d9;
-  border-bottom: none;
-  border-radius: 8px 8px 0 0;
+  border: none;
+  border-radius: 0;
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
   animation: slideUp 0.2s ease-out;
   overflow: hidden;
@@ -72,7 +71,7 @@
 
 .start-menu-top {
   background: linear-gradient(180deg, #5c95d6 0%, #3d7fb7 100%);
-  padding: 4px;
+  padding: 0;
   border-bottom: 2px solid #1e4a8a;
 }
 
@@ -106,7 +105,7 @@
 .start-menu-left {
   width: 200px;
   background: white;
-  padding: 10px 0;
+  padding: 0;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -115,12 +114,14 @@
 .pinned-items {
   display: flex;
   flex-direction: column;
+  flex: 1;
+  overflow-y: auto;
 }
 
 .start-menu-right {
   flex: 1;
   background: linear-gradient(180deg, #d6dff7 0%, #c4d5f0 100%);
-  padding: 8px 0;
+  padding: 0;
 }
 
 .start-menu-item {
@@ -190,8 +191,10 @@
   color: #000000;
   font-weight: normal;
   position: relative;
-  top: 10px;
+  top: 0;
   justify-content: center;
+  margin-top: auto;
+  text-align: center;
 }
 
 .start-menu-left .all-programs .arrow-icon {

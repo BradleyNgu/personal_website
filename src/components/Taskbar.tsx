@@ -12,9 +12,10 @@ interface TaskbarProps {
   onMyPicturesClick: () => void
   onMyMusicClick: () => void
   onResumeClick: () => void
+  onAutobiographyClick: () => void
 }
 
-function Taskbar({ windows, onWindowClick, onShutdown, onLogOff, onEmailClick, onCommandPromptClick, onMyPicturesClick, onMyMusicClick, onResumeClick }: TaskbarProps) {
+function Taskbar({ windows, onWindowClick, onShutdown, onLogOff, onEmailClick, onCommandPromptClick, onMyPicturesClick, onMyMusicClick, onResumeClick, onAutobiographyClick }: TaskbarProps) {
   const [showStartMenu, setShowStartMenu] = useState(false)
   const [currentTime, setCurrentTime] = useState(new Date())
 
@@ -86,7 +87,10 @@ function Taskbar({ windows, onWindowClick, onShutdown, onLogOff, onEmailClick, o
             </div>
             
             <div className="start-menu-right">
-              <div className="start-menu-item">
+              <div className="start-menu-item" onClick={() => {
+                onAutobiographyClick()
+                setShowStartMenu(false)
+              }}>
                 <img src="/assets/icons/Windows XP Icons/My Documents.png" alt="" className="menu-icon-small" />
                 <span>About Me</span>
               </div>

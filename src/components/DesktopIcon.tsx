@@ -62,11 +62,52 @@ function DesktopIcon({
     }
   }
 
+  const handleTouchStart = (e: React.TouchEvent) => {
+    e.stopPropagation()
+    e.preventDefault()
+    const now = Date.now()
+    const touch = e.touches[0]
+    
+    if (now - clickTime < 300) {
+      // Double tap detected
+      onDoubleClick()
+      setClickTime(0)
+    } else {
+      // Single tap
+      setClickTime(now)
+      onSelect(id, false) // Touch doesn't support ctrl/meta key
+      
+      // Start dragging for touch
+      setIsDragging(true)
+      setDragStart({
+        x: touch.clientX - position.x,
+        y: touch.clientY - position.y,
+      })
+      
+      setTimeout(() => {
+        setClickTime(0)
+      }, 300)
+    }
+  }
+
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       if (isDragging) {
         const newX = Math.max(0, e.clientX - dragStart.x)
         const newY = Math.max(0, e.clientY - dragStart.y)
+        onPositionChange(id, newX, newY)
+        if (!isRecycleBin) {
+          onDragOver(id, newX, newY)
+        }
+      }
+    }
+
+    const handleTouchMove = (e: TouchEvent) => {
+      if (isDragging) {
+        e.preventDefault()
+        const touch = e.touches[0]
+        const newX = Math.max(0, touch.clientX - dragStart.x)
+        const newY = Math.max(0, touch.clientY - dragStart.y)
         onPositionChange(id, newX, newY)
         if (!isRecycleBin) {
           onDragOver(id, newX, newY)
@@ -83,12 +124,25 @@ function DesktopIcon({
       setIsDragging(false)
     }
 
+    const handleTouchEnd = () => {
+      if (isDragging) {
+        if (!isRecycleBin) {
+          onDropOnRecycleBin(id)
+        }
+      }
+      setIsDragging(false)
+    }
+
     if (isDragging) {
       document.addEventListener('mousemove', handleMouseMove)
       document.addEventListener('mouseup', handleMouseUp)
+      document.addEventListener('touchmove', handleTouchMove, { passive: false })
+      document.addEventListener('touchend', handleTouchEnd)
       return () => {
         document.removeEventListener('mousemove', handleMouseMove)
         document.removeEventListener('mouseup', handleMouseUp)
+        document.removeEventListener('touchmove', handleTouchMove)
+        document.removeEventListener('touchend', handleTouchEnd)
       }
     }
   }, [isDragging, dragStart, id, onPositionChange, onDragOver, onDropOnRecycleBin, isRecycleBin])
@@ -98,6 +152,7 @@ function DesktopIcon({
       className={`desktop-icon ${isSelected ? 'selected' : ''} ${isRecycleBinHovered ? 'recycle-bin-hovered' : ''}`}
       style={{ left: `${position.x}px`, top: `${position.y}px` }}
       onMouseDown={handleMouseDown}
+      onTouchStart={handleTouchStart}
       data-icon-id={id}
     >
       <div className="icon-image-container">

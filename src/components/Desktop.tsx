@@ -352,6 +352,36 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
     }
   }
 
+  const handleDesktopTouchStart = (e: React.TouchEvent) => {
+    e.preventDefault()
+    if (e.target === desktopRef.current || (e.target as HTMLElement).classList.contains('desktop-icons')) {
+      const touch = e.touches[0]
+      // Check if touching a selected icon
+      const touchedIcon = (e.target as HTMLElement).closest('.desktop-icon')
+      if (touchedIcon && selectedIcons.length > 0) {
+        const iconId = touchedIcon.getAttribute('data-icon-id')
+        if (iconId && selectedIcons.includes(iconId)) {
+          // Start dragging selected icons
+          setIsDraggingSelected(true)
+          setDragOffset({
+            x: touch.clientX,
+            y: touch.clientY
+          })
+          return
+        }
+      }
+      
+      // Start selection box
+      setSelectedIcons([])
+      setSelectionBox({
+        startX: touch.clientX,
+        startY: touch.clientY,
+        endX: touch.clientX,
+        endY: touch.clientY,
+      })
+    }
+  }
+
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       if (selectionBox) {
@@ -466,12 +496,131 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
       }
     }
 
+    const handleTouchMove = (e: TouchEvent) => {
+      e.preventDefault()
+      const touch = e.touches[0]
+      if (selectionBox) {
+        setSelectionBox(prev => prev ? {
+          ...prev,
+          endX: touch.clientX,
+          endY: touch.clientY,
+        } : null)
+      }
+      
+      if (isDraggingSelected && dragOffset && selectedIcons.length > 0) {
+        const deltaX = touch.clientX - dragOffset.x
+        const deltaY = touch.clientY - dragOffset.y
+        
+        // Update positions of all selected icons
+        setIconPositions(prev => 
+          prev.map(icon => 
+            selectedIcons.includes(icon.id)
+              ? { ...icon, x: Math.max(0, icon.x + deltaX), y: Math.max(0, icon.y + deltaY) }
+              : icon
+          )
+        )
+        
+        // Check if hovering over recycle bin
+        const recycleBinPos = iconPositions.find(p => p.id === 'recycle-bin')
+        if (recycleBinPos) {
+          const distance = Math.sqrt(
+            Math.pow(touch.clientX - recycleBinPos.x, 2) + Math.pow(touch.clientY - recycleBinPos.y, 2)
+          )
+          setIsRecycleBinHovered(distance < 100)
+        }
+        
+        setDragOffset({ x: touch.clientX, y: touch.clientY })
+      }
+    }
+
+    const handleTouchEnd = () => {
+      if (selectionBox) {
+        // Calculate which icons are within the selection box
+        const box = {
+          left: Math.min(selectionBox.startX, selectionBox.endX),
+          right: Math.max(selectionBox.startX, selectionBox.endX),
+          top: Math.min(selectionBox.startY, selectionBox.endY),
+          bottom: Math.max(selectionBox.startY, selectionBox.endY),
+        }
+
+        const selected = iconPositions.filter(icon => {
+          const iconRight = icon.x + 80
+          const iconBottom = icon.y + 80
+          return (
+            icon.x < box.right &&
+            iconRight > box.left &&
+            icon.y < box.bottom &&
+            iconBottom > box.top
+          )
+        }).map(icon => icon.id)
+
+        setSelectedIcons(selected)
+        setSelectionBox(null)
+      }
+      
+      if (isDraggingSelected) {
+        // Check if dropped on recycle bin
+        if (isRecycleBinHovered && selectedIcons.length > 0) {
+          const toRecycle = selectedIcons.filter(id => id !== 'recycle-bin')
+          
+          // Check if any of the items to recycle are currently open
+          const openApplications = toRecycle.filter(id => isApplicationOpen(id))
+          
+          if (openApplications.length > 0) {
+            // Show error dialog for open applications
+            const appNames = openApplications.map(id => {
+              const icon = desktopIcons.find(i => i.id === id)
+              return icon?.title || id
+            }).join(', ')
+            
+            // Reset positions of items that couldn't be moved
+            setIconPositions(prev => 
+              prev.map(icon => {
+                if (toRecycle.includes(icon.id)) {
+                  const originalPosition = initialIconPositions.find(p => p.id === icon.id)
+                  return originalPosition ? { ...icon, ...originalPosition } : icon
+                }
+                return icon
+              })
+            )
+            
+            showErrorDialog(
+              'Cannot Move Items',
+              `Cannot move ${appNames} to the Recycle Bin because ${openApplications.length === 1 ? 'it is' : 'they are'} currently open. Please close the application${openApplications.length > 1 ? 's' : ''} and try again.`
+            )
+          } else if (toRecycle.length > 0) {
+            const itemsToAdd: RecycleBinItem[] = toRecycle.map(id => {
+              const icon = desktopIcons.find(i => i.id === id)
+              const originalPosition = initialIconPositions.find(p => p.id === id)
+              return {
+                id,
+                title: icon?.title || '',
+                icon: icon?.icon || '',
+                originalPosition: originalPosition || { x: 20, y: 20 }
+              }
+            })
+            
+            setRecycleBinItems(prev => [...prev, ...itemsToAdd])
+            setSelectedIcons([])
+          }
+        }
+        
+        setIsDraggingSelected(false)
+        setDragOffset(null)
+        setIsRecycleBinHovered(false)
+      }
+    }
+
     if (selectionBox || isDraggingSelected) {
       document.addEventListener('mousemove', handleMouseMove)
       document.addEventListener('mouseup', handleMouseUp)
+      document.addEventListener('touchmove', handleTouchMove, { passive: false })
+      document.addEventListener('touchend', handleTouchEnd)
       return () => {
         document.removeEventListener('mousemove', handleMouseMove)
         document.removeEventListener('mouseup', handleMouseUp)
+        document.removeEventListener('touchmove', handleTouchMove)
+        document.removeEventListener('touchend', handleTouchEnd)
       }
     }
   }, [selectionBox, iconPositions, isDraggingSelected, dragOffset, selectedIcons])
@@ -523,6 +672,7 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
       ref={desktopRef}
       className={`desktop ${isDraggingSelected ? 'multi-drag-active' : ''}`}
       onMouseDown={handleDesktopMouseDown}
+      onTouchStart={handleDesktopTouchStart}
     >
       <div className="desktop-icons">
         {desktopIcons

@@ -1,6 +1,8 @@
 .shutdown-screen {
   width: 100%;
   height: 100vh;
+  height: 100dvh; /* Dynamic viewport height for mobile browsers */
+  min-height: 100vh;
   background: linear-gradient(to bottom, #5a8fc7 0%, #4a7eb8 50%, #3a6ea5 100%);
   display: flex;
   flex-direction: column;
@@ -93,6 +95,13 @@
 
 /* Mobile devices (portrait) */
 @media (max-width: 480px) {
+  .shutdown-screen {
+    height: 100vh;
+    height: 100dvh; /* Dynamic viewport height for mobile */
+    min-height: 100vh;
+    min-height: 100dvh;
+  }
+  
   .shutdown-top-bar,
   .shutdown-bottom-bar {
     height: 50px;
@@ -111,11 +120,19 @@
   
   .shutdown-content {
     gap: 20px;
+    padding: 10px 0; /* Add some padding to prevent cutoff */
   }
 }
 
 /* Very small screens */
 @media (max-width: 320px) {
+  .shutdown-screen {
+    height: 100vh;
+    height: 100dvh; /* Dynamic viewport height for mobile */
+    min-height: 100vh;
+    min-height: 100dvh;
+  }
+  
   .shutdown-top-bar,
   .shutdown-bottom-bar {
     height: 40px;
@@ -134,5 +151,6 @@
   
   .shutdown-content {
     gap: 15px;
+    padding: 5px 0; /* Add some padding to prevent cutoff */
   }
 }

@@ -27,6 +27,24 @@
     box-sizing: border-box !important;
   }
   
+  /* Equal height bars for very small screens */
+  .welcome-top-bar {
+    height: 80px !important;
+    min-height: 80px !important;
+    max-height: 80px !important;
+    flex-shrink: 0 !important;
+  }
+  
+  .welcome-footer {
+    height: 80px !important;
+    min-height: 80px !important;
+    max-height: 80px !important;
+    flex-shrink: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+  
   .system-tray {
     height: 35px !important;
   }
@@ -152,6 +170,24 @@
     padding-left: env(safe-area-inset-left) !important;
     padding-right: env(safe-area-inset-right) !important;
     box-sizing: border-box !important;
+  }
+  
+  /* Equal height bars for small screens */
+  .welcome-top-bar {
+    height: 80px !important;
+    min-height: 80px !important;
+    max-height: 80px !important;
+    flex-shrink: 0 !important;
+  }
+  
+  .welcome-footer {
+    height: 80px !important;
+    min-height: 80px !important;
+    max-height: 80px !important;
+    flex-shrink: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
   }
   
   .system-tray {
@@ -307,11 +343,15 @@
   }
   
   .welcome-footer {
-    height: auto !important;
-    min-height: 60px !important;
+    height: 80px !important;
+    min-height: 80px !important;
+    max-height: 80px !important;
     flex-shrink: 0 !important;
     padding: 10px 20px !important;
     box-sizing: border-box !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
   }
   
   /* Show user button in main content on mobile */
@@ -1053,6 +1093,24 @@
       justify-content: center !important;
       padding: 0 !important;
       gap: 30px !important;
+    }
+    
+    /* Equal height bars for mobile */
+    .welcome-top-bar {
+      height: 80px !important;
+      min-height: 80px !important;
+      max-height: 80px !important;
+      flex-shrink: 0 !important;
+    }
+    
+    .welcome-footer {
+      height: 80px !important;
+      min-height: 80px !important;
+      max-height: 80px !important;
+      flex-shrink: 0 !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
     }
     
     .welcome-right {

@@ -178,6 +178,7 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
     openWindow('autobiography', 'About Me', '/assets/icons/folder.png', <Autobiography />)
   }
 
+
   const updateIconPosition = (id: string, x: number, y: number) => {
     setIconPositions(prev => 
       prev.map(icon => icon.id === id ? { ...icon, x, y } : icon)

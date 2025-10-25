@@ -15,8 +15,28 @@
     height: 35px !important;
   }
   
+  /* Mobile-only: Remove gap between quick launch and taskbar windows */
+  .quick-launch {
+    margin-right: 0 !important;
+    padding-right: 4px !important;
+  }
+  
+  /* Mobile-only: Equal sizing for very small screens */
+  .taskbar-windows {
+    flex: 1 !important;
+    overflow: hidden !important;
+    display: flex !important;
+    align-items: stretch !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  
   .taskbar-window {
+    flex: 1 !important;
     height: 35px !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    flex-shrink: 1 !important;
   }
   
   .desktop {
@@ -106,8 +126,28 @@
     height: 38px !important;
   }
   
+  /* Mobile-only: Remove gap between quick launch and taskbar windows */
+  .quick-launch {
+    margin-right: 0 !important;
+    padding-right: 4px !important;
+  }
+  
+  /* Mobile-only: Equal sizing for small screens */
+  .taskbar-windows {
+    flex: 1 !important;
+    overflow: hidden !important;
+    display: flex !important;
+    align-items: stretch !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  
   .taskbar-window {
+    flex: 1 !important;
     height: 38px !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    flex-shrink: 1 !important;
   }
   
   .desktop {
@@ -357,6 +397,9 @@
     border-radius: 0 !important;
     border: none !important;
     position: relative !important;
+    min-width: 80px !important;
+    max-width: 120px !important;
+    z-index: 10 !important;
   }
   
   .tray-icons {
@@ -365,20 +408,42 @@
     gap: 6px !important;
   }
   
+  /* Mobile-only: Remove gap between quick launch and taskbar windows */
+  .quick-launch {
+    margin-right: 0 !important;
+    padding-right: 4px !important;
+  }
+  
+  /* Mobile-only: Equal sizing for taskbar windows */
+  .taskbar-windows {
+    flex: 1 !important;
+    overflow: hidden !important;
+    display: flex !important;
+    align-items: stretch !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  
   .taskbar-window {
-    min-width: 80px !important;
-    max-width: 100px !important;
+    flex: 1 !important;
+    min-width: 0 !important;
+    max-width: none !important;
     padding: 2px 4px !important;
     height: 40px !important;
     margin: 0 !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
+    flex-shrink: 1 !important;
   }
   
   .taskbar-window-title {
     font-size: 9px !important;
-    display: none !important; /* Hide text on very small screens */
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    flex: 1 !important;
+    min-width: 0 !important;
   }
   
   .taskbar-window-icon {
@@ -419,6 +484,31 @@
   .taskbar {
     min-height: 40px !important;
     max-height: 40px !important;
+    display: flex !important;
+    align-items: stretch !important;
+    overflow: hidden !important;
+  }
+  
+  /* Ensure proper taskbar layout on mobile */
+  .taskbar-windows {
+    flex: 1 !important;
+    overflow: hidden !important;
+    display: flex !important;
+    align-items: stretch !important;
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+  }
+  
+  .taskbar-windows::-webkit-scrollbar {
+    display: none !important;
+  }
+  
+  /* Dynamic taskbar window sizing */
+  .taskbar-window {
+    flex: 1 !important;
+    flex-shrink: 1 !important;
+    min-width: 0 !important;
+    max-width: none !important;
   }
   
   /* Window Mobile Styles */
@@ -536,10 +626,9 @@
   .window:not(.maximized) {
     width: 95vw !important;
     height: 90vh !important;
-    left: 2.5vw !important;
-    top: 5vh !important;
     max-width: none !important;
     max-height: none !important;
+    /* Remove fixed positioning to allow dragging */
   }
   
   /* Maximized windows on mobile should take full screen */
@@ -755,24 +844,34 @@
     touch-action: none !important;
     -webkit-user-select: none !important;
     user-select: none !important;
+    cursor: move !important;
   }
   
   .window-resize-handle {
     touch-action: none !important;
     -webkit-user-select: none !important;
     user-select: none !important;
+    cursor: nwse-resize !important;
   }
   
   /* Prevent text selection during drag on mobile */
   .window {
     -webkit-user-select: none !important;
     user-select: none !important;
+    touch-action: manipulation !important;
   }
   
   /* Allow text selection in window content */
   .window-content {
     -webkit-user-select: text !important;
     user-select: text !important;
+    touch-action: auto !important;
+  }
+  
+  /* Ensure windows can be dragged on mobile */
+  .window:not(.maximized) {
+    position: absolute !important;
+    touch-action: manipulation !important;
   }
   
   /* Ensure consistent button sizing across all mobile breakpoints */
@@ -802,9 +901,8 @@
   .window:not(.maximized) {
     width: 90% !important;
     max-width: 90vw !important;
-    left: 5vw !important;
-    top: 5vh !important;
     height: 85vh !important;
+    /* Remove fixed positioning to allow dragging */
   }
   
   /* Maximized windows on tablet should take full screen */
@@ -846,9 +944,24 @@
     height: 40px !important;
   }
   
+  /* Tablet: Remove gap between quick launch and taskbar windows */
+  .quick-launch {
+    margin-right: 0 !important;
+    padding-right: 4px !important;
+  }
+  
+  .taskbar-windows {
+    flex: 1 !important;
+    overflow: hidden !important;
+    display: flex !important;
+    align-items: stretch !important;
+  }
+  
   .taskbar-window {
-    min-width: 90px !important;
-    max-width: 120px !important;
+    flex: 1 !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    flex-shrink: 1 !important;
   }
   
   .taskbar-window-title {

@@ -101,7 +101,7 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
       icon,
       component,
       isMinimized: false,
-      isMaximized: false,
+      isMaximized: true,
       position: { x: 100 + windows.length * 30, y: 50 + windows.length * 30 },
       size: { width: 800, height: 600 },
       zIndex: highestZIndex + 1,

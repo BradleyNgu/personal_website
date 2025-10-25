@@ -105,11 +105,31 @@
     align-items: center;
     gap: 15px;
     padding: 15px;
+    height: 60px !important;
+    min-height: 60px !important;
+    justify-content: center !important;
   }
   
   .footer-info {
     text-align: center;
     max-width: 100%;
+  }
+  
+  .turn-off-btn {
+    padding: 10px 15px !important;
+    font-size: 13px !important;
+    gap: 8px !important;
+    white-space: nowrap !important;
+    flex-shrink: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+  
+  .shutdown-icon {
+    width: 22px !important;
+    height: 22px !important;
+    flex-shrink: 0 !important;
   }
   
   /* Taskbar Mobile */

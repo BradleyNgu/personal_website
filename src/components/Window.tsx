@@ -26,6 +26,10 @@ function Window({
   const [isResizing, setIsResizing] = useState(false)
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 })
   const [resizeStart, setResizeStart] = useState({ x: 0, y: 0, width: 0, height: 0 })
+  
+  // Detect if device is mobile
+  const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || 
+                  ('ontouchstart' in window && window.innerWidth <= 768)
 
   const handleMouseDownTitle = (e: React.MouseEvent) => {
     if (window.isMaximized) return
@@ -39,7 +43,7 @@ function Window({
   }
 
   const handleMouseDownContent = (e: React.MouseEvent) => {
-    if (window.isMaximized) return
+    if (window.isMaximized || isMobile) return
     
     // Check if the clicked element is interactive (button, link, input, etc.)
     const target = e.target as HTMLElement
@@ -69,7 +73,7 @@ function Window({
   }
 
   const handleTouchStartContent = (e: React.TouchEvent) => {
-    if (window.isMaximized) return
+    if (window.isMaximized || isMobile) return
     
     // Check if the touched element is interactive (button, link, input, etc.)
     const target = e.target as HTMLElement
@@ -88,7 +92,7 @@ function Window({
   }
 
   const handleMouseDownResize = (e: React.MouseEvent) => {
-    if (window.isMaximized) return
+    if (window.isMaximized || isMobile) return
     e.preventDefault()
     e.stopPropagation()
     onFocus()
@@ -102,7 +106,7 @@ function Window({
   }
 
   const handleTouchStartResize = (e: React.TouchEvent) => {
-    if (window.isMaximized) return
+    if (window.isMaximized || isMobile) return
     e.preventDefault()
     e.stopPropagation()
     onFocus()
@@ -217,19 +221,19 @@ function Window({
         </div>
       </div>
       
-      <div className="window-menu-bar" onMouseDown={handleMouseDownContent} onTouchStart={handleTouchStartContent}>
+      <div className="window-menu-bar" onMouseDown={handleMouseDownContent} onTouchStart={isMobile ? undefined : handleTouchStartContent}>
         <span className="menu-item">File</span>
         <span className="menu-item">Edit</span>
         <span className="menu-item">View</span>
         <span className="menu-item">Help</span>
       </div>
 
-      <div className="window-content" onMouseDown={handleMouseDownContent} onTouchStart={handleTouchStartContent}>
+      <div className="window-content" onMouseDown={handleMouseDownContent} onTouchStart={isMobile ? undefined : handleTouchStartContent}>
         {window.component}
       </div>
 
       {!window.isMaximized && (
-        <div className="window-resize-handle" onMouseDown={handleMouseDownResize} onTouchStart={handleTouchStartResize}></div>
+        <div className="window-resize-handle" onMouseDown={handleMouseDownResize} onTouchStart={isMobile ? undefined : handleTouchStartResize}></div>
       )}
     </div>
   )

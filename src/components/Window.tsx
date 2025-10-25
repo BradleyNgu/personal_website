@@ -27,9 +27,8 @@ function Window({
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 })
   const [resizeStart, setResizeStart] = useState({ x: 0, y: 0, width: 0, height: 0 })
   
-  // Detect if device is mobile
-  const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || 
-                  ('ontouchstart' in globalThis && globalThis.innerWidth <= 768)
+  // Detect if device is mobile (more specific detection)
+  const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
 
   const handleMouseDownTitle = (e: React.MouseEvent) => {
     if (window.isMaximized) return

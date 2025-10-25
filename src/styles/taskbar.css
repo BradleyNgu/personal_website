@@ -1,3 +1,8 @@
+/* Ensure all taskbar elements use border-box sizing */
+.taskbar * {
+  box-sizing: border-box;
+}
+
 .taskbar {
   position: absolute;
   bottom: 0;
@@ -13,6 +18,7 @@
   z-index: 10000;
   margin: 0;
   border: none;
+  box-sizing: border-box;
 }
 
 .start-button {
@@ -23,10 +29,12 @@
   border: none;
   border-radius: 0;
   display: flex;
-  align-items: flex-end;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
   transition: all 0.1s;
   flex-shrink: 0;
+  box-sizing: border-box;
 }
 
 .start-button:hover {
@@ -40,8 +48,9 @@
 .start-icon-img {
   height: 100%;
   width: auto;
-  object-fit: fill;
+  object-fit: contain;
   display: block;
+  max-height: 40px;
 }
 
 
@@ -247,6 +256,8 @@
   height: 40px;
   border-right: 1px solid rgba(255, 255, 255, 0.2);
   margin-right: 8px;
+  box-sizing: border-box;
+  flex-shrink: 0;
 }
 
 .quick-launch-icon {
@@ -278,6 +289,8 @@
   margin-left: -8px;
   pointer-events: auto;
   position: relative;
+  height: 40px;
+  box-sizing: border-box;
 }
 
 .taskbar-windows::-webkit-scrollbar {
@@ -302,6 +315,8 @@
   pointer-events: auto;
   position: relative;
   z-index: 1;
+  box-sizing: border-box;
+  flex-shrink: 0;
 }
 
 .taskbar-window:hover {
@@ -344,6 +359,8 @@
   border-bottom: none;
   border-right: none;
   border-radius: 0;
+  box-sizing: border-box;
+  flex-shrink: 0;
 }
 
 .tray-icons {

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import type { WindowState } from './Desktop'
 import '../styles/taskbar.css'
 
@@ -18,6 +18,7 @@ interface TaskbarProps {
 function Taskbar({ windows, onWindowClick, onShutdown, onLogOff, onEmailClick, onCommandPromptClick, onMyPicturesClick, onMyMusicClick, onResumeClick, onAutobiographyClick }: TaskbarProps) {
   const [showStartMenu, setShowStartMenu] = useState(false)
   const [currentTime, setCurrentTime] = useState(new Date())
+  const startMenuRef = useRef<HTMLDivElement>(null)
 
   // Update time every second
   useEffect(() => {
@@ -26,6 +27,23 @@ function Taskbar({ windows, onWindowClick, onShutdown, onLogOff, onEmailClick, o
     }, 1000)
     return () => clearInterval(timer)
   }, [])
+
+  // Close start menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (showStartMenu && startMenuRef.current && !startMenuRef.current.contains(event.target as Node)) {
+        setShowStartMenu(false)
+      }
+    }
+
+    if (showStartMenu) {
+      document.addEventListener('mousedown', handleClickOutside)
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [showStartMenu])
 
   const formatTime = (date: Date) => {
     return date.toLocaleTimeString('en-US', { 
@@ -45,7 +63,7 @@ function Taskbar({ windows, onWindowClick, onShutdown, onLogOff, onEmailClick, o
       </button>
 
       {showStartMenu && (
-        <div className="start-menu">
+        <div className="start-menu" ref={startMenuRef}>
           <div className="start-menu-top">
             <div className="user-profile-banner">
               <img 

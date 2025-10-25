@@ -104,6 +104,7 @@
   overflow: auto;
   background: white;
   position: relative;
+  min-height: 0;
 }
 
 .window-resize-handle {

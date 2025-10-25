@@ -38,8 +38,45 @@ function Window({
     })
   }
 
+  const handleMouseDownContent = (e: React.MouseEvent) => {
+    if (window.isMaximized) return
+    
+    // Check if the clicked element is interactive (button, link, input, etc.)
+    const target = e.target as HTMLElement
+    const isInteractive = target.closest('button, a, input, select, textarea, [role="button"], [onclick]')
+    
+    if (isInteractive) return
+    
+    e.preventDefault()
+    onFocus()
+    setIsDragging(true)
+    setDragStart({
+      x: e.clientX - window.position.x,
+      y: e.clientY - window.position.y,
+    })
+  }
+
   const handleTouchStartTitle = (e: React.TouchEvent) => {
     if (window.isMaximized) return
+    e.preventDefault()
+    onFocus()
+    const touch = e.touches[0]
+    setIsDragging(true)
+    setDragStart({
+      x: touch.clientX - window.position.x,
+      y: touch.clientY - window.position.y,
+    })
+  }
+
+  const handleTouchStartContent = (e: React.TouchEvent) => {
+    if (window.isMaximized) return
+    
+    // Check if the touched element is interactive (button, link, input, etc.)
+    const target = e.target as HTMLElement
+    const isInteractive = target.closest('button, a, input, select, textarea, [role="button"], [onclick]')
+    
+    if (isInteractive) return
+    
     e.preventDefault()
     onFocus()
     const touch = e.touches[0]
@@ -160,12 +197,7 @@ function Window({
       ref={windowRef}
       className={`window ${window.isMaximized ? 'maximized' : ''}`}
       style={style}
-      onMouseDown={(e) => {
-        onFocus()
-        if (e.target === windowRef.current) {
-          handleMouseDownTitle(e)
-        }
-      }}
+      onMouseDown={() => onFocus()}
     >
       <div className="window-title-bar" onMouseDown={handleMouseDownTitle} onTouchStart={handleTouchStartTitle}>
         <div className="window-title">
@@ -185,14 +217,14 @@ function Window({
         </div>
       </div>
       
-      <div className="window-menu-bar">
+      <div className="window-menu-bar" onMouseDown={handleMouseDownContent} onTouchStart={handleTouchStartContent}>
         <span className="menu-item">File</span>
         <span className="menu-item">Edit</span>
         <span className="menu-item">View</span>
         <span className="menu-item">Help</span>
       </div>
 
-      <div className="window-content">
+      <div className="window-content" onMouseDown={handleMouseDownContent} onTouchStart={handleTouchStartContent}>
         {window.component}
       </div>
 

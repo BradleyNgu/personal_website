@@ -605,6 +605,13 @@
   font-family: 'Consolas', 'Courier New', monospace;
 }
 
+.initial-prompt {
+  display: flex;
+  align-items: center;
+  margin: 0;
+  padding: 8px;
+}
+
 .current-line {
   display: flex;
   align-items: center;

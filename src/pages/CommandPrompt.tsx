@@ -11,17 +11,29 @@ function CommandPrompt() {
   const [currentCommand, setCurrentCommand] = useState('')
   const [currentPath] = useState('C:\\Users\\Bradley>')
   const [isExecuting, setIsExecuting] = useState(false)
+  const [showInitialPrompt, setShowInitialPrompt] = useState(true)
   const terminalRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
     if (terminalRef.current) {
-      terminalRef.current.scrollTop = 0
+      if (commands.length === 0) {
+        // Show initial prompt at top
+        terminalRef.current.scrollTop = 0
+      } else {
+        // Scroll to bottom for new commands
+        terminalRef.current.scrollTop = terminalRef.current.scrollHeight
+      }
     }
   }, [commands])
 
   const executeCommand = (command: string) => {
     if (!command.trim()) return
+
+    // Hide initial prompt when first command is executed
+    if (showInitialPrompt) {
+      setShowInitialPrompt(false)
+    }
 
     const cmd = command.trim().toLowerCase()
     let output: string[] = []
@@ -116,6 +128,7 @@ function CommandPrompt() {
         break
       case 'cls':
         setCommands([])
+        setShowInitialPrompt(true)
         return
       case 'ver':
         output = ['Microsoft Windows XP [Version 5.1.2600]']
@@ -212,6 +225,11 @@ function CommandPrompt() {
   return (
     <div className="command-prompt">
       <div className="terminal-content" ref={terminalRef}>
+        {showInitialPrompt && (
+          <div className="initial-prompt">
+            <span className="prompt">{currentPath}</span>
+          </div>
+        )}
         {commands.map((cmd, index) => (
           <div key={index} className="command-block">
             <div className="command-line">

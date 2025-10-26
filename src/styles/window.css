@@ -31,8 +31,8 @@
   }
   
   .window.maximized .window-content {
-    min-height: calc(100vh - var(--taskbar-height, 40px) - 60px) !important; /* Account for title bar and menu */
-    min-height: calc(100dvh - var(--taskbar-height, 40px) - 60px) !important; /* Dynamic viewport for mobile */
+    height: calc(100vh - var(--taskbar-height, 40px) - 60px) !important; /* Force exact height */
+    height: calc(100dvh - var(--taskbar-height, 40px) - 60px) !important; /* Dynamic viewport for mobile */
     max-height: calc(100vh - var(--taskbar-height, 40px) - 60px) !important; /* Prevent overflow */
     max-height: calc(100dvh - var(--taskbar-height, 40px) - 60px) !important;
     overflow-y: auto !important;
@@ -43,7 +43,7 @@
   /* Ensure page containers work properly in maximized windows on mobile */
   .window.maximized .window-content .page-container {
     flex: 1 !important;
-    min-height: 0 !important; /* Allow flex shrinking */
+    height: 100% !important; /* Force to fit within window content */
     max-height: 100% !important; /* Prevent overflow */
     overflow-y: auto !important;
   }

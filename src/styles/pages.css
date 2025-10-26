@@ -8,13 +8,24 @@
 /* Mobile viewport handling for page containers */
 @media (max-width: 480px) {
   .page-container {
-    min-height: calc(100vh - 100px) !important; /* More conservative - account for taskbar + UI */
-    min-height: calc(100dvh - 100px) !important; /* Dynamic viewport for mobile */
-    max-height: calc(100vh - 100px) !important; /* Prevent overflow */
-    max-height: calc(100dvh - 100px) !important;
-    padding: 15px !important;
+    height: calc(100vh - 120px) !important; /* Very conservative - force exact height */
+    height: calc(100dvh - 120px) !important; /* Dynamic viewport for mobile */
+    max-height: calc(100vh - 120px) !important; /* Prevent overflow */
+    max-height: calc(100dvh - 120px) !important;
+    padding: 10px !important; /* Reduced padding */
     overflow-y: auto !important;
     box-sizing: border-box !important;
+    position: relative !important;
+  }
+}
+
+/* Chrome mobile specific - even more conservative */
+@media (max-width: 480px) and (-webkit-min-device-pixel-ratio: 1) {
+  .page-container {
+    height: calc(100vh - 140px) !important; /* Extra conservative for Chrome */
+    height: calc(100dvh - 140px) !important;
+    max-height: calc(100vh - 140px) !important;
+    max-height: calc(100dvh - 140px) !important;
   }
 }
 

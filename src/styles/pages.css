@@ -5,6 +5,16 @@
   font-family: 'Tahoma', sans-serif;
 }
 
+/* Mobile viewport handling for page containers */
+@media (max-width: 480px) {
+  .page-container {
+    min-height: calc(100vh - 60px) !important; /* Account for title bar and menu */
+    min-height: calc(100dvh - 60px) !important; /* Dynamic viewport for mobile */
+    padding: 15px !important;
+    overflow-y: auto !important;
+  }
+}
+
 .page-header {
   display: flex;
   justify-content: space-between;

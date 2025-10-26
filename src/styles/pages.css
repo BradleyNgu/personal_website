@@ -5,27 +5,40 @@
   font-family: 'Tahoma', sans-serif;
 }
 
-/* Mobile viewport handling for page containers */
-@media (max-width: 480px) {
+/* Phone-specific viewport handling - very aggressive to prevent taskbar overlap */
+@media (max-width: 480px) and (orientation: portrait) {
   .page-container {
-    height: calc(100vh - 120px) !important; /* Very conservative - force exact height */
-    height: calc(100dvh - 120px) !important; /* Dynamic viewport for mobile */
-    max-height: calc(100vh - 120px) !important; /* Prevent overflow */
-    max-height: calc(100dvh - 120px) !important;
-    padding: 10px !important; /* Reduced padding */
+    height: calc(100vh - 160px) !important; /* Very aggressive - account for taskbar + Chrome UI */
+    height: calc(100dvh - 160px) !important; /* Dynamic viewport for mobile */
+    max-height: calc(100vh - 160px) !important; /* Prevent any overflow */
+    max-height: calc(100dvh - 160px) !important;
+    padding: 8px !important; /* Minimal padding to save space */
     overflow-y: auto !important;
     box-sizing: border-box !important;
     position: relative !important;
+    margin-bottom: 20px !important; /* Extra buffer from taskbar */
   }
 }
 
-/* Chrome mobile specific - even more conservative */
-@media (max-width: 480px) and (-webkit-min-device-pixel-ratio: 1) {
+/* Chrome mobile phone - most aggressive */
+@media (max-width: 480px) and (orientation: portrait) and (-webkit-min-device-pixel-ratio: 1) {
   .page-container {
-    height: calc(100vh - 140px) !important; /* Extra conservative for Chrome */
-    height: calc(100dvh - 140px) !important;
-    max-height: calc(100vh - 140px) !important;
-    max-height: calc(100dvh - 140px) !important;
+    height: calc(100vh - 180px) !important; /* Most conservative for Chrome */
+    height: calc(100dvh - 180px) !important;
+    max-height: calc(100vh - 180px) !important;
+    max-height: calc(100dvh - 180px) !important;
+    margin-bottom: 30px !important; /* Extra buffer for Chrome */
+  }
+}
+
+/* Tablet and landscape - less aggressive */
+@media (max-width: 480px) and (orientation: landscape) {
+  .page-container {
+    height: calc(100vh - 120px) !important;
+    height: calc(100dvh - 120px) !important;
+    max-height: calc(100vh - 120px) !important;
+    max-height: calc(100dvh - 120px) !important;
+    padding: 10px !important;
   }
 }
 

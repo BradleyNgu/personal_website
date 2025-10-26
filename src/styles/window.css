@@ -23,7 +23,25 @@
 @media (max-width: 480px) {
   .window.maximized {
     width: 100dvw !important;
+    width: 100vw !important; /* Fallback for older browsers */
     height: calc(100dvh - var(--taskbar-height, 40px)) !important;
+    height: calc(100vh - var(--taskbar-height, 40px)) !important; /* Fallback for older browsers */
+  }
+}
+
+/* Samsung Galaxy and Chrome specific fixes */
+@media (max-width: 480px) and (-webkit-min-device-pixel-ratio: 2) {
+  .window.maximized {
+    height: calc(100vh - var(--taskbar-height, 40px) - env(safe-area-inset-bottom, 0px)) !important;
+    height: calc(100dvh - var(--taskbar-height, 40px) - env(safe-area-inset-bottom, 0px)) !important;
+  }
+}
+
+/* Chrome mobile specific viewport handling */
+@media (max-width: 480px) and (orientation: portrait) {
+  .window.maximized {
+    height: calc(100vh - var(--taskbar-height, 40px) - 20px) !important; /* Extra buffer for Chrome UI */
+    height: calc(100dvh - var(--taskbar-height, 40px) - 20px) !important;
   }
 }
 

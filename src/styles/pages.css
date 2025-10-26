@@ -8,10 +8,13 @@
 /* Mobile viewport handling for page containers */
 @media (max-width: 480px) {
   .page-container {
-    min-height: calc(100vh - 60px) !important; /* Account for title bar and menu */
-    min-height: calc(100dvh - 60px) !important; /* Dynamic viewport for mobile */
+    min-height: calc(100vh - 100px) !important; /* More conservative - account for taskbar + UI */
+    min-height: calc(100dvh - 100px) !important; /* Dynamic viewport for mobile */
+    max-height: calc(100vh - 100px) !important; /* Prevent overflow */
+    max-height: calc(100dvh - 100px) !important;
     padding: 15px !important;
     overflow-y: auto !important;
+    box-sizing: border-box !important;
   }
 }
 

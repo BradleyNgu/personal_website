@@ -40,7 +40,7 @@
     height: calc(100dvh - 140px) !important; /* Dynamic viewport for mobile */
     max-height: calc(100vh - 140px) !important; /* Prevent overflow */
     max-height: calc(100dvh - 140px) !important;
-    overflow-y: auto !important;
+    overflow-y: hidden !important; /* Remove scrollbar from window content */
     display: flex !important;
     flex-direction: column !important;
     padding-bottom: 20px !important; /* Extra buffer from bottom */
@@ -51,7 +51,7 @@
     flex: 1 !important;
     height: 100% !important; /* Force to fit within window content */
     max-height: 100% !important; /* Prevent overflow */
-    overflow-y: auto !important;
+    overflow-y: auto !important; /* Only page container scrolls */
     margin-bottom: 20px !important; /* Extra buffer from taskbar */
   }
 }
@@ -71,6 +71,7 @@
     height: calc(100dvh - 160px) !important;
     max-height: calc(100vh - 160px) !important;
     max-height: calc(100dvh - 160px) !important;
+    overflow-y: hidden !important; /* Remove scrollbar from window content */
     padding-bottom: 30px !important; /* Extra buffer for Chrome */
   }
 }

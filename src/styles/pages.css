@@ -5,27 +5,16 @@
   font-family: 'Tahoma', sans-serif;
 }
 
-/* Mobile viewport handling for page containers */
+/* Mobile viewport handling for page containers in maximized windows */
 @media (max-width: 480px) {
-  .page-container {
-    height: calc(100vh - 120px) !important; /* Very conservative - force exact height */
-    height: calc(100dvh - 120px) !important; /* Dynamic viewport for mobile */
-    max-height: calc(100vh - 120px) !important; /* Prevent overflow */
-    max-height: calc(100dvh - 120px) !important;
-    padding: 10px !important; /* Reduced padding */
-    overflow-y: auto !important;
+  /* In maximized windows, let the window-content handle scrolling */
+  .window.maximized .window-content .page-container {
+    height: auto !important;
+    min-height: 100% !important;
+    max-height: none !important;
+    padding: 10px !important;
+    overflow-y: visible !important; /* Let parent handle scroll */
     box-sizing: border-box !important;
-    position: relative !important;
-  }
-}
-
-/* Chrome mobile specific - even more conservative */
-@media (max-width: 480px) and (-webkit-min-device-pixel-ratio: 1) {
-  .page-container {
-    height: calc(100vh - 140px) !important; /* Extra conservative for Chrome */
-    height: calc(100dvh - 140px) !important;
-    max-height: calc(100vh - 140px) !important;
-    max-height: calc(100dvh - 140px) !important;
   }
 }
 

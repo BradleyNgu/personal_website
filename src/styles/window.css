@@ -31,21 +31,22 @@
   }
   
   .window.maximized .window-content {
-    height: calc(100vh - var(--taskbar-height, 40px) - 60px) !important; /* Force exact height */
-    height: calc(100dvh - var(--taskbar-height, 40px) - 60px) !important; /* Dynamic viewport for mobile */
-    max-height: calc(100vh - var(--taskbar-height, 40px) - 60px) !important; /* Prevent overflow */
-    max-height: calc(100dvh - var(--taskbar-height, 40px) - 60px) !important;
-    overflow-y: auto !important;
+    height: calc(100vh - var(--taskbar-height, 40px) - 55px) !important; /* taskbar + title + menu */
+    height: calc(100dvh - var(--taskbar-height, 40px) - 55px) !important; /* Dynamic viewport for mobile */
+    max-height: calc(100vh - var(--taskbar-height, 40px) - 55px) !important; /* Prevent overflow */
+    max-height: calc(100dvh - var(--taskbar-height, 40px) - 55px) !important;
+    overflow-y: scroll !important; /* Force scrollbar to always show */
+    -webkit-overflow-scrolling: touch !important; /* Smooth scrolling on iOS */
     display: flex !important;
     flex-direction: column !important;
   }
   
   /* Ensure page containers work properly in maximized windows on mobile */
   .window.maximized .window-content .page-container {
-    flex: 1 !important;
-    height: 100% !important; /* Force to fit within window content */
-    max-height: 100% !important; /* Prevent overflow */
-    overflow-y: auto !important;
+    flex: 1 1 auto !important; /* Allow flex shrinking and growing */
+    height: auto !important; /* Let content determine height */
+    max-height: 100% !important; /* But don't exceed window content */
+    overflow-y: visible !important; /* Let window-content handle scrolling */
   }
 }
 

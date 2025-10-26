@@ -36,14 +36,14 @@
   }
   
   .window.maximized .window-content {
-    height: calc(100vh - 145px) !important; /* Extra 5px buffer for cut-off */
-    height: calc(100dvh - 145px) !important; /* Dynamic viewport for mobile */
-    max-height: calc(100vh - 145px) !important; /* Prevent overflow */
-    max-height: calc(100dvh - 145px) !important;
+    height: calc(100vh - 150px) !important; /* Extra 10px buffer for cut-off */
+    height: calc(100dvh - 150px) !important; /* Dynamic viewport for mobile */
+    max-height: calc(100vh - 150px) !important; /* Prevent overflow */
+    max-height: calc(100dvh - 150px) !important;
     overflow-y: hidden !important; /* Remove scrollbar from window content */
     display: flex !important;
     flex-direction: column !important;
-    padding-bottom: 25px !important; /* Extra buffer from bottom + 5px */
+    padding-bottom: 30px !important; /* Extra buffer from bottom + 10px */
   }
   
   /* Ensure page containers work properly in maximized windows on phone */
@@ -67,12 +67,12 @@
   }
   
   .window.maximized .window-content {
-    height: calc(100vh - 165px) !important; /* Extra 5px buffer for Chrome cut-off */
-    height: calc(100dvh - 165px) !important;
-    max-height: calc(100vh - 165px) !important;
-    max-height: calc(100dvh - 165px) !important;
+    height: calc(100vh - 170px) !important; /* Extra 10px buffer for Chrome cut-off */
+    height: calc(100dvh - 170px) !important;
+    max-height: calc(100vh - 170px) !important;
+    max-height: calc(100dvh - 170px) !important;
     overflow-y: hidden !important; /* Remove scrollbar from window content */
-    padding-bottom: 35px !important; /* Extra buffer for Chrome + 5px */
+    padding-bottom: 40px !important; /* Extra buffer for Chrome + 10px */
   }
 }
 

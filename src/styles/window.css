@@ -36,6 +36,40 @@
   }
 }
 
+/* Chrome mobile specific fixes */
+@media (max-width: 480px) and (-webkit-min-device-pixel-ratio: 1) {
+  .window.maximized {
+    height: calc(100vh - var(--taskbar-height, 40px) - env(safe-area-inset-bottom, 0px)) !important;
+    height: calc(100dvh - var(--taskbar-height, 40px) - env(safe-area-inset-bottom, 0px)) !important;
+  }
+  
+  .window.maximized .window-content {
+    min-height: calc(100vh - var(--taskbar-height, 40px) - 60px - env(safe-area-inset-bottom, 0px)) !important;
+  }
+}
+
+/* Samsung Galaxy and Chrome specific viewport handling */
+@media (max-width: 480px) and (orientation: portrait) {
+  .window.maximized {
+    height: calc(100vh - var(--taskbar-height, 40px) - 10px) !important; /* Small buffer for Chrome UI */
+    height: calc(100dvh - var(--taskbar-height, 40px) - 10px) !important;
+  }
+}
+
+/* Chrome mobile viewport fix - more aggressive */
+@supports (-webkit-touch-callout: none) {
+  @media (max-width: 480px) {
+    .window.maximized {
+      height: calc(100vh - var(--taskbar-height, 40px) - 20px) !important;
+      height: calc(100dvh - var(--taskbar-height, 40px) - 20px) !important;
+    }
+    
+    .window.maximized .window-content {
+      min-height: calc(100vh - var(--taskbar-height, 40px) - 80px) !important;
+    }
+  }
+}
+
 @keyframes windowOpen {
   from {
     opacity: 0;

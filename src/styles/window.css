@@ -31,22 +31,21 @@
   }
   
   .window.maximized .window-content {
-    height: calc(100vh - 120px) !important; /* Conservative: taskbar + title + menu + buffer */
-    height: calc(100dvh - 120px) !important; /* Dynamic viewport for mobile */
-    max-height: calc(100vh - 120px) !important; /* Prevent overflow */
-    max-height: calc(100dvh - 120px) !important;
-    overflow-y: scroll !important; /* Force scrollbar to always show */
-    -webkit-overflow-scrolling: touch !important; /* Smooth scrolling on iOS */
+    height: calc(100vh - var(--taskbar-height, 40px) - 60px) !important; /* Force exact height */
+    height: calc(100dvh - var(--taskbar-height, 40px) - 60px) !important; /* Dynamic viewport for mobile */
+    max-height: calc(100vh - var(--taskbar-height, 40px) - 60px) !important; /* Prevent overflow */
+    max-height: calc(100dvh - var(--taskbar-height, 40px) - 60px) !important;
+    overflow-y: auto !important;
     display: flex !important;
     flex-direction: column !important;
   }
   
   /* Ensure page containers work properly in maximized windows on mobile */
   .window.maximized .window-content .page-container {
-    flex: 1 1 auto !important; /* Allow flex shrinking and growing */
-    height: auto !important; /* Let content determine height */
-    max-height: 100% !important; /* But don't exceed window content */
-    overflow-y: visible !important; /* Let window-content handle scrolling */
+    flex: 1 !important;
+    height: 100% !important; /* Force to fit within window content */
+    max-height: 100% !important; /* Prevent overflow */
+    overflow-y: auto !important;
   }
 }
 
@@ -58,10 +57,7 @@
   }
   
   .window.maximized .window-content {
-    height: calc(100vh - 120px - env(safe-area-inset-bottom, 0px)) !important;
-    height: calc(100dvh - 120px - env(safe-area-inset-bottom, 0px)) !important;
-    max-height: calc(100vh - 120px - env(safe-area-inset-bottom, 0px)) !important;
-    max-height: calc(100dvh - 120px - env(safe-area-inset-bottom, 0px)) !important;
+    min-height: calc(100vh - var(--taskbar-height, 40px) - 60px - env(safe-area-inset-bottom, 0px)) !important;
   }
 }
 
@@ -70,13 +66,6 @@
   .window.maximized {
     height: calc(100vh - var(--taskbar-height, 40px) - 10px) !important; /* Small buffer for Chrome UI */
     height: calc(100dvh - var(--taskbar-height, 40px) - 10px) !important;
-  }
-  
-  .window.maximized .window-content {
-    height: calc(100vh - 130px) !important; /* 120px + 10px extra buffer for Chrome portrait */
-    height: calc(100dvh - 130px) !important;
-    max-height: calc(100vh - 130px) !important;
-    max-height: calc(100dvh - 130px) !important;
   }
 }
 
@@ -89,10 +78,7 @@
     }
     
     .window.maximized .window-content {
-      height: calc(100vh - 140px) !important; /* 120px + 20px extra buffer for WebKit */
-      height: calc(100dvh - 140px) !important;
-      max-height: calc(100vh - 140px) !important;
-      max-height: calc(100dvh - 140px) !important;
+      min-height: calc(100vh - var(--taskbar-height, 40px) - 80px) !important;
     }
   }
 }

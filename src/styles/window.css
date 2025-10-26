@@ -31,10 +31,10 @@
   }
   
   .window.maximized .window-content {
-    height: calc(100vh - 95px) !important; /* Full calc: 40px taskbar + 30px title + 25px menu */
-    height: calc(100dvh - 95px) !important; /* Dynamic viewport for mobile */
-    max-height: calc(100vh - 95px) !important; /* Prevent overflow */
-    max-height: calc(100dvh - 95px) !important;
+    height: calc(100vh - 100px) !important; /* Full calc: 40px taskbar + 30px title + 25px menu */
+    height: calc(100dvh - 100px) !important; /* Dynamic viewport for mobile */
+    max-height: calc(100vh - 100px) !important; /* Prevent overflow */
+    max-height: calc(100dvh - 100px) !important;
     overflow-y: scroll !important; /* Force scrollbar to always show */
     -webkit-overflow-scrolling: touch !important; /* Smooth scrolling on iOS */
     display: flex !important;
@@ -73,10 +73,10 @@
   }
   
   .window.maximized .window-content {
-    height: calc(100vh - 105px) !important; /* 95px + 10px buffer for Chrome */
-    height: calc(100dvh - 105px) !important;
-    max-height: calc(100vh - 105px) !important;
-    max-height: calc(100dvh - 105px) !important;
+    height: calc(100vh - 100px) !important; /* 95px + 10px buffer for Chrome */
+    height: calc(100dvh - 100px) !important;
+    max-height: calc(100vh - 100px) !important;
+    max-height: calc(100dvh - 100px) !important;
   }
 }
 
@@ -89,10 +89,10 @@
     }
     
     .window.maximized .window-content {
-      height: calc(100vh - 115px) !important; /* 95px + 20px extra buffer */
-      height: calc(100dvh - 115px) !important;
-      max-height: calc(100vh - 115px) !important;
-      max-height: calc(100dvh - 115px) !important;
+      height: calc(100vh - 110px) !important; /* 95px + 20px extra buffer */
+      height: calc(100dvh - 110px) !important;
+      max-height: calc(100vh - 110px) !important;
+      max-height: calc(100dvh - 110px) !important;
     }
   }
 }

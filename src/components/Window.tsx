@@ -26,28 +26,9 @@ function Window({
   const [isResizing, setIsResizing] = useState(false)
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 })
   const [resizeStart, setResizeStart] = useState({ x: 0, y: 0, width: 0, height: 0 })
-  const [actualViewportHeight, setActualViewportHeight] = useState(globalThis.innerHeight)
   
   // Detect if device is mobile (more specific detection)
   const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
-  
-  // Handle viewport changes for mobile devices
-  useEffect(() => {
-    if (!isMobile) return
-    
-    const updateViewportHeight = () => {
-      setActualViewportHeight(globalThis.innerHeight)
-    }
-    
-    // Update on resize and orientation change
-    globalThis.addEventListener('resize', updateViewportHeight)
-    globalThis.addEventListener('orientationchange', updateViewportHeight)
-    
-    return () => {
-      globalThis.removeEventListener('resize', updateViewportHeight)
-      globalThis.removeEventListener('orientationchange', updateViewportHeight)
-    }
-  }, [isMobile])
 
   const handleMouseDownTitle = (e: React.MouseEvent) => {
     if (window.isMaximized) return
@@ -201,9 +182,7 @@ function Window({
         top: 0,
         left: 0,
         width: '100vw',
-        height: isMobile 
-          ? `${actualViewportHeight - 40}px` // Use actual viewport height for mobile
-          : 'calc(100vh - var(--taskbar-height, 40px))', // Use CSS calc for desktop
+        height: 'calc(100vh - var(--taskbar-height, 40px))',
         zIndex: window.zIndex,
         borderRadius: 0,
       }

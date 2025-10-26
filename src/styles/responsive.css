@@ -2,6 +2,10 @@
 
 /* Very small mobile devices */
 @media (max-width: 320px) {
+  :root {
+    --taskbar-height: 35px;
+  }
+  
   .taskbar {
     height: 35px !important;
   }
@@ -147,6 +151,10 @@
 
 /* Small mobile devices */
 @media (max-width: 375px) and (min-width: 321px) {
+  :root {
+    --taskbar-height: 38px;
+  }
+  
   .taskbar {
     height: 38px !important;
   }

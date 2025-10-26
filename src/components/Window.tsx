@@ -182,7 +182,7 @@ function Window({
         top: 0,
         left: 0,
         width: '100vw',
-        height: 'calc(100vh - 40px)',
+        height: 'calc(100vh - var(--taskbar-height, 40px))',
         zIndex: window.zIndex,
         borderRadius: 0,
       }

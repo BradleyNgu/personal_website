@@ -19,6 +19,14 @@
   max-height: none;
 }
 
+/* Mobile viewport handling for maximized windows */
+@media (max-width: 480px) {
+  .window.maximized {
+    width: 100dvw !important;
+    height: calc(100dvh - var(--taskbar-height, 40px)) !important;
+  }
+}
+
 @keyframes windowOpen {
   from {
     opacity: 0;

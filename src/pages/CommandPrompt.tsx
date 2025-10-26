@@ -11,7 +11,7 @@ function CommandPrompt() {
   const [currentCommand, setCurrentCommand] = useState('')
   const [currentPath] = useState('C:\\Users\\Bradley>')
   const [isExecuting, setIsExecuting] = useState(false)
-  const [showInitialPrompt, setShowInitialPrompt] = useState(true)
+  const [showInputAtTop, setShowInputAtTop] = useState(true)
   const terminalRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
 
@@ -30,9 +30,9 @@ function CommandPrompt() {
   const executeCommand = (command: string) => {
     if (!command.trim()) return
 
-    // Hide initial prompt when first command is executed
-    if (showInitialPrompt) {
-      setShowInitialPrompt(false)
+    // Move input to bottom after first command
+    if (showInputAtTop) {
+      setShowInputAtTop(false)
     }
 
     const cmd = command.trim().toLowerCase()
@@ -128,7 +128,7 @@ function CommandPrompt() {
         break
       case 'cls':
         setCommands([])
-        setShowInitialPrompt(true)
+        setShowInputAtTop(true)
         return
       case 'ver':
         output = ['Microsoft Windows XP [Version 5.1.2600]']
@@ -225,11 +225,27 @@ function CommandPrompt() {
   return (
     <div className="command-prompt">
       <div className="terminal-content" ref={terminalRef}>
-        {showInitialPrompt && (
-          <div className="initial-prompt">
-            <span className="prompt">{currentPath}</span>
-          </div>
-        )}
+        <div className="welcome-message">
+          Microsoft Windows XP [Version 5.1.2600]<br />
+          (C) Copyright 1985-2001 Microsoft Corp.<br />
+          <br />
+          {showInputAtTop && (
+            <div className="initial-prompt-line">
+              <span className="prompt">C:\Users\Bradley&gt;</span>
+              <input
+                ref={inputRef}
+                type="text"
+                value={currentCommand}
+                onChange={handleInputChange}
+                onKeyPress={handleKeyPress}
+                className="command-input"
+                autoFocus
+                disabled={isExecuting}
+                placeholder=""
+              />
+            </div>
+          )}
+        </div>
         {commands.map((cmd, index) => (
           <div key={index} className="command-block">
             <div className="command-line">
@@ -243,20 +259,22 @@ function CommandPrompt() {
             ))}
           </div>
         ))}
-        <div className="current-line">
-          <span className="prompt">{currentPath}</span>
-          <input
-            ref={inputRef}
-            type="text"
-            value={currentCommand}
-            onChange={handleInputChange}
-            onKeyPress={handleKeyPress}
-            className="command-input"
-            autoFocus
-            disabled={isExecuting}
-            placeholder=""
-          />
-        </div>
+        {!showInputAtTop && (
+          <div className="current-line">
+            <span className="prompt">{currentPath}</span>
+            <input
+              ref={inputRef}
+              type="text"
+              value={currentCommand}
+              onChange={handleInputChange}
+              onKeyPress={handleKeyPress}
+              className="command-input"
+              autoFocus
+              disabled={isExecuting}
+              placeholder=""
+            />
+          </div>
+        )}
       </div>
     </div>
   )

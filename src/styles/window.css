@@ -40,7 +40,7 @@
     height: calc(100dvh - 155px) !important; /* Dynamic viewport for mobile */
     max-height: calc(100vh - 155px) !important; /* Prevent overflow */
     max-height: calc(100dvh - 155px) !important;
-    overflow-y: hidden !important; /* Remove scrollbar from window content */
+    overflow: hidden !important; /* Remove scrollbar from window content */
     display: flex !important;
     flex-direction: column !important;
     padding-bottom: 35px !important; /* Extra buffer from bottom + 15px */
@@ -71,7 +71,7 @@
     height: calc(100dvh - 175px) !important;
     max-height: calc(100vh - 175px) !important;
     max-height: calc(100dvh - 175px) !important;
-    overflow-y: hidden !important; /* Remove scrollbar from window content */
+    overflow: hidden !important; /* Remove scrollbar from window content */
     padding-bottom: 45px !important; /* Extra buffer for Chrome + 15px */
   }
 }
@@ -192,7 +192,7 @@
 
 .window-content {
   flex: 1;
-  overflow: auto;
+  overflow: hidden;
   background: white;
   position: relative;
 }
@@ -217,22 +217,5 @@
   );
 }
 
-/* Custom scrollbar for windows */
-.window-content::-webkit-scrollbar {
-  width: 16px;
-  height: 16px;
-}
-
-.window-content::-webkit-scrollbar-track {
-  background: #f0f0f0;
-}
-
-.window-content::-webkit-scrollbar-thumb {
-  background: linear-gradient(to right, #5c95d6, #3b6fbc);
-  border: 1px solid #003c74;
-}
-
-.window-content::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(to right, #6ca5e6, #4b7fcc);
-}
+/* Custom scrollbar for windows - removed to prevent double scrollbars */
 

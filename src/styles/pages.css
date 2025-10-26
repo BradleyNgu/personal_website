@@ -3,6 +3,8 @@
   min-height: 100%;
   background: white;
   font-family: 'Tahoma', sans-serif;
+  overflow-y: auto;
+  height: 100%;
 }
 
 /* Phone-specific viewport handling - very aggressive to prevent taskbar overlap */

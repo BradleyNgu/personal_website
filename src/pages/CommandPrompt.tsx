@@ -16,7 +16,7 @@ function CommandPrompt() {
 
   useEffect(() => {
     if (terminalRef.current) {
-      terminalRef.current.scrollTop = terminalRef.current.scrollHeight
+      terminalRef.current.scrollTop = 0
     }
   }, [commands])
 

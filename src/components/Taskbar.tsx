@@ -13,9 +13,10 @@ interface TaskbarProps {
   onMyMusicClick: () => void
   onResumeClick: () => void
   onAutobiographyClick: () => void
+  onInternetExplorerClick: () => void
 }
 
-function Taskbar({ windows, onWindowClick, onShutdown, onLogOff, onEmailClick, onCommandPromptClick, onMyPicturesClick, onMyMusicClick, onResumeClick, onAutobiographyClick }: TaskbarProps) {
+function Taskbar({ windows, onWindowClick, onShutdown, onLogOff, onEmailClick, onCommandPromptClick, onMyPicturesClick, onMyMusicClick, onResumeClick, onAutobiographyClick, onInternetExplorerClick }: TaskbarProps) {
   const [showStartMenu, setShowStartMenu] = useState(false)
   const [currentTime, setCurrentTime] = useState(new Date())
   const startMenuRef = useRef<HTMLDivElement>(null)
@@ -103,7 +104,16 @@ function Taskbar({ windows, onWindowClick, onShutdown, onLogOff, onEmailClick, o
                   <img src="/assets/icons/Windows XP Icons/Email.png" alt="" className="menu-icon-large" />
                   <span>Email</span>
                 </div>
-                <div className="start-menu-item">
+                <div className="start-menu-item" 
+                  onClick={() => {
+                    onInternetExplorerClick()
+                    setShowStartMenu(false)
+                  }}
+                  onTouchStart={() => {
+                    onInternetExplorerClick()
+                    setShowStartMenu(false)
+                  }}
+                >
                   <img src="/assets/icons/Windows XP Icons/Internet Explorer 6.png" alt="" className="menu-icon-large" />
                   <span>Internet</span>
                 </div>
@@ -215,7 +225,13 @@ function Taskbar({ windows, onWindowClick, onShutdown, onLogOff, onEmailClick, o
 
 
       <div className="quick-launch">
-        <img src="/assets/icons/Windows XP Icons/Internet Explorer 6.png" alt="Internet Explorer" className="quick-launch-icon" title="Internet Explorer" />
+        <img 
+          src="/assets/icons/Windows XP Icons/Internet Explorer 6.png" 
+          alt="Internet Explorer" 
+          className="quick-launch-icon" 
+          title="Internet Explorer"
+          onClick={onInternetExplorerClick}
+        />
         <img 
           src="/assets/icons/Windows XP Icons/Command Prompt.png" 
           alt="Command Prompt" 

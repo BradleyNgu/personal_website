@@ -12,6 +12,7 @@ import CommandPrompt from '../pages/CommandPrompt'
 import MyPictures from '../pages/MyPictures'
 import MyMusic from '../pages/MyMusic'
 import Resume from '../pages/Resume'
+import InternetExplorer from '../pages/InternetExplorer'
 import '../styles/desktop.css'
 
 export interface WindowState {
@@ -176,6 +177,10 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
 
   const openAutobiography = () => {
     openWindow('autobiography', 'About Me', '/assets/icons/folder.png', <Autobiography />)
+  }
+
+  const openInternetExplorer = () => {
+    openWindow('internet-explorer', 'Internet Explorer', '/assets/icons/Windows XP Icons/Internet Explorer 6.png', <InternetExplorer />)
   }
 
 
@@ -757,6 +762,7 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
         onMyMusicClick={openMyMusic}
         onResumeClick={openResume}
         onAutobiographyClick={openAutobiography}
+        onInternetExplorerClick={openInternetExplorer}
       />
 
       <ErrorDialog

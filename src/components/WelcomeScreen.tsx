@@ -13,7 +13,7 @@ function WelcomeScreen({ onLogin, onShutdown }: WelcomeScreenProps) {
   useEffect(() => {
     if (stage === 'typing') {
       // Simulate typing password
-      const dots = '••••••••'
+      const dots = '••••••••••••••••'
       let currentDot = 0
       const typingInterval = setInterval(() => {
         if (currentDot < dots.length) {

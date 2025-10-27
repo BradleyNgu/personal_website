@@ -395,6 +395,27 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
           endX: e.clientX,
           endY: e.clientY,
         } : null)
+        
+        // Update selected icons in real-time as selection box moves
+        const box = {
+          left: Math.min(selectionBox.startX, e.clientX),
+          right: Math.max(selectionBox.startX, e.clientX),
+          top: Math.min(selectionBox.startY, e.clientY),
+          bottom: Math.max(selectionBox.startY, e.clientY),
+        }
+
+        const selected = iconPositions.filter(icon => {
+          const iconRight = icon.x + 80
+          const iconBottom = icon.y + 80
+          return (
+            icon.x < box.right &&
+            iconRight > box.left &&
+            icon.y < box.bottom &&
+            iconBottom > box.top
+          )
+        }).map(icon => icon.id)
+
+        setSelectedIcons(selected)
       }
       
       if (isDraggingSelected && dragOffset && selectedIcons.length > 0) {
@@ -425,26 +446,7 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
 
     const handleMouseUp = () => {
       if (selectionBox) {
-        // Calculate which icons are within the selection box
-        const box = {
-          left: Math.min(selectionBox.startX, selectionBox.endX),
-          right: Math.max(selectionBox.startX, selectionBox.endX),
-          top: Math.min(selectionBox.startY, selectionBox.endY),
-          bottom: Math.max(selectionBox.startY, selectionBox.endY),
-        }
-
-        const selected = iconPositions.filter(icon => {
-          const iconRight = icon.x + 80
-          const iconBottom = icon.y + 80
-          return (
-            icon.x < box.right &&
-            iconRight > box.left &&
-            icon.y < box.bottom &&
-            iconBottom > box.top
-          )
-        }).map(icon => icon.id)
-
-        setSelectedIcons(selected)
+        // Selection is already handled in real-time during mouse move
         setSelectionBox(null)
       }
       
@@ -510,6 +512,27 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
           endX: touch.clientX,
           endY: touch.clientY,
         } : null)
+        
+        // Update selected icons in real-time as selection box moves
+        const box = {
+          left: Math.min(selectionBox.startX, touch.clientX),
+          right: Math.max(selectionBox.startX, touch.clientX),
+          top: Math.min(selectionBox.startY, touch.clientY),
+          bottom: Math.max(selectionBox.startY, touch.clientY),
+        }
+
+        const selected = iconPositions.filter(icon => {
+          const iconRight = icon.x + 80
+          const iconBottom = icon.y + 80
+          return (
+            icon.x < box.right &&
+            iconRight > box.left &&
+            icon.y < box.bottom &&
+            iconBottom > box.top
+          )
+        }).map(icon => icon.id)
+
+        setSelectedIcons(selected)
       }
       
       if (isDraggingSelected && dragOffset && selectedIcons.length > 0) {
@@ -540,26 +563,7 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
 
     const handleTouchEnd = () => {
       if (selectionBox) {
-        // Calculate which icons are within the selection box
-        const box = {
-          left: Math.min(selectionBox.startX, selectionBox.endX),
-          right: Math.max(selectionBox.startX, selectionBox.endX),
-          top: Math.min(selectionBox.startY, selectionBox.endY),
-          bottom: Math.max(selectionBox.startY, selectionBox.endY),
-        }
-
-        const selected = iconPositions.filter(icon => {
-          const iconRight = icon.x + 80
-          const iconBottom = icon.y + 80
-          return (
-            icon.x < box.right &&
-            iconRight > box.left &&
-            icon.y < box.bottom &&
-            iconBottom > box.top
-          )
-        }).map(icon => icon.id)
-
-        setSelectedIcons(selected)
+        // Selection is already handled in real-time during touch move
         setSelectionBox(null)
       }
       

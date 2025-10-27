@@ -156,7 +156,13 @@ function DesktopIcon({
       data-icon-id={id}
     >
       <div className="icon-image-container">
-        <img src={icon} alt={title} className="icon-image" />
+        <img 
+          src={icon} 
+          alt={title} 
+          className="icon-image" 
+          draggable={false}
+          onDragStart={(e) => e.preventDefault()}
+        />
       </div>
       <div className="icon-label">
         <span>{title}</span>

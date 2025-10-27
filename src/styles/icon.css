@@ -33,6 +33,13 @@
   height: 100%;
   object-fit: contain;
   filter: drop-shadow(1px 1px 1px rgba(0, 0, 0, 0.5));
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
+  user-drag: none;
 }
 
 .icon-label {

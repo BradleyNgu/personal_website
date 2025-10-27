@@ -330,22 +330,23 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
   }, [recycleBinItems])
 
   const handleDesktopMouseDown = (e: React.MouseEvent) => {
-    if (e.target === desktopRef.current || (e.target as HTMLElement).classList.contains('desktop-icons')) {
-      // Check if clicking on a selected icon
-      const clickedIcon = (e.target as HTMLElement).closest('.desktop-icon')
-      if (clickedIcon && selectedIcons.length > 0) {
-        const iconId = clickedIcon.getAttribute('data-icon-id')
-        if (iconId && selectedIcons.includes(iconId)) {
-          // Start dragging selected icons
-          setIsDraggingSelected(true)
-          setDragOffset({
-            x: e.clientX,
-            y: e.clientY
-          })
-          return
-        }
+    // Check if clicking on a selected icon (even if not on desktop background)
+    const clickedIcon = (e.target as HTMLElement).closest('.desktop-icon')
+    if (clickedIcon && selectedIcons.length > 0) {
+      const iconId = clickedIcon.getAttribute('data-icon-id')
+      if (iconId && selectedIcons.includes(iconId)) {
+        // Start dragging selected icons
+        setIsDraggingSelected(true)
+        setDragOffset({
+          x: e.clientX,
+          y: e.clientY
+        })
+        return
       }
-      
+    }
+    
+    // Only start selection box if clicking on desktop background
+    if (e.target === desktopRef.current || (e.target as HTMLElement).classList.contains('desktop-icons')) {
       // Start selection box
       setSelectedIcons([])
       setSelectionBox({
@@ -359,23 +360,25 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
 
   const handleDesktopTouchStart = (e: React.TouchEvent) => {
     e.preventDefault()
-    if (e.target === desktopRef.current || (e.target as HTMLElement).classList.contains('desktop-icons')) {
-      const touch = e.touches[0]
-      // Check if touching a selected icon
-      const touchedIcon = (e.target as HTMLElement).closest('.desktop-icon')
-      if (touchedIcon && selectedIcons.length > 0) {
-        const iconId = touchedIcon.getAttribute('data-icon-id')
-        if (iconId && selectedIcons.includes(iconId)) {
-          // Start dragging selected icons
-          setIsDraggingSelected(true)
-          setDragOffset({
-            x: touch.clientX,
-            y: touch.clientY
-          })
-          return
-        }
+    const touch = e.touches[0]
+    
+    // Check if touching a selected icon (even if not on desktop background)
+    const touchedIcon = (e.target as HTMLElement).closest('.desktop-icon')
+    if (touchedIcon && selectedIcons.length > 0) {
+      const iconId = touchedIcon.getAttribute('data-icon-id')
+      if (iconId && selectedIcons.includes(iconId)) {
+        // Start dragging selected icons
+        setIsDraggingSelected(true)
+        setDragOffset({
+          x: touch.clientX,
+          y: touch.clientY
+        })
+        return
       }
-      
+    }
+    
+    // Only start selection box if touching desktop background
+    if (e.target === desktopRef.current || (e.target as HTMLElement).classList.contains('desktop-icons')) {
       // Start selection box
       setSelectedIcons([])
       setSelectionBox({
@@ -713,6 +716,7 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
                     setSelectedIcons([iconId])
                   }
                 }}
+                hasMultipleSelected={selectedIcons.length > 1}
               />
             )
           })

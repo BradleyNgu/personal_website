@@ -14,6 +14,7 @@ interface DesktopIconProps {
   onDragOver: (id: string, x: number, y: number) => void
   onDropOnRecycleBin: (id: string) => void
   onSelect: (id: string, addToSelection: boolean) => void
+  hasMultipleSelected: boolean
 }
 
 function DesktopIcon({ 
@@ -28,32 +29,44 @@ function DesktopIcon({
   onPositionChange,
   onDragOver,
   onDropOnRecycleBin,
-  onSelect
+  onSelect,
+  hasMultipleSelected
 }: DesktopIconProps) {
   const [clickTime, setClickTime] = useState(0)
   const [isDragging, setIsDragging] = useState(false)
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 })
 
   const handleMouseDown = (e: React.MouseEvent) => {
-    e.stopPropagation()
     const now = Date.now()
     
     if (now - clickTime < 300) {
       // Double click detected
+      e.stopPropagation()
       onDoubleClick()
       setClickTime(0)
     } else {
       // Single click
       setClickTime(now)
+      
+      // If multiple icons are selected, don't change selection - just let desktop handle dragging
+      if (hasMultipleSelected) {
+        // Let the desktop handle multi-selection dragging
+        return
+      }
+      
+      // Only change selection if not part of a multi-selection
       onSelect(id, e.ctrlKey || e.metaKey)
       
       // Only start individual dragging if not part of a multi-selection
       if (!e.ctrlKey && !e.metaKey) {
+        e.stopPropagation()
         setIsDragging(true)
         setDragStart({
           x: e.clientX - position.x,
           y: e.clientY - position.y,
         })
+      } else {
+        e.stopPropagation()
       }
       
       setTimeout(() => {
@@ -63,21 +76,30 @@ function DesktopIcon({
   }
 
   const handleTouchStart = (e: React.TouchEvent) => {
-    e.stopPropagation()
     e.preventDefault()
     const now = Date.now()
     const touch = e.touches[0]
     
     if (now - clickTime < 300) {
       // Double tap detected
+      e.stopPropagation()
       onDoubleClick()
       setClickTime(0)
     } else {
       // Single tap
       setClickTime(now)
+      
+      // If multiple icons are selected, don't change selection - just let desktop handle dragging
+      if (hasMultipleSelected) {
+        // Let the desktop handle multi-selection dragging
+        return
+      }
+      
+      // Only change selection if not part of a multi-selection
       onSelect(id, false) // Touch doesn't support ctrl/meta key
       
-      // Start dragging for touch
+      // Start dragging for touch only if not part of a multi-selection
+      e.stopPropagation()
       setIsDragging(true)
       setDragStart({
         x: touch.clientX - position.x,
@@ -91,6 +113,11 @@ function DesktopIcon({
   }
 
   useEffect(() => {
+    // Don't start individual dragging if multiple icons are selected
+    if (hasMultipleSelected) {
+      return
+    }
+
     const handleMouseMove = (e: MouseEvent) => {
       if (isDragging) {
         const newX = Math.max(0, e.clientX - dragStart.x)
@@ -145,7 +172,7 @@ function DesktopIcon({
         document.removeEventListener('touchend', handleTouchEnd)
       }
     }
-  }, [isDragging, dragStart, id, onPositionChange, onDragOver, onDropOnRecycleBin, isRecycleBin])
+  }, [isDragging, dragStart, id, onPositionChange, onDragOver, onDropOnRecycleBin, isRecycleBin, hasMultipleSelected])
 
   return (
     <div

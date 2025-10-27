@@ -5,7 +5,7 @@ interface InternetExplorerProps {
   onClose?: () => void
 }
 
-function InternetExplorer({ onClose }: InternetExplorerProps) {
+function InternetExplorer({ }: InternetExplorerProps) {
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0)
   const [isLoading, setIsLoading] = useState(false)
   const iframeRef = useRef<HTMLIFrameElement>(null)
@@ -69,20 +69,6 @@ function InternetExplorer({ onClose }: InternetExplorerProps) {
     }
   }
 
-  const handleRefresh = () => {
-    setIsLoading(true)
-    setTimeout(() => {
-      setIsLoading(false)
-    }, 1000)
-  }
-
-  const handleHome = () => {
-    setIsLoading(true)
-    setCurrentVideoIndex(0)
-    setTimeout(() => {
-      setIsLoading(false)
-    }, 500)
-  }
 
   return (
     <div className="internet-explorer">

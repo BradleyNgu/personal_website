@@ -31,6 +31,11 @@ function InternetExplorer({ }: InternetExplorerProps) {
       id: 'aARcW3aMKM0',
       title: '3004 Final - Team Two - Shane Bateman',
       url: 'https://www.youtube.com/watch?v=aARcW3aMKM0'
+    },
+    {
+      id: 'OHxGY2OEQ0k',
+      title: 'Meido-chan Demo',
+      url: 'https://www.youtube.com/watch?v=OHxGY2OEQ0k'
     }
   ]
 

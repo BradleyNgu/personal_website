@@ -1605,6 +1605,13 @@
     margin-right: auto !important;
   }
   
+  /* Command prompt should align with viewport, not be constrained */
+  .window.maximized .window-content .page-container > .command-prompt {
+    max-width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+  
   .project-card,
   .experience-card,
   .about-card {
@@ -1668,6 +1675,13 @@
     margin-right: auto !important;
   }
   
+  /* Command prompt should align with viewport, not be constrained */
+  .window.maximized .window-content .page-container > .command-prompt {
+    max-width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+  
   .project-card,
   .experience-card,
   .about-card {
@@ -1726,6 +1740,13 @@
     max-width: 2000px !important;
     margin-left: auto !important;
     margin-right: auto !important;
+  }
+  
+  /* Command prompt should align with viewport, not be constrained */
+  .window.maximized .window-content .page-container > .command-prompt {
+    max-width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
   }
   
   .page-header h1 {

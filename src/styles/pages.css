@@ -597,37 +597,60 @@
 
 /* Mobile-specific fixes for command prompt to ensure input is visible */
 @media (max-width: 480px) {
-  .window.maximized .window-content .page-container .command-prompt .terminal-content {
-    /* Ensure terminal content can scroll and show the input at bottom */
-    padding-bottom: calc(var(--taskbar-height, 40px) + var(--mobile-buffer, 40px) + 20px) !important;
-    box-sizing: border-box !important;
-    overscroll-behavior: contain !important;
+  /* Remove max-height constraint from page-container when it contains command-prompt */
+  .window.maximized .window-content .page-container .command-prompt {
+    /* Command prompt container should use full height */
+    height: 100% !important;
+    min-height: 100% !important;
   }
   
-  /* Ensure the current-line (input) has space and is visible */
+  /* Override the max-height constraint for page-container containing command prompt */
+  .window.maximized .window-content .page-container:has(.command-prompt) {
+    max-height: 100% !important;
+  }
+  
+  .window.maximized .window-content .page-container .command-prompt .terminal-content {
+    /* Ensure terminal content can scroll fully and show the input at bottom */
+    padding-bottom: calc(var(--taskbar-height, 40px) + var(--mobile-buffer, 40px) + 80px) !important;
+    box-sizing: border-box !important;
+    overscroll-behavior: contain !important;
+    /* Ensure content can scroll to show the input */
+    height: 100% !important;
+  }
+  
+  /* Ensure the current-line (input) is always visible and scrollable */
   .window.maximized .window-content .page-container .command-prompt .terminal-content .current-line {
-    margin-bottom: calc(var(--taskbar-height, 40px) + var(--mobile-buffer, 40px) + 20px) !important;
+    margin-bottom: 0 !important;
+    padding-bottom: calc(var(--taskbar-height, 40px) + var(--mobile-buffer, 40px) + 40px) !important;
     flex-shrink: 0 !important;
+    position: relative !important;
+    z-index: 1 !important;
   }
 }
 
 @media (max-width: 480px) and (orientation: portrait) {
+  .window.maximized .window-content .page-container:has(.command-prompt) {
+    max-height: 100% !important;
+  }
+  
   .window.maximized .window-content .page-container .command-prompt .terminal-content {
-    padding-bottom: calc(var(--taskbar-height, 40px) + var(--mobile-buffer, 40px) + 20px) !important;
+    padding-bottom: calc(var(--taskbar-height, 40px) + var(--mobile-buffer, 40px) + 80px) !important;
+    height: 100% !important;
   }
   
   .window.maximized .window-content .page-container .command-prompt .terminal-content .current-line {
-    margin-bottom: calc(var(--taskbar-height, 40px) + var(--mobile-buffer, 40px) + 20px) !important;
+    padding-bottom: calc(var(--taskbar-height, 40px) + var(--mobile-buffer, 40px) + 40px) !important;
   }
 }
 
 @media (max-width: 480px) and (orientation: portrait) and (-webkit-min-device-pixel-ratio: 1) {
   .window.maximized .window-content .page-container .command-prompt .terminal-content {
-    padding-bottom: calc(var(--taskbar-height, 40px) + var(--mobile-buffer, 60px) + 20px) !important;
+    padding-bottom: calc(var(--taskbar-height, 40px) + var(--mobile-buffer, 60px) + 80px) !important;
+    height: 100% !important;
   }
   
   .window.maximized .window-content .page-container .command-prompt .terminal-content .current-line {
-    margin-bottom: calc(var(--taskbar-height, 40px) + var(--mobile-buffer, 60px) + 20px) !important;
+    padding-bottom: calc(var(--taskbar-height, 40px) + var(--mobile-buffer, 60px) + 40px) !important;
   }
 }
 

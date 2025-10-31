@@ -72,8 +72,20 @@
     min-height: 0 !important; /* Allow flex item to shrink */
     overflow-y: auto !important;
     /* Constrain scrollable height to prevent going past taskbar */
+    /* Exception: command-prompt needs full scrolling - handled in pages.css */
     max-height: calc(100% - var(--taskbar-height, 40px) - var(--mobile-buffer, 40px)) !important;
     /* Bottom padding is handled in pages.css to account for taskbar */
+  }
+  
+  /* Command prompt needs special handling - allow full scrolling */
+  .window.maximized .window-content .page-container:has(.command-prompt) {
+    max-height: 100% !important;
+    overflow-y: visible !important;
+  }
+  
+  .window.maximized .window-content .page-container .command-prompt {
+    height: 100% !important;
+    overflow-y: auto !important;
   }
 }
 

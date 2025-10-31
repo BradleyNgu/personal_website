@@ -53,11 +53,11 @@
   }
   
   .window.maximized .window-content {
-    /* Reduce height to account for bottom spacing to prevent scroll past taskbar */
-    height: calc(100vh - var(--taskbar-height, 40px) - var(--window-title-bar-height, 30px) - var(--window-menu-bar-height, 24px) - var(--mobile-buffer, 40px) - 21px - 20px) !important;
-    height: calc(100dvh - var(--taskbar-height, 40px) - var(--window-title-bar-height, 30px) - var(--window-menu-bar-height, 24px) - var(--mobile-buffer, 40px) - 21px - 20px) !important;
-    max-height: calc(100vh - var(--taskbar-height, 40px) - var(--window-title-bar-height, 30px) - var(--window-menu-bar-height, 24px) - var(--mobile-buffer, 40px) - 21px - 20px) !important;
-    max-height: calc(100dvh - var(--taskbar-height, 40px) - var(--window-title-bar-height, 30px) - var(--window-menu-bar-height, 24px) - var(--mobile-buffer, 40px) - 21px - 20px) !important;
+    /* Full height to ensure all content is viewable */
+    height: calc(100vh - var(--taskbar-height, 40px) - var(--window-title-bar-height, 30px) - var(--window-menu-bar-height, 24px) - var(--mobile-buffer, 40px) - 21px) !important;
+    height: calc(100dvh - var(--taskbar-height, 40px) - var(--window-title-bar-height, 30px) - var(--window-menu-bar-height, 24px) - var(--mobile-buffer, 40px) - 21px) !important;
+    max-height: calc(100vh - var(--taskbar-height, 40px) - var(--window-title-bar-height, 30px) - var(--window-menu-bar-height, 24px) - var(--mobile-buffer, 40px) - 21px) !important;
+    max-height: calc(100dvh - var(--taskbar-height, 40px) - var(--window-title-bar-height, 30px) - var(--window-menu-bar-height, 24px) - var(--mobile-buffer, 40px) - 21px) !important;
     overflow: hidden !important;
     display: flex !important;
     flex-direction: column !important;
@@ -71,8 +71,9 @@
     max-height: 100% !important;
     min-height: 0 !important; /* Allow flex item to shrink */
     overflow-y: auto !important;
+    /* Constrain scrollable height to prevent going past taskbar */
+    max-height: calc(100% - var(--taskbar-height, 40px) - var(--mobile-buffer, 40px)) !important;
     /* Bottom padding is handled in pages.css to account for taskbar */
-    /* The container itself is constrained by window-content height */
   }
 }
 
@@ -91,13 +92,18 @@
   }
   
   .window.maximized .window-content {
-    /* Reduce height to account for bottom spacing to prevent scroll past taskbar */
-    height: calc(100vh - var(--taskbar-height, 40px) - var(--window-title-bar-height, 30px) - var(--window-menu-bar-height, 24px) - var(--mobile-buffer, 60px) - 21px - 20px) !important;
-    height: calc(100dvh - var(--taskbar-height, 40px) - var(--window-title-bar-height, 30px) - var(--window-menu-bar-height, 24px) - var(--mobile-buffer, 60px) - 21px - 20px) !important;
-    max-height: calc(100vh - var(--taskbar-height, 40px) - var(--window-title-bar-height, 30px) - var(--window-menu-bar-height, 24px) - var(--mobile-buffer, 60px) - 21px - 20px) !important;
-    max-height: calc(100dvh - var(--taskbar-height, 40px) - var(--window-title-bar-height, 30px) - var(--window-menu-bar-height, 24px) - var(--mobile-buffer, 60px) - 21px - 20px) !important;
+    /* Full height to ensure all content is viewable */
+    height: calc(100vh - var(--taskbar-height, 40px) - var(--window-title-bar-height, 30px) - var(--window-menu-bar-height, 24px) - var(--mobile-buffer, 60px) - 21px) !important;
+    height: calc(100dvh - var(--taskbar-height, 40px) - var(--window-title-bar-height, 30px) - var(--window-menu-bar-height, 24px) - var(--mobile-buffer, 60px) - 21px) !important;
+    max-height: calc(100vh - var(--taskbar-height, 40px) - var(--window-title-bar-height, 30px) - var(--window-menu-bar-height, 24px) - var(--mobile-buffer, 60px) - 21px) !important;
+    max-height: calc(100dvh - var(--taskbar-height, 40px) - var(--window-title-bar-height, 30px) - var(--window-menu-bar-height, 24px) - var(--mobile-buffer, 60px) - 21px) !important;
     overflow: hidden !important;
     padding-bottom: calc(var(--mobile-buffer, 60px) - 15px) !important;
+  }
+  
+  .window.maximized .window-content .page-container {
+    /* Constrain scrollable height for Chrome's larger buffer */
+    max-height: calc(100% - var(--taskbar-height, 40px) - var(--mobile-buffer, 60px)) !important;
   }
 }
 

@@ -595,6 +595,42 @@
   flex-direction: column;
 }
 
+/* Mobile-specific fixes for command prompt to ensure input is visible */
+@media (max-width: 480px) {
+  .window.maximized .window-content .page-container .command-prompt .terminal-content {
+    /* Ensure terminal content can scroll and show the input at bottom */
+    padding-bottom: calc(var(--taskbar-height, 40px) + var(--mobile-buffer, 40px) + 20px) !important;
+    box-sizing: border-box !important;
+    overscroll-behavior: contain !important;
+  }
+  
+  /* Ensure the current-line (input) has space and is visible */
+  .window.maximized .window-content .page-container .command-prompt .terminal-content .current-line {
+    margin-bottom: calc(var(--taskbar-height, 40px) + var(--mobile-buffer, 40px) + 20px) !important;
+    flex-shrink: 0 !important;
+  }
+}
+
+@media (max-width: 480px) and (orientation: portrait) {
+  .window.maximized .window-content .page-container .command-prompt .terminal-content {
+    padding-bottom: calc(var(--taskbar-height, 40px) + var(--mobile-buffer, 40px) + 20px) !important;
+  }
+  
+  .window.maximized .window-content .page-container .command-prompt .terminal-content .current-line {
+    margin-bottom: calc(var(--taskbar-height, 40px) + var(--mobile-buffer, 40px) + 20px) !important;
+  }
+}
+
+@media (max-width: 480px) and (orientation: portrait) and (-webkit-min-device-pixel-ratio: 1) {
+  .window.maximized .window-content .page-container .command-prompt .terminal-content {
+    padding-bottom: calc(var(--taskbar-height, 40px) + var(--mobile-buffer, 60px) + 20px) !important;
+  }
+  
+  .window.maximized .window-content .page-container .command-prompt .terminal-content .current-line {
+    margin-bottom: calc(var(--taskbar-height, 40px) + var(--mobile-buffer, 60px) + 20px) !important;
+  }
+}
+
 .command-block {
   margin-bottom: 0;
 }

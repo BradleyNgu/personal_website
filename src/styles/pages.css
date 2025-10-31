@@ -5,42 +5,45 @@
   font-family: 'Tahoma', sans-serif;
   overflow-y: auto;
   height: 100%;
+  box-sizing: border-box;
+}
+
+/* Ensure page containers inside maximized windows have proper bottom padding for taskbar */
+@media (max-width: 480px) {
+  .window.maximized .window-content .page-container {
+    padding-bottom: calc(var(--taskbar-height, 40px) + var(--mobile-buffer, 40px) + 20px) !important;
+  }
 }
 
 /* Phone-specific viewport handling - very aggressive to prevent taskbar overlap */
 @media (max-width: 480px) and (orientation: portrait) {
   .page-container {
-    height: calc(100vh - 175px) !important; /* Extra 15px buffer for cut-off */
-    height: calc(100dvh - 175px) !important; /* Dynamic viewport for mobile */
-    max-height: calc(100vh - 175px) !important; /* Prevent any overflow */
-    max-height: calc(100dvh - 175px) !important;
     padding: 8px !important; /* Minimal padding to save space */
+    padding-bottom: calc(var(--taskbar-height, 40px) + var(--mobile-buffer, 40px) + 20px) !important;
     overflow-y: auto !important;
     box-sizing: border-box !important;
     position: relative !important;
-    margin-bottom: 35px !important; /* Extra buffer from taskbar + 15px */
+  }
+  
+  /* For standalone page containers (not in windows), ensure proper height calculation */
+  .window.maximized .window-content .page-container {
+    height: 100% !important;
+    max-height: 100% !important;
   }
 }
 
 /* Chrome mobile phone - most aggressive */
 @media (max-width: 480px) and (orientation: portrait) and (-webkit-min-device-pixel-ratio: 1) {
   .page-container {
-    height: calc(100vh - 195px) !important; /* Extra 15px buffer for Chrome cut-off */
-    height: calc(100dvh - 195px) !important;
-    max-height: calc(100vh - 195px) !important;
-    max-height: calc(100dvh - 195px) !important;
-    margin-bottom: 45px !important; /* Extra buffer for Chrome + 15px */
+    padding-bottom: calc(var(--taskbar-height, 40px) + var(--mobile-buffer, 60px) + 20px) !important;
   }
 }
 
 /* Tablet and landscape - less aggressive */
 @media (max-width: 480px) and (orientation: landscape) {
   .page-container {
-    height: calc(100vh - 120px) !important;
-    height: calc(100dvh - 120px) !important;
-    max-height: calc(100vh - 120px) !important;
-    max-height: calc(100dvh - 120px) !important;
     padding: 10px !important;
+    padding-bottom: calc(var(--taskbar-height, 40px) + 20px) !important;
   }
 }
 

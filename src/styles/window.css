@@ -69,7 +69,7 @@
     height: 100% !important;
     max-height: 100% !important;
     overflow-y: auto !important;
-    margin-bottom: var(--mobile-buffer, 20px) !important;
+    /* Bottom padding is handled in pages.css to account for taskbar */
   }
 }
 

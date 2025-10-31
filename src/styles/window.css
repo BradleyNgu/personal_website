@@ -1,3 +1,18 @@
+:root {
+  --taskbar-height: 40px;
+  --window-title-bar-height: 30px;
+  --window-menu-bar-height: 24px;
+  --window-button-size: 16px;
+  --window-icon-size: 16px;
+  --window-resize-handle-size: 16px;
+  --window-title-font-size: 12px;
+  --window-menu-font-size: 11px;
+  --window-padding: 3px 5px;
+  --window-menu-padding: 3px 8px;
+  --window-menu-gap: 8px;
+  --mobile-buffer: 0px; /* Default no buffer, overridden per device */
+}
+
 .window {
   background: white;
   border-radius: 0;
@@ -7,7 +22,9 @@
   overflow: hidden;
   animation: windowOpen 0.2s ease-out;
   max-width: 100vw;
-  max-height: calc(100vh - 40px);
+  max-width: 100dvw;
+  max-height: calc(100vh - var(--taskbar-height, 40px));
+  max-height: calc(100dvh - var(--taskbar-height, 40px));
 }
 
 .window.maximized {
@@ -19,60 +36,64 @@
   max-height: none;
 }
 
-/* Phone-specific viewport handling - very aggressive to prevent taskbar overlap */
+/* Phone-specific viewport handling - using CSS variables */
 @media (max-width: 480px) and (orientation: portrait) {
   .window.maximized {
     width: 100dvw !important;
     width: 100vw !important; /* Fallback for older browsers */
-    height: calc(100dvh - 80px) !important; /* Very aggressive - large buffer for taskbar */
-    height: calc(100vh - 80px) !important; /* Fallback for older browsers */
-    max-height: calc(100dvh - 80px) !important; /* Prevent any overflow */
-    max-height: calc(100vh - 80px) !important;
-    overflow: hidden !important; /* Prevent any overflow */
+    height: calc(100dvh - var(--taskbar-height, 40px) - var(--mobile-buffer, 40px)) !important;
+    height: calc(100vh - var(--taskbar-height, 40px) - var(--mobile-buffer, 40px)) !important;
+    max-height: calc(100dvh - var(--taskbar-height, 40px) - var(--mobile-buffer, 40px)) !important;
+    max-height: calc(100vh - var(--taskbar-height, 40px) - var(--mobile-buffer, 40px)) !important;
+    overflow: hidden !important;
     position: fixed !important;
     top: 0 !important;
     left: 0 !important;
-    bottom: 80px !important; /* Force bottom margin */
+    bottom: calc(var(--taskbar-height, 40px) + var(--mobile-buffer, 40px)) !important;
   }
   
   .window.maximized .window-content {
-    height: calc(100vh - 155px) !important; /* Extra 15px buffer for cut-off */
-    height: calc(100dvh - 155px) !important; /* Dynamic viewport for mobile */
-    max-height: calc(100vh - 155px) !important; /* Prevent overflow */
-    max-height: calc(100dvh - 155px) !important;
-    overflow: hidden !important; /* Remove scrollbar from window content */
+    height: calc(100vh - var(--taskbar-height, 40px) - var(--window-title-bar-height, 30px) - var(--window-menu-bar-height, 24px) - var(--mobile-buffer, 40px) - 21px) !important;
+    height: calc(100dvh - var(--taskbar-height, 40px) - var(--window-title-bar-height, 30px) - var(--window-menu-bar-height, 24px) - var(--mobile-buffer, 40px) - 21px) !important;
+    max-height: calc(100vh - var(--taskbar-height, 40px) - var(--window-title-bar-height, 30px) - var(--window-menu-bar-height, 24px) - var(--mobile-buffer, 40px) - 21px) !important;
+    max-height: calc(100dvh - var(--taskbar-height, 40px) - var(--window-title-bar-height, 30px) - var(--window-menu-bar-height, 24px) - var(--mobile-buffer, 40px) - 21px) !important;
+    overflow: hidden !important;
     display: flex !important;
     flex-direction: column !important;
-    padding-bottom: 35px !important; /* Extra buffer from bottom + 15px */
+    padding-bottom: calc(var(--mobile-buffer, 40px) - 5px) !important;
   }
   
   /* Ensure page containers work properly in maximized windows on phone */
   .window.maximized .window-content .page-container {
     flex: 1 !important;
-    height: 100% !important; /* Force to fit within window content */
-    max-height: 100% !important; /* Prevent overflow */
-    overflow-y: auto !important; /* Only page container scrolls */
-    margin-bottom: 20px !important; /* Extra buffer from taskbar */
+    height: 100% !important;
+    max-height: 100% !important;
+    overflow-y: auto !important;
+    margin-bottom: var(--mobile-buffer, 20px) !important;
   }
 }
 
 /* Chrome mobile phone - most aggressive */
 @media (max-width: 480px) and (orientation: portrait) and (-webkit-min-device-pixel-ratio: 1) {
+  :root {
+    --mobile-buffer: 60px; /* Larger buffer for Chrome */
+  }
+  
   .window.maximized {
-    height: calc(100dvh - 100px) !important; /* Even more aggressive for Chrome */
-    height: calc(100vh - 100px) !important;
-    max-height: calc(100dvh - 100px) !important;
-    max-height: calc(100vh - 100px) !important;
-    bottom: 100px !important; /* Larger bottom margin for Chrome */
+    height: calc(100dvh - var(--taskbar-height, 40px) - var(--mobile-buffer, 60px)) !important;
+    height: calc(100vh - var(--taskbar-height, 40px) - var(--mobile-buffer, 60px)) !important;
+    max-height: calc(100dvh - var(--taskbar-height, 40px) - var(--mobile-buffer, 60px)) !important;
+    max-height: calc(100vh - var(--taskbar-height, 40px) - var(--mobile-buffer, 60px)) !important;
+    bottom: calc(var(--taskbar-height, 40px) + var(--mobile-buffer, 60px)) !important;
   }
   
   .window.maximized .window-content {
-    height: calc(100vh - 175px) !important; /* Extra 15px buffer for Chrome cut-off */
-    height: calc(100dvh - 175px) !important;
-    max-height: calc(100vh - 175px) !important;
-    max-height: calc(100dvh - 175px) !important;
-    overflow: hidden !important; /* Remove scrollbar from window content */
-    padding-bottom: 45px !important; /* Extra buffer for Chrome + 15px */
+    height: calc(100vh - var(--taskbar-height, 40px) - var(--window-title-bar-height, 30px) - var(--window-menu-bar-height, 24px) - var(--mobile-buffer, 60px) - 21px) !important;
+    height: calc(100dvh - var(--taskbar-height, 40px) - var(--window-title-bar-height, 30px) - var(--window-menu-bar-height, 24px) - var(--mobile-buffer, 60px) - 21px) !important;
+    max-height: calc(100vh - var(--taskbar-height, 40px) - var(--window-title-bar-height, 30px) - var(--window-menu-bar-height, 24px) - var(--mobile-buffer, 60px) - 21px) !important;
+    max-height: calc(100dvh - var(--taskbar-height, 40px) - var(--window-title-bar-height, 30px) - var(--window-menu-bar-height, 24px) - var(--mobile-buffer, 60px) - 21px) !important;
+    overflow: hidden !important;
+    padding-bottom: calc(var(--mobile-buffer, 60px) - 15px) !important;
   }
 }
 
@@ -84,28 +105,36 @@
   }
   
   .window.maximized .window-content {
-    min-height: calc(100vh - var(--taskbar-height, 40px) - 60px - env(safe-area-inset-bottom, 0px)) !important;
+    min-height: calc(100vh - var(--taskbar-height, 40px) - var(--window-title-bar-height, 30px) - var(--window-menu-bar-height, 24px) - env(safe-area-inset-bottom, 0px)) !important;
   }
 }
 
 /* Samsung Galaxy and Chrome specific viewport handling */
 @media (max-width: 480px) and (orientation: portrait) {
+  :root {
+    --mobile-buffer: 10px; /* Small buffer for Chrome UI */
+  }
+  
   .window.maximized {
-    height: calc(100vh - var(--taskbar-height, 40px) - 10px) !important; /* Small buffer for Chrome UI */
-    height: calc(100dvh - var(--taskbar-height, 40px) - 10px) !important;
+    height: calc(100vh - var(--taskbar-height, 40px) - var(--mobile-buffer, 10px)) !important;
+    height: calc(100dvh - var(--taskbar-height, 40px) - var(--mobile-buffer, 10px)) !important;
   }
 }
 
 /* Chrome mobile viewport fix - more aggressive */
 @supports (-webkit-touch-callout: none) {
   @media (max-width: 480px) {
+    :root {
+      --mobile-buffer: 20px;
+    }
+    
     .window.maximized {
-      height: calc(100vh - var(--taskbar-height, 40px) - 20px) !important;
-      height: calc(100dvh - var(--taskbar-height, 40px) - 20px) !important;
+      height: calc(100vh - var(--taskbar-height, 40px) - var(--mobile-buffer, 20px)) !important;
+      height: calc(100dvh - var(--taskbar-height, 40px) - var(--mobile-buffer, 20px)) !important;
     }
     
     .window.maximized .window-content {
-      min-height: calc(100vh - var(--taskbar-height, 40px) - 80px) !important;
+      min-height: calc(100vh - var(--taskbar-height, 40px) - var(--window-title-bar-height, 30px) - var(--window-menu-bar-height, 24px) - var(--mobile-buffer, 20px) - 6px) !important;
     }
   }
 }
@@ -123,39 +152,45 @@
 
 .window-title-bar {
   background: linear-gradient(to bottom, #3c6dc5 0%, #2a52a0 50%, #1e3f7a 100%);
-  padding: 3px 5px;
+  padding: var(--window-padding, 3px 5px);
   display: flex;
   justify-content: space-between;
   align-items: center;
   cursor: move;
   user-select: none;
   border-radius: 0;
-  height: 30px;
+  height: var(--window-title-bar-height, 30px);
+  min-height: var(--window-title-bar-height, 30px);
+  flex-shrink: 0;
 }
 
 .window-title {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: clamp(4px, 0.5vw, 6px);
   color: white;
-  font-size: 12px;
+  font-size: var(--window-title-font-size, 12px);
   font-weight: bold;
   text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
 }
 
 .window-icon {
-  width: 16px;
-  height: 16px;
+  width: var(--window-icon-size, 16px);
+  height: var(--window-icon-size, 16px);
+  min-width: var(--window-icon-size, 16px);
+  min-height: var(--window-icon-size, 16px);
 }
 
 .window-controls {
   display: flex;
-  gap: 2px;
+  gap: clamp(1px, 0.25vw, 2px);
 }
 
 .window-button {
-  width: 16px;
-  height: 16px;
+  width: var(--window-button-size, 16px);
+  height: var(--window-button-size, 16px);
+  min-width: var(--window-button-size, 16px);
+  min-height: var(--window-button-size, 16px);
   border: none;
   background: none;
   padding: 0;
@@ -163,11 +198,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
 }
 
 .window-button img {
-  width: 16px;
-  height: 16px;
+  width: var(--window-button-size, 16px);
+  height: var(--window-button-size, 16px);
   object-fit: contain;
 }
 
@@ -175,9 +211,12 @@
   background: linear-gradient(to bottom, #f0f0f0 0%, #e8e8e8 100%);
   border-bottom: 1px solid #d4d4d4;
   display: flex;
-  gap: 8px;
-  padding: 3px 8px;
-  font-size: 11px;
+  gap: var(--window-menu-gap, 8px);
+  padding: var(--window-menu-padding, 3px 8px);
+  font-size: var(--window-menu-font-size, 11px);
+  height: var(--window-menu-bar-height, 24px);
+  min-height: var(--window-menu-bar-height, 24px);
+  flex-shrink: 0;
 }
 
 .menu-item {
@@ -201,8 +240,8 @@
   position: absolute;
   bottom: 0;
   right: 0;
-  width: 16px;
-  height: 16px;
+  width: var(--window-resize-handle-size, 16px);
+  height: var(--window-resize-handle-size, 16px);
   cursor: nwse-resize;
   background: linear-gradient(135deg, 
     transparent 0%, 
@@ -215,6 +254,7 @@
     #a0a0a0 75%,
     transparent 75%
   );
+  flex-shrink: 0;
 }
 
 /* iPad specific viewport fixes */
@@ -223,17 +263,17 @@
   .window.maximized {
     width: 100vw !important;
     width: 100dvw !important;
-    height: calc(100vh - 40px) !important;
-    height: calc(100dvh - 40px) !important;
+    height: calc(100vh - var(--taskbar-height, 40px)) !important;
+    height: calc(100dvh - var(--taskbar-height, 40px)) !important;
     max-width: 100vw !important;
     max-width: 100dvw !important;
-    max-height: calc(100vh - 40px) !important;
-    max-height: calc(100dvh - 40px) !important;
+    max-height: calc(100vh - var(--taskbar-height, 40px)) !important;
+    max-height: calc(100dvh - var(--taskbar-height, 40px)) !important;
     position: fixed !important;
     top: 0 !important;
     left: 0 !important;
     right: 0 !important;
-    bottom: 40px !important;
+    bottom: var(--taskbar-height, 40px) !important;
     overflow: hidden !important;
     box-sizing: border-box !important;
   }
@@ -249,8 +289,8 @@
   
   .window:not(.maximized) {
     max-width: 90vw !important;
-    max-height: calc(100vh - 60px) !important;
-    max-height: calc(100dvh - 60px) !important;
+    max-height: calc(100vh - var(--taskbar-height, 40px) - 20px) !important;
+    max-height: calc(100dvh - var(--taskbar-height, 40px) - 20px) !important;
   }
 }
 
@@ -288,21 +328,21 @@
     }
     
     .window.maximized {
-      height: calc(100vh - 40px) !important;
-      height: calc(-webkit-fill-available - 40px) !important;
-      height: calc(100dvh - 40px) !important;
-      max-height: calc(100vh - 40px) !important;
-      max-height: calc(-webkit-fill-available - 40px) !important;
-      max-height: calc(100dvh - 40px) !important;
+      height: calc(100vh - var(--taskbar-height, 40px)) !important;
+      height: calc(-webkit-fill-available - var(--taskbar-height, 40px)) !important;
+      height: calc(100dvh - var(--taskbar-height, 40px)) !important;
+      max-height: calc(100vh - var(--taskbar-height, 40px)) !important;
+      max-height: calc(-webkit-fill-available - var(--taskbar-height, 40px)) !important;
+      max-height: calc(100dvh - var(--taskbar-height, 40px)) !important;
     }
     
     .window.maximized .window-content {
-      height: calc(100vh - 40px - 60px) !important; /* Subtract title bar height */
-      height: calc(-webkit-fill-available - 40px - 60px) !important;
-      height: calc(100dvh - 40px - 60px) !important;
-      max-height: calc(100vh - 40px - 60px) !important;
-      max-height: calc(-webkit-fill-available - 40px - 60px) !important;
-      max-height: calc(100dvh - 40px - 60px) !important;
+      height: calc(100vh - var(--taskbar-height, 40px) - var(--window-title-bar-height, 30px) - var(--window-menu-bar-height, 24px)) !important;
+      height: calc(-webkit-fill-available - var(--taskbar-height, 40px) - var(--window-title-bar-height, 30px) - var(--window-menu-bar-height, 24px)) !important;
+      height: calc(100dvh - var(--taskbar-height, 40px) - var(--window-title-bar-height, 30px) - var(--window-menu-bar-height, 24px)) !important;
+      max-height: calc(100vh - var(--taskbar-height, 40px) - var(--window-title-bar-height, 30px) - var(--window-menu-bar-height, 24px)) !important;
+      max-height: calc(-webkit-fill-available - var(--taskbar-height, 40px) - var(--window-title-bar-height, 30px) - var(--window-menu-bar-height, 24px)) !important;
+      max-height: calc(100dvh - var(--taskbar-height, 40px) - var(--window-title-bar-height, 30px) - var(--window-menu-bar-height, 24px)) !important;
       overflow-y: auto !important;
       -webkit-overflow-scrolling: touch !important;
     }
@@ -312,20 +352,20 @@
 /* iPad Landscape specific */
 @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: landscape) {
   .window.maximized {
-    height: calc(100vh - 40px) !important;
-    height: calc(100dvh - 40px) !important;
-    max-height: calc(100vh - 40px) !important;
-    max-height: calc(100dvh - 40px) !important;
+    height: calc(100vh - var(--taskbar-height, 40px)) !important;
+    height: calc(100dvh - var(--taskbar-height, 40px)) !important;
+    max-height: calc(100vh - var(--taskbar-height, 40px)) !important;
+    max-height: calc(100dvh - var(--taskbar-height, 40px)) !important;
   }
 }
 
 /* iPad Portrait specific */
 @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: portrait) {
   .window.maximized {
-    height: calc(100vh - 40px) !important;
-    height: calc(100dvh - 40px) !important;
-    max-height: calc(100vh - 40px) !important;
-    max-height: calc(100dvh - 40px) !important;
+    height: calc(100vh - var(--taskbar-height, 40px)) !important;
+    height: calc(100dvh - var(--taskbar-height, 40px)) !important;
+    max-height: calc(100vh - var(--taskbar-height, 40px)) !important;
+    max-height: calc(100dvh - var(--taskbar-height, 40px)) !important;
   }
 }
 

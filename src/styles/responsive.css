@@ -4,6 +4,13 @@
 @media (max-width: 320px) {
   :root {
     --taskbar-height: 35px;
+    --window-title-bar-height: 24px;
+    --window-menu-bar-height: 20px;
+    --window-button-size: 10px;
+    --window-icon-size: 10px;
+    --window-title-font-size: 9px;
+    --window-menu-font-size: 8px;
+    --mobile-buffer: 40px;
   }
   
   .taskbar {
@@ -153,6 +160,13 @@
 @media (max-width: 375px) and (min-width: 321px) {
   :root {
     --taskbar-height: 38px;
+    --window-title-bar-height: 26px;
+    --window-menu-bar-height: 22px;
+    --window-button-size: 12px;
+    --window-icon-size: 12px;
+    --window-title-font-size: 10px;
+    --window-menu-font-size: 9px;
+    --mobile-buffer: 38px;
   }
   
   .taskbar {
@@ -300,6 +314,17 @@
 
 /* Mobile devices (portrait) */
 @media (max-width: 480px) {
+  :root {
+    --taskbar-height: 40px;
+    --window-title-bar-height: 28px;
+    --window-menu-bar-height: 24px;
+    --window-button-size: 14px;
+    --window-icon-size: 14px;
+    --window-title-font-size: 11px;
+    --window-menu-font-size: 10px;
+    --mobile-buffer: 40px;
+  }
+  
   /* Ensure no gaps at bottom and handle safe areas */
   body, html {
     margin: 0 !important;
@@ -1227,6 +1252,12 @@
 
 /* iPad specific fixes */
 @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) {
+  :root {
+    --taskbar-height: 40px;
+    --window-title-bar-height: 30px;
+    --window-menu-bar-height: 24px;
+    --mobile-buffer: 0px;
+  }
   /* Force proper viewport units on iPad */
   body, html {
     height: 100vh !important;
@@ -1306,6 +1337,12 @@
 
 /* Tablets and small screens */
 @media (max-width: 768px) {
+  :root {
+    --window-title-bar-height: 32px;
+    --window-menu-bar-height: 24px;
+    --window-title-font-size: 12px;
+    --mobile-buffer: 0px;
+  }
   .window:not(.maximized) {
     width: 90% !important;
     max-width: 90vw !important;

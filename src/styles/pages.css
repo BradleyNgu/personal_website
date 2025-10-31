@@ -11,12 +11,13 @@
 /* Ensure page containers inside maximized windows have proper spacing and scroll limits */
 @media (max-width: 480px) {
   .window.maximized .window-content .page-container {
-    /* Reduce height to account for bottom spacing, preventing scroll past taskbar */
-    height: calc(100% - var(--taskbar-height, 40px) - var(--mobile-buffer, 40px) - 20px) !important;
-    max-height: calc(100% - var(--taskbar-height, 40px) - var(--mobile-buffer, 40px) - 20px) !important;
-    /* Add padding for visual spacing */
-    padding-bottom: calc(var(--taskbar-height, 40px) + var(--mobile-buffer, 40px) + 20px) !important;
+    /* Use scroll-padding-bottom to create spacing that scroll respects but doesn't extend scroll area */
+    scroll-padding-bottom: calc(var(--taskbar-height, 40px) + var(--mobile-buffer, 40px) + 20px) !important;
+    /* Also add regular padding for visual spacing at the very bottom */
+    padding-bottom: 20px !important;
     box-sizing: border-box !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
   }
 }
 
@@ -31,20 +32,18 @@
   
   /* For standalone page containers (not in windows), ensure proper height calculation */
   .window.maximized .window-content .page-container {
-    /* Constrain height to prevent scrolling past taskbar */
-    height: calc(100% - var(--taskbar-height, 40px) - var(--mobile-buffer, 40px) - 20px) !important;
-    max-height: calc(100% - var(--taskbar-height, 40px) - var(--mobile-buffer, 40px) - 20px) !important;
+    /* Use scroll-padding to prevent scrolling past taskbar */
+    scroll-padding-bottom: calc(var(--taskbar-height, 40px) + var(--mobile-buffer, 40px) + 20px) !important;
+    padding-bottom: 20px !important;
     box-sizing: border-box !important;
-    padding-bottom: calc(var(--taskbar-height, 40px) + var(--mobile-buffer, 40px) + 20px) !important;
   }
 }
 
 /* Chrome mobile phone - most aggressive */
 @media (max-width: 480px) and (orientation: portrait) and (-webkit-min-device-pixel-ratio: 1) {
   .window.maximized .window-content .page-container {
-    height: calc(100% - var(--taskbar-height, 40px) - var(--mobile-buffer, 60px) - 20px) !important;
-    max-height: calc(100% - var(--taskbar-height, 40px) - var(--mobile-buffer, 60px) - 20px) !important;
-    padding-bottom: calc(var(--taskbar-height, 40px) + var(--mobile-buffer, 60px) + 20px) !important;
+    scroll-padding-bottom: calc(var(--taskbar-height, 40px) + var(--mobile-buffer, 60px) + 20px) !important;
+    padding-bottom: 20px !important;
   }
 }
 
@@ -55,9 +54,8 @@
   }
   
   .window.maximized .window-content .page-container {
-    height: calc(100% - var(--taskbar-height, 40px) - 20px) !important;
-    max-height: calc(100% - var(--taskbar-height, 40px) - 20px) !important;
-    padding-bottom: calc(var(--taskbar-height, 40px) + 20px) !important;
+    scroll-padding-bottom: calc(var(--taskbar-height, 40px) + 20px) !important;
+    padding-bottom: 20px !important;
   }
 }
 

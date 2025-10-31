@@ -306,8 +306,13 @@
     padding: 0 !important;
     height: 100vh !important;
     height: 100dvh !important; /* Dynamic viewport height for mobile */
+    height: -webkit-fill-available !important; /* iOS Safari fix */
+    overflow: hidden !important; /* Prevent all scrolling */
     overflow-x: hidden !important;
-    overflow-y: auto !important;
+    overflow-y: hidden !important;
+    position: fixed !important;
+    width: 100% !important;
+    touch-action: none !important; /* Prevent pull-to-refresh and overscroll */
   }
   
   /* Handle safe area insets for devices with notches */
@@ -315,6 +320,45 @@
     padding-bottom: env(safe-area-inset-bottom) !important;
     padding-left: env(safe-area-inset-left) !important;
     padding-right: env(safe-area-inset-right) !important;
+  }
+  
+  /* Fix root container */
+  #root {
+    height: 100vh !important;
+    height: 100dvh !important;
+    height: -webkit-fill-available !important;
+    width: 100vw !important;
+    width: 100dvw !important;
+    overflow: hidden !important;
+    position: relative !important;
+    touch-action: none !important;
+  }
+  
+  /* Fix app container */
+  .app {
+    height: 100vh !important;
+    height: 100dvh !important;
+    height: -webkit-fill-available !important;
+    width: 100vw !important;
+    width: 100dvw !important;
+    overflow: hidden !important;
+    position: relative !important;
+  }
+  
+  /* Fix welcome, loading, and shutdown screens */
+  .welcome-screen,
+  .loading-screen,
+  .shutdown-screen {
+    height: 100vh !important;
+    height: 100dvh !important;
+    height: -webkit-fill-available !important;
+    width: 100vw !important;
+    width: 100dvw !important;
+    max-height: 100vh !important;
+    max-height: 100dvh !important;
+    overflow: hidden !important;
+    position: relative !important;
+    touch-action: none !important;
   }
   /* Welcome Screen Mobile - Center like shutdown page */
   .welcome-screen {
@@ -669,6 +713,21 @@
   /* Ensure desktop content doesn't overlap with fixed taskbar */
   .desktop {
     padding-bottom: 40px !important;
+    height: calc(100vh - 40px) !important;
+    height: calc(100dvh - 40px) !important;
+    height: calc(-webkit-fill-available - 40px) !important;
+    width: 100vw !important;
+    width: 100dvw !important;
+    overflow: hidden !important;
+    position: relative !important;
+    touch-action: none !important; /* Prevent overscroll */
+  }
+  
+  .desktop-icons {
+    height: calc(100vh - 40px) !important;
+    height: calc(100dvh - 40px) !important;
+    height: calc(-webkit-fill-available - 40px) !important;
+    overflow: hidden !important;
   }
   
   /* Remove any potential gaps or margins that could affect flush alignment */
@@ -1691,11 +1750,17 @@
     -webkit-touch-callout: none !important;
   }
   
-  /* Better touch scrolling */
-  .window-content,
+  /* Better touch scrolling - only within window content */
+  .window-content {
+    -webkit-overflow-scrolling: touch !important;
+    overscroll-behavior: contain !important;
+    touch-action: pan-y !important; /* Allow vertical scrolling in windows only */
+  }
+  
   .page-container {
     -webkit-overflow-scrolling: touch !important;
     overscroll-behavior: contain !important;
+    touch-action: pan-y !important; /* Allow vertical scrolling in page content only */
   }
 }
 
@@ -1969,5 +2034,50 @@
   transform: translateZ(0) !important;
   will-change: transform !important;
   backface-visibility: hidden !important;
+}
+
+/* Universal fix: Prevent body/html scrolling on all devices */
+html, body {
+  overscroll-behavior: none !important;
+  overscroll-behavior-y: none !important;
+  overscroll-behavior-x: none !important;
+  -webkit-overflow-scrolling: auto !important; /* Disable momentum scrolling */
+}
+
+/* Mobile-specific: Prevent pull-to-refresh and bounce scrolling */
+@media (max-width: 768px) {
+  html, body {
+    overscroll-behavior-y: none !important;
+    -webkit-overflow-scrolling: auto !important;
+    /* Prevent iOS Safari bounce effect */
+    position: fixed !important;
+    width: 100% !important;
+    height: 100% !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    height: -webkit-fill-available !important;
+    overflow: hidden !important;
+    touch-action: none !important;
+  }
+  
+  /* Ensure no scrolling on any main containers */
+  #root,
+  .app,
+  .desktop,
+  .welcome-screen,
+  .loading-screen,
+  .shutdown-screen {
+    overscroll-behavior: none !important;
+    -webkit-overflow-scrolling: auto !important;
+    touch-action: none !important;
+  }
+  
+  /* Only allow scrolling within window content and page containers */
+  .window-content,
+  .page-container {
+    overscroll-behavior: contain !important;
+    -webkit-overflow-scrolling: touch !important;
+    touch-action: pan-y !important; /* Only allow vertical pan in content areas */
+  }
 }
 

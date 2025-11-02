@@ -34,6 +34,15 @@
   padding: 0;
   max-width: none;
   max-height: none;
+  display: flex;
+  flex-direction: column;
+}
+
+.window.maximized .window-content {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 /* Phone-specific viewport handling - using CSS variables */

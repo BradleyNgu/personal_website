@@ -2061,7 +2061,14 @@
   }
   
   .desktop-icon.selected {
-    border: 2px solid #000 !important;
+    outline: 1px solid #000 !important;
+    outline-offset: -1px !important;
+  }
+  
+  .desktop-icon.selected .icon-label {
+    padding: 2px 4px !important;
+    box-sizing: border-box !important;
+    margin: 0 !important;
   }
   
   .taskbar {

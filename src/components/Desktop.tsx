@@ -50,17 +50,17 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
   const [highestZIndex, setHighestZIndex] = useState(1)
   const [iconPositions, setIconPositions] = useState<IconPosition[]>([
     { id: 'projects', x: 20, y: 20 },
-    { id: 'experiences', x: 20, y: 120 },
-    { id: 'autobiography', x: 20, y: 220 },
-    { id: 'resume', x: 20, y: 320 },
-    { id: 'recycle-bin', x: 20, y: 420 },
+    { id: 'experiences', x: 20, y: 140 },
+    { id: 'autobiography', x: 20, y: 260 },
+    { id: 'resume', x: 20, y: 380 },
+    { id: 'recycle-bin', x: 20, y: 500 },
   ])
   const [initialIconPositions] = useState<IconPosition[]>([
     { id: 'projects', x: 20, y: 20 },
-    { id: 'experiences', x: 20, y: 120 },
-    { id: 'autobiography', x: 20, y: 220 },
-    { id: 'resume', x: 20, y: 320 },
-    { id: 'recycle-bin', x: 20, y: 420 },
+    { id: 'experiences', x: 20, y: 140 },
+    { id: 'autobiography', x: 20, y: 260 },
+    { id: 'resume', x: 20, y: 380 },
+    { id: 'recycle-bin', x: 20, y: 500 },
   ])
   const [selectedIcons, setSelectedIcons] = useState<string[]>([])
   const [selectionBox, setSelectionBox] = useState<{

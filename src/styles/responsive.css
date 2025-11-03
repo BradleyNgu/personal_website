@@ -2179,12 +2179,30 @@
 }
 
 /* Performance: GPU acceleration for smooth animations */
-.window,
-.desktop-icon,
+/* Only use will-change on elements that are actively being transformed */
+.window {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+.window:not(.maximized) {
+  will-change: transform, left, top;
+}
+
+.desktop-icon {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  will-change: transform, left, top;
+}
+
 .taskbar-window {
-  transform: translateZ(0) !important;
-  will-change: transform !important;
-  backface-visibility: hidden !important;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* Remove will-change when not needed to avoid performance overhead */
+.window.maximized {
+  will-change: auto;
 }
 
 /* Universal fix: Prevent body/html scrolling on all devices */

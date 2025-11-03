@@ -6,6 +6,11 @@
   overflow: hidden;
   min-height: 100vh;
   min-height: 100dvh;
+  /* Performance optimizations */
+  transform: translateZ(0);
+  will-change: auto;
+  backface-visibility: hidden;
+  -webkit-font-smoothing: antialiased;
 }
 
 .desktop-icons {
@@ -16,6 +21,10 @@
   height: calc(100% - 40px);
   padding: 10px;
   z-index: 0;
+  /* Performance optimizations for smooth icon interactions */
+  transform: translateZ(0);
+  will-change: auto;
+  contain: layout style paint;
 }
 
 @media (max-width: 768px) {

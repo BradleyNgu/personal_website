@@ -27,6 +27,9 @@
   max-height: calc(100dvh - var(--taskbar-height, 40px));
   /* Performance optimizations for dragging */
   contain: layout style paint;
+  /* Ensure sub-pixel positioning for smooth movement */
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 .window.maximized {

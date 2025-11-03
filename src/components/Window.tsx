@@ -89,15 +89,18 @@ function Window({
     
     // On mobile, if maximized, only allow focusing - no dragging or unmaximizing
     if (isMobile && window.isMaximized) {
-      e.preventDefault()
+      // Don't call preventDefault here to avoid passive listener warning
+      // CSS touch-action: none on the title bar will handle preventing scroll
       e.stopPropagation()
       onFocus()
       return
     }
     
-    e.preventDefault()
+    // Don't call preventDefault on touchStart - CSS touch-action: none handles it
+    // This avoids "passive event listener" warnings
     onFocus()
     const touch = e.touches[0]
+    if (!touch) return
     
     if (window.isMaximized) {
       // On desktop, when dragging a maximized window, restore it first
@@ -133,9 +136,11 @@ function Window({
     
     if (isInteractive) return
     
-    e.preventDefault()
+    // Don't call preventDefault on touchStart - rely on CSS touch-action
     onFocus()
     const touch = e.touches[0]
+    if (!touch) return
+    
     setIsDragging(true)
     setDragStart({
       x: touch.clientX - window.position.x,
@@ -159,10 +164,15 @@ function Window({
 
   const handleTouchStartResize = (e: React.TouchEvent) => {
     if (window.isMaximized || isMobile) return
-    e.preventDefault()
+    
+    // Don't call preventDefault on touchStart - rely on CSS touch-action
+    // stopPropagation is safe to call
     e.stopPropagation()
+    
     onFocus()
     const touch = e.touches[0]
+    if (!touch) return
+    
     setIsResizing(true)
     setResizeStart({
       x: touch.clientX,
@@ -189,17 +199,25 @@ function Window({
 
     const handleTouchMove = (e: TouchEvent) => {
       if (isDragging) {
+        // Prevent scrolling when dragging (touchmove is already non-passive)
+        e.preventDefault()
         const touch = e.touches[0]
-        onPositionChange({
-          x: touch.clientX - dragStart.x,
-          y: touch.clientY - dragStart.y,
-        })
+        if (touch) {
+          onPositionChange({
+            x: touch.clientX - dragStart.x,
+            y: touch.clientY - dragStart.y,
+          })
+        }
       }
       if (isResizing) {
+        // Prevent scrolling when resizing (touchmove is already non-passive)
+        e.preventDefault()
         const touch = e.touches[0]
-        const newWidth = Math.max(400, resizeStart.width + (touch.clientX - resizeStart.x))
-        const newHeight = Math.max(300, resizeStart.height + (touch.clientY - resizeStart.y))
-        onSizeChange({ width: newWidth, height: newHeight })
+        if (touch) {
+          const newWidth = Math.max(400, resizeStart.width + (touch.clientX - resizeStart.x))
+          const newHeight = Math.max(300, resizeStart.height + (touch.clientY - resizeStart.y))
+          onSizeChange({ width: newWidth, height: newHeight })
+        }
       }
     }
 

@@ -31,14 +31,37 @@ function Window({
   const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
 
   const handleMouseDownTitle = (e: React.MouseEvent) => {
-    if (window.isMaximized) return
+    // Don't allow dragging if clicking on window controls
+    const target = e.target as HTMLElement
+    if (target.closest('.window-controls, .window-button')) return
+    
     e.preventDefault()
     onFocus()
-    setIsDragging(true)
-    setDragStart({
-      x: e.clientX - window.position.x,
-      y: e.clientY - window.position.y,
-    })
+    
+    if (window.isMaximized) {
+      // When dragging a maximized window, restore it first
+      // Calculate the restore position based on where the user clicked
+      const restoreX = e.clientX - window.size.width / 2
+      const restoreY = e.clientY - 50 // Offset from top
+      
+      // Unmaximize the window
+      onMaximize()
+      
+      // Set position and start dragging
+      onPositionChange({ x: restoreX, y: restoreY })
+      
+      setIsDragging(true)
+      setDragStart({
+        x: e.clientX - restoreX,
+        y: e.clientY - restoreY,
+      })
+    } else {
+      setIsDragging(true)
+      setDragStart({
+        x: e.clientX - window.position.x,
+        y: e.clientY - window.position.y,
+      })
+    }
   }
 
   const handleMouseDownContent = (e: React.MouseEvent) => {
@@ -60,15 +83,36 @@ function Window({
   }
 
   const handleTouchStartTitle = (e: React.TouchEvent) => {
-    if (window.isMaximized) return
+    // Don't allow dragging if touching window controls
+    const target = e.target as HTMLElement
+    if (target.closest('.window-controls, .window-button')) return
+    
     e.preventDefault()
     onFocus()
     const touch = e.touches[0]
-    setIsDragging(true)
-    setDragStart({
-      x: touch.clientX - window.position.x,
-      y: touch.clientY - window.position.y,
-    })
+    
+    if (window.isMaximized) {
+      // When dragging a maximized window, restore it first
+      const restoreX = touch.clientX - window.size.width / 2
+      const restoreY = touch.clientY - 50
+      
+      // Unmaximize the window
+      onMaximize()
+      
+      onPositionChange({ x: restoreX, y: restoreY })
+      
+      setIsDragging(true)
+      setDragStart({
+        x: touch.clientX - restoreX,
+        y: touch.clientY - restoreY,
+      })
+    } else {
+      setIsDragging(true)
+      setDragStart({
+        x: touch.clientX - window.position.x,
+        y: touch.clientY - window.position.y,
+      })
+    }
   }
 
   const handleTouchStartContent = (e: React.TouchEvent) => {
@@ -172,7 +216,7 @@ function Window({
         document.removeEventListener('touchend', handleTouchEnd)
       }
     }
-  }, [isDragging, isResizing, dragStart, resizeStart, onPositionChange, onSizeChange])
+  }, [isDragging, isResizing, dragStart, resizeStart, onPositionChange, onSizeChange, window.position, window.size])
 
   if (window.isMinimized) return null
 
@@ -205,7 +249,7 @@ function Window({
       <div className="window-title-bar" onMouseDown={handleMouseDownTitle} onTouchStart={handleTouchStartTitle}>
         <div className="window-title">
           <img src={window.icon} alt="" className="window-icon" />
-          <span>{window.title}</span>
+          <span style={{ flexShrink: 0 }}>{window.title}</span>
         </div>
         <div className="window-controls">
           <button className="window-button minimize" onClick={onMinimize} title="Minimize">

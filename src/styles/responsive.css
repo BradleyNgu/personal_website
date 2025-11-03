@@ -1254,7 +1254,7 @@
 @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) {
   :root {
     --taskbar-height: 40px;
-    --window-title-bar-height: 30px;
+    --window-title-bar-height: 48px;
     --window-menu-bar-height: 24px;
     --mobile-buffer: 0px;
   }

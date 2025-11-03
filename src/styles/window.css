@@ -1,13 +1,13 @@
 :root {
   --taskbar-height: 40px;
-  --window-title-bar-height: 30px;
+  --window-title-bar-height: 48px;
   --window-menu-bar-height: 24px;
-  --window-button-size: 16px;
-  --window-icon-size: 16px;
+  --window-button-size: 28px;
+  --window-icon-size: 22px;
   --window-resize-handle-size: 16px;
-  --window-title-font-size: 12px;
+  --window-title-font-size: 14px;
   --window-menu-font-size: 11px;
-  --window-padding: 3px 5px;
+  --window-padding: 6px 10px;
   --window-menu-padding: 3px 8px;
   --window-menu-gap: 8px;
   --mobile-buffer: 0px; /* Default no buffer, overridden per device */
@@ -183,58 +183,72 @@
 
 .window-title-bar {
   background: linear-gradient(to bottom, #3c6dc5 0%, #2a52a0 50%, #1e3f7a 100%);
-  padding: var(--window-padding, 3px 5px);
+  padding: var(--window-padding, 6px 10px);
   display: flex;
   justify-content: space-between;
   align-items: center;
   cursor: move;
   user-select: none;
   border-radius: 0;
-  height: var(--window-title-bar-height, 30px);
-  min-height: var(--window-title-bar-height, 30px);
+  height: var(--window-title-bar-height, 48px);
+  min-height: var(--window-title-bar-height, 48px);
   flex-shrink: 0;
 }
 
 .window-title {
   display: flex;
   align-items: center;
-  gap: clamp(4px, 0.5vw, 6px);
+  gap: 6px;
   color: white;
-  font-size: var(--window-title-font-size, 12px);
+  font-size: var(--window-title-font-size, 14px);
   font-weight: bold;
   text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .window-icon {
-  width: var(--window-icon-size, 16px);
-  height: var(--window-icon-size, 16px);
-  min-width: var(--window-icon-size, 16px);
-  min-height: var(--window-icon-size, 16px);
+  width: var(--window-icon-size, 22px);
+  height: var(--window-icon-size, 22px);
+  min-width: var(--window-icon-size, 22px);
+  min-height: var(--window-icon-size, 22px);
+  flex-shrink: 0;
 }
 
 .window-controls {
   display: flex;
-  gap: clamp(1px, 0.25vw, 2px);
+  gap: 4px;
+  align-items: center;
+  flex-shrink: 0;
 }
 
 .window-button {
-  width: var(--window-button-size, 16px);
-  height: var(--window-button-size, 16px);
-  min-width: var(--window-button-size, 16px);
-  min-height: var(--window-button-size, 16px);
+  width: var(--window-button-size, 28px);
+  height: var(--window-button-size, 28px);
+  min-width: var(--window-button-size, 28px);
+  min-height: var(--window-button-size, 28px);
   border: none;
   background: none;
-  padding: 0;
+  padding: 3px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  transition: background-color 0.1s;
+}
+
+.window-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.window-button.close:hover {
+  background-color: rgba(255, 0, 0, 0.3);
 }
 
 .window-button img {
-  width: var(--window-button-size, 16px);
-  height: var(--window-button-size, 16px);
+  width: 100%;
+  height: 100%;
   object-fit: contain;
 }
 

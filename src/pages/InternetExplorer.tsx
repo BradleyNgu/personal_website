@@ -106,7 +106,9 @@ function InternetExplorer({ }: InternetExplorerProps) {
               className="ie-address-input"
               readOnly
             />
-            <button className="ie-go-btn">Go</button>
+            <button className="ie-go-btn">
+              <img src="/assets/icons/Windows XP Icons/Go.png" alt="Go" />
+            </button>
           </div>
         </div>
       </div>

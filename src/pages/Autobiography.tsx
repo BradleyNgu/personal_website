@@ -10,12 +10,12 @@ const sections: AboutSection[] = [
   {
     id: '1',
     title: 'About Me',
-    content: 'Hi! I\'m Bradley Nguyen, a Computer Science student at Carleton University pursuing a Bachelor\'s degree in the Honours Co-op program with a Software Engineering stream. I\'m passionate about building IoT systems and software/hardware solutions that solve real-world problems.\n\n Outside of school, I do a lot of hackathons on the side, in which I have won over $2,700 in prizes competing against 1000+ participants. Other than working with tech, I\'m interested in F1, Sim Racing, and playing volleyball.',
+    content: 'Hi! I\'m Bradley Nguyen, a Computer Science student at Carleton University pursuing a Bachelor\'s degree in the Honours Co-op program with a Software Engineering stream. I\'m passionate about building IoT systems and software/hardware solutions that solve real-world problems.\n\n Outside of school, I do a lot of hackathons on the side, in which I have won over $2,700 in prizes competing against 1000+ participants. Other than working with tech, I\'m interested in F1, sim racing, and playing volleyball.',
   },
   {
     id: '2',
     title: 'Education',
-    content: 'Carleton University\nBachelor of Computer Science, Honours Program (Co-op)\nSoftware Engineering Stream\n2023 - 2027 | Major CGPA: 3.77/4.0\n\nRelevant Coursework:\n• Abstract Data Types and Algorithms\n• Object-Oriented Software Engineering\n• Computer Systems\n• Web Development\n• Programming Paradigms',
+    content: 'Carleton University\nBachelor of Computer Science, Honours Program (Co-op)\nSoftware Engineering Stream\n2023 - 2027\nMajor CGPA: 3.77/4.0',
   },
   {
     id: '3',

@@ -21,11 +21,39 @@ function CommandPrompt() {
         // Show initial prompt at top
         terminalRef.current.scrollTop = 0
       } else {
-        // Scroll to bottom for new commands
-        terminalRef.current.scrollTop = terminalRef.current.scrollHeight
+        // Scroll to bottom for new commands - use setTimeout to ensure DOM is updated
+        setTimeout(() => {
+          if (terminalRef.current) {
+            terminalRef.current.scrollTop = terminalRef.current.scrollHeight
+          }
+        }, 0)
       }
     }
-  }, [commands])
+  }, [commands, currentCommand])
+
+  // Ensure input is visible when focused (especially on mobile)
+  useEffect(() => {
+    if (inputRef.current && terminalRef.current) {
+      const scrollIntoView = () => {
+        setTimeout(() => {
+          if (terminalRef.current && inputRef.current) {
+            // Scroll to ensure input is visible
+            inputRef.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+            // Also scroll terminal to bottom
+            terminalRef.current.scrollTop = terminalRef.current.scrollHeight
+          }
+        }, 100)
+      }
+      
+      inputRef.current.addEventListener('focus', scrollIntoView)
+      
+      return () => {
+        if (inputRef.current) {
+          inputRef.current.removeEventListener('focus', scrollIntoView)
+        }
+      }
+    }
+  }, [showInputAtTop])
 
   const executeCommand = (command: string) => {
     if (!command.trim()) return

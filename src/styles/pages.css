@@ -611,7 +611,9 @@
 .terminal-content {
   flex: 1;
   padding: 8px;
+  padding-bottom: 60px; /* Extra padding at bottom to ensure content is visible */
   overflow-y: auto;
+  overflow-x: hidden;
   background: #000000;
   color: #c0c0c0;
   font-family: 'Consolas', 'Courier New', monospace;
@@ -619,6 +621,8 @@
   line-height: 1.2;
   display: flex;
   flex-direction: column;
+  -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+  min-height: 0; /* Allow flex child to shrink */
 }
 
 /* Mobile-specific fixes for command prompt to ensure input is visible */
@@ -719,6 +723,8 @@
   margin: 0;
   margin-top: auto;
   flex-shrink: 0;
+  padding-bottom: 20px; /* Extra padding to ensure input is fully visible */
+  min-height: 24px; /* Minimum height for the input line */
 }
 
 .command-input {

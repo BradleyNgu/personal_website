@@ -22,10 +22,12 @@ function Window({
   onSizeChange,
 }: WindowProps) {
   const windowRef = useRef<HTMLDivElement>(null)
+  const menuBarRef = useRef<HTMLDivElement>(null)
   const [isDragging, setIsDragging] = useState(false)
   const [isResizing, setIsResizing] = useState(false)
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 })
   const [resizeStart, setResizeStart] = useState({ x: 0, y: 0, width: 0, height: 0 })
+  const [openMenu, setOpenMenu] = useState<string | null>(null)
   
   // Detect if device is mobile (more specific detection)
   const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
@@ -182,6 +184,42 @@ function Window({
     })
   }
 
+  const handleMenuClick = (menuName: string, e: React.MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    onFocus()
+    
+    // Toggle menu - if clicking the same menu, close it; otherwise open the clicked menu
+    if (openMenu === menuName) {
+      setOpenMenu(null)
+    } else {
+      setOpenMenu(menuName)
+    }
+  }
+
+  const handleMenuItemClick = (action: string, e: React.MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    // Handle menu item actions here
+    console.log(`Menu action: ${action}`)
+    setOpenMenu(null)
+  }
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (menuBarRef.current && !menuBarRef.current.contains(e.target as Node)) {
+        setOpenMenu(null)
+      }
+    }
+
+    if (openMenu) {
+      document.addEventListener('mousedown', handleClickOutside)
+      return () => {
+        document.removeEventListener('mousedown', handleClickOutside)
+      }
+    }
+  }, [openMenu])
+
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       if (isDragging) {
@@ -291,11 +329,85 @@ function Window({
         </div>
       </div>
       
-      <div className="window-menu-bar" onMouseDown={handleMouseDownContent} onTouchStart={isMobile ? undefined : handleTouchStartContent}>
-        <span className="menu-item">File</span>
-        <span className="menu-item">Edit</span>
-        <span className="menu-item">View</span>
-        <span className="menu-item">Help</span>
+      <div 
+        ref={menuBarRef}
+        className="window-menu-bar" 
+        onMouseDown={handleMouseDownContent} 
+        onTouchStart={isMobile ? undefined : handleTouchStartContent}
+      >
+        <div className="menu-item-wrapper">
+          <span 
+            className={`menu-item ${openMenu === 'File' ? 'active' : ''}`}
+            onClick={(e) => handleMenuClick('File', e)}
+          >
+            File
+          </span>
+          {openMenu === 'File' && (
+            <div className="menu-dropdown">
+              <div className="menu-dropdown-item" onClick={(e) => handleMenuItemClick('New', e)}>New</div>
+              <div className="menu-dropdown-item" onClick={(e) => handleMenuItemClick('Open', e)}>Open</div>
+              <div className="menu-dropdown-item" onClick={(e) => handleMenuItemClick('Save', e)}>Save</div>
+              <div className="menu-dropdown-item" onClick={(e) => handleMenuItemClick('Save As', e)}>Save As...</div>
+              <div className="menu-dropdown-separator"></div>
+              <div className="menu-dropdown-item" onClick={(e) => handleMenuItemClick('Exit', e)}>Exit</div>
+            </div>
+          )}
+        </div>
+        <div className="menu-item-wrapper">
+          <span 
+            className={`menu-item ${openMenu === 'Edit' ? 'active' : ''}`}
+            onClick={(e) => handleMenuClick('Edit', e)}
+          >
+            Edit
+          </span>
+          {openMenu === 'Edit' && (
+            <div className="menu-dropdown">
+              <div className="menu-dropdown-item" onClick={(e) => handleMenuItemClick('Undo', e)}>Undo</div>
+              <div className="menu-dropdown-item" onClick={(e) => handleMenuItemClick('Redo', e)}>Redo</div>
+              <div className="menu-dropdown-separator"></div>
+              <div className="menu-dropdown-item" onClick={(e) => handleMenuItemClick('Cut', e)}>Cut</div>
+              <div className="menu-dropdown-item" onClick={(e) => handleMenuItemClick('Copy', e)}>Copy</div>
+              <div className="menu-dropdown-item" onClick={(e) => handleMenuItemClick('Paste', e)}>Paste</div>
+              <div className="menu-dropdown-separator"></div>
+              <div className="menu-dropdown-item" onClick={(e) => handleMenuItemClick('Select All', e)}>Select All</div>
+            </div>
+          )}
+        </div>
+        <div className="menu-item-wrapper">
+          <span 
+            className={`menu-item ${openMenu === 'View' ? 'active' : ''}`}
+            onClick={(e) => handleMenuClick('View', e)}
+          >
+            View
+          </span>
+          {openMenu === 'View' && (
+            <div className="menu-dropdown">
+              <div className="menu-dropdown-item" onClick={(e) => handleMenuItemClick('Toolbar', e)}>Toolbar</div>
+              <div className="menu-dropdown-item" onClick={(e) => handleMenuItemClick('Status Bar', e)}>Status Bar</div>
+              <div className="menu-dropdown-separator"></div>
+              <div className="menu-dropdown-item" onClick={(e) => handleMenuItemClick('Large Icons', e)}>Large Icons</div>
+              <div className="menu-dropdown-item" onClick={(e) => handleMenuItemClick('Small Icons', e)}>Small Icons</div>
+              <div className="menu-dropdown-item" onClick={(e) => handleMenuItemClick('List', e)}>List</div>
+              <div className="menu-dropdown-item" onClick={(e) => handleMenuItemClick('Details', e)}>Details</div>
+              <div className="menu-dropdown-separator"></div>
+              <div className="menu-dropdown-item" onClick={(e) => handleMenuItemClick('Refresh', e)}>Refresh</div>
+            </div>
+          )}
+        </div>
+        <div className="menu-item-wrapper">
+          <span 
+            className={`menu-item ${openMenu === 'Help' ? 'active' : ''}`}
+            onClick={(e) => handleMenuClick('Help', e)}
+          >
+            Help
+          </span>
+          {openMenu === 'Help' && (
+            <div className="menu-dropdown">
+              <div className="menu-dropdown-item" onClick={(e) => handleMenuItemClick('Help Topics', e)}>Help Topics</div>
+              <div className="menu-dropdown-item" onClick={(e) => handleMenuItemClick('About', e)}>About</div>
+            </div>
+          )}
+        </div>
       </div>
 
       <div className="window-content" onMouseDown={handleMouseDownContent} onTouchStart={isMobile ? undefined : handleTouchStartContent}>

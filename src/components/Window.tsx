@@ -28,6 +28,8 @@ function Window({
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 })
   const [resizeStart, setResizeStart] = useState({ x: 0, y: 0, width: 0, height: 0 })
   const [openMenu, setOpenMenu] = useState<string | null>(null)
+  const touchStartPosRef = useRef<{ x: number; y: number } | null>(null)
+  const hasMovedRef = useRef<boolean>(false)
   
   // Detect if device is mobile (more specific detection)
   const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
@@ -89,37 +91,30 @@ function Window({
     const target = e.target as HTMLElement
     if (target.closest('.window-controls, .window-button')) return
     
-    // On mobile, if maximized, ONLY allow focusing - prevent any dragging or unmaximizing
+    const touch = e.touches[0]
+    if (!touch) return
+    
+    // Store initial touch position and reset movement flag
+    touchStartPosRef.current = { x: touch.clientX, y: touch.clientY }
+    hasMovedRef.current = false
+    
+    // Always focus on touch start
+    onFocus()
+    
+    // On mobile, if maximized, ONLY allow focusing - wait for movement before doing anything
     if (isMobile && window.isMaximized) {
-      e.preventDefault()
-      e.stopPropagation()
-      onFocus()
-      // Explicitly prevent dragging from starting
+      // Don't start dragging yet - wait to see if user actually moves finger
       setIsDragging(false)
       return
     }
     
-    // On mobile, if not maximized, allow dragging
+    // On mobile, if not maximized, prepare for dragging (will start on move)
     if (isMobile && !window.isMaximized) {
-      onFocus()
-      const touch = e.touches[0]
-      if (!touch) return
-      
-      setIsDragging(true)
-      setDragStart({
-        x: touch.clientX - window.position.x,
-        y: touch.clientY - window.position.y,
-      })
+      setIsDragging(false) // Don't start dragging until movement detected
       return
     }
     
-    // Desktop behavior
-    // Don't call preventDefault on touchStart - CSS touch-action: none handles it
-    // This avoids "passive event listener" warnings
-    onFocus()
-    const touch = e.touches[0]
-    if (!touch) return
-    
+    // Desktop behavior - start dragging immediately
     if (window.isMaximized) {
       // On desktop, when dragging a maximized window, restore it first
       const restoreX = touch.clientX - window.size.width / 2
@@ -252,16 +247,38 @@ function Window({
     }
 
     const handleTouchMove = (e: TouchEvent) => {
-      // Prevent dragging on mobile when maximized - should never happen but safety check
-      if (isMobile && window.isMaximized) {
-        setIsDragging(false)
-        return
+      const touch = e.touches[0]
+      if (!touch || !touchStartPosRef.current) return
+      
+      // Calculate movement distance
+      const deltaX = Math.abs(touch.clientX - touchStartPosRef.current.x)
+      const deltaY = Math.abs(touch.clientY - touchStartPosRef.current.y)
+      const moveThreshold = 10 // pixels - threshold to distinguish tap from drag
+      
+      // If user has moved significantly, mark as moved
+      if (deltaX > moveThreshold || deltaY > moveThreshold) {
+        hasMovedRef.current = true
+        
+        // Prevent dragging on mobile when maximized - should never happen but safety check
+        if (isMobile && window.isMaximized) {
+          setIsDragging(false)
+          e.preventDefault()
+          return
+        }
+        
+        // On mobile, if not maximized and we haven't started dragging yet, start it now
+        if (isMobile && !window.isMaximized && !isDragging) {
+          setIsDragging(true)
+          setDragStart({
+            x: touch.clientX - window.position.x,
+            y: touch.clientY - window.position.y,
+          })
+        }
       }
       
       if (isDragging) {
         // Prevent scrolling when dragging (touchmove is already non-passive)
         e.preventDefault()
-        const touch = e.touches[0]
         if (touch) {
           onPositionChange({
             x: touch.clientX - dragStart.x,
@@ -287,23 +304,37 @@ function Window({
     }
 
     const handleTouchEnd = () => {
+      // On mobile, if maximized and user only tapped (didn't move), don't unmaximize
+      // The hasMovedRef check ensures we only unmaximize if user actually dragged
+      
+      // Reset touch tracking
+      touchStartPosRef.current = null
+      hasMovedRef.current = false
+      
       setIsDragging(false)
       setIsResizing(false)
     }
 
+    // Always listen for mouse events if dragging/resizing
     if (isDragging || isResizing) {
       document.addEventListener('mousemove', handleMouseMove)
       document.addEventListener('mouseup', handleMouseUp)
-      document.addEventListener('touchmove', handleTouchMove, { passive: false })
-      document.addEventListener('touchend', handleTouchEnd)
-      return () => {
+    }
+    
+    // Always listen for touch events to detect movement (especially on mobile)
+    // This is needed to distinguish taps from drags
+    document.addEventListener('touchmove', handleTouchMove, { passive: false })
+    document.addEventListener('touchend', handleTouchEnd)
+    
+    return () => {
+      if (isDragging || isResizing) {
         document.removeEventListener('mousemove', handleMouseMove)
         document.removeEventListener('mouseup', handleMouseUp)
-        document.removeEventListener('touchmove', handleTouchMove)
-        document.removeEventListener('touchend', handleTouchEnd)
       }
+      document.removeEventListener('touchmove', handleTouchMove)
+      document.removeEventListener('touchend', handleTouchEnd)
     }
-  }, [isDragging, isResizing, dragStart, resizeStart, onPositionChange, onSizeChange, window.position, window.size])
+  }, [isDragging, isResizing, dragStart, resizeStart, onPositionChange, onSizeChange, window.position, window.size, isMobile, window.isMaximized])
 
   if (window.isMinimized) return null
 

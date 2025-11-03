@@ -83,6 +83,7 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
     message: ''
   })
   const desktopRef = useRef<HTMLDivElement>(null)
+  const selectionBoxRef = useRef<HTMLDivElement>(null)
 
   const openWindow = (id: string, title: string, icon: string, component: React.ReactNode) => {
     // Check if window is already open
@@ -392,12 +393,17 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
-      if (selectionBox) {
-        setSelectionBox(prev => prev ? {
-          ...prev,
-          endX: e.clientX,
-          endY: e.clientY,
-        } : null)
+      if (selectionBox && selectionBoxRef.current) {
+        // Update selection box directly in DOM for smooth rendering
+        const left = Math.min(selectionBox.startX, e.clientX)
+        const top = Math.min(selectionBox.startY, e.clientY)
+        const width = Math.abs(e.clientX - selectionBox.startX)
+        const height = Math.abs(e.clientY - selectionBox.startY)
+        
+        selectionBoxRef.current.style.left = `${left}px`
+        selectionBoxRef.current.style.top = `${top}px`
+        selectionBoxRef.current.style.width = `${width}px`
+        selectionBoxRef.current.style.height = `${height}px`
         
         // Update selected icons in real-time as selection box moves
         const box = {
@@ -509,12 +515,17 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
     const handleTouchMove = (e: TouchEvent) => {
       e.preventDefault()
       const touch = e.touches[0]
-      if (selectionBox) {
-        setSelectionBox(prev => prev ? {
-          ...prev,
-          endX: touch.clientX,
-          endY: touch.clientY,
-        } : null)
+      if (selectionBox && selectionBoxRef.current) {
+        // Update selection box directly in DOM for smooth rendering on touch
+        const left = Math.min(selectionBox.startX, touch.clientX)
+        const top = Math.min(selectionBox.startY, touch.clientY)
+        const width = Math.abs(touch.clientX - selectionBox.startX)
+        const height = Math.abs(touch.clientY - selectionBox.startY)
+        
+        selectionBoxRef.current.style.left = `${left}px`
+        selectionBoxRef.current.style.top = `${top}px`
+        selectionBoxRef.current.style.width = `${width}px`
+        selectionBoxRef.current.style.height = `${height}px`
         
         // Update selected icons in real-time as selection box moves
         const box = {
@@ -725,6 +736,7 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
 
       {selectionBox && (
         <div
+          ref={selectionBoxRef}
           className="selection-box"
           style={{
             left: Math.min(selectionBox.startX, selectionBox.endX),

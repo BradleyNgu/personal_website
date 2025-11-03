@@ -1922,6 +1922,34 @@
   .start-menu-item:hover {
     transition: all 0.15s ease !important;
   }
+  
+  /* Desktop-specific: Let browsers optimize naturally - less is more */
+  /* Desktop browsers are better at optimizing without explicit hints */
+  .window:not(.maximized) {
+    /* Only use transform for GPU acceleration when needed */
+    transform: translateZ(0);
+    /* Don't force will-change - let browser decide */
+  }
+  
+  .desktop-icon {
+    /* Minimal GPU hint */
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    /* Don't force will-change - causes overhead on desktop */
+  }
+  
+  /* Disable smooth scrolling on desktop for better performance */
+  .window-content {
+    scroll-behavior: auto !important;
+    -webkit-overflow-scrolling: auto !important;
+  }
+  
+  /* Remove containment that can cause overhead on desktop */
+  .window-title-bar,
+  .window-menu-bar,
+  .taskbar {
+    /* Let desktop browsers optimize naturally */
+  }
 }
 
 /* Landscape orientation improvements */
@@ -2179,30 +2207,25 @@
 }
 
 /* Performance: GPU acceleration for smooth animations */
-/* Only use will-change on elements that are actively being transformed */
+/* Desktop browsers optimize better without explicit will-change hints */
 .window {
   transform: translateZ(0);
   backface-visibility: hidden;
 }
 
 .window:not(.maximized) {
-  will-change: transform, left, top;
+  /* Don't use will-change: desktop browsers handle this better automatically */
 }
 
 .desktop-icon {
   transform: translateZ(0);
   backface-visibility: hidden;
-  will-change: transform, left, top;
+  /* Don't use will-change: causes unnecessary compositing layers on desktop */
 }
 
 .taskbar-window {
   transform: translateZ(0);
   backface-visibility: hidden;
-}
-
-/* Remove will-change when not needed to avoid performance overhead */
-.window.maximized {
-  will-change: auto;
 }
 
 /* Universal fix: Prevent body/html scrolling on all devices */

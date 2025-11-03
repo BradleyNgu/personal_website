@@ -26,10 +26,11 @@
   max-height: calc(100vh - var(--taskbar-height, 40px));
   max-height: calc(100dvh - var(--taskbar-height, 40px));
   /* Performance optimizations for dragging */
-  contain: layout style paint;
+  /* Removed contain: it can cause overhead on desktop browsers */
   /* Ensure sub-pixel positioning for smooth movement */
   transform: translateZ(0);
   backface-visibility: hidden;
+  /* Removed isolation: can cause unnecessary compositing layers */
 }
 
 .window.maximized {

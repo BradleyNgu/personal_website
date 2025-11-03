@@ -6,9 +6,8 @@
   overflow: hidden;
   min-height: 100vh;
   min-height: 100dvh;
-  /* Performance optimizations */
+  /* Performance optimizations - minimal for desktop */
   transform: translateZ(0);
-  will-change: auto;
   backface-visibility: hidden;
   -webkit-font-smoothing: antialiased;
 }
@@ -21,10 +20,8 @@
   height: calc(100% - 40px);
   padding: 10px;
   z-index: 0;
-  /* Performance optimizations for smooth icon interactions */
+  /* Performance optimizations - removed contain for better desktop performance */
   transform: translateZ(0);
-  will-change: auto;
-  contain: layout style paint;
 }
 
 @media (max-width: 768px) {
@@ -39,6 +36,10 @@
   background-color: rgba(0, 120, 215, 0.2);
   pointer-events: none;
   z-index: 9999;
+  /* Performance optimizations for smooth selection box */
+  transform: translateZ(0);
+  will-change: left, top, width, height;
+  backface-visibility: hidden;
 }
 
 .multi-drag-active .desktop-icon.selected {

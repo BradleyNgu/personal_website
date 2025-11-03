@@ -15,9 +15,8 @@
   box-sizing: border-box;
   /* Performance optimizations for smooth dragging */
   transform: translateZ(0);
-  will-change: transform, left, top;
   backface-visibility: hidden;
-  contain: layout style paint;
+  /* Removed will-change and contain: they can cause overhead on desktop */
 }
 
 .desktop-icon:hover {

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import '../styles/icon.css'
 
 interface DesktopIconProps {
@@ -35,6 +35,8 @@ function DesktopIcon({
   const [clickTime, setClickTime] = useState(0)
   const [isDragging, setIsDragging] = useState(false)
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 })
+  const iconRef = useRef<HTMLDivElement>(null)
+  const dragOffsetRef = useRef<{ x: number; y: number } | null>(null)
 
   const handleMouseDown = (e: React.MouseEvent) => {
     const now = Date.now()
@@ -119,10 +121,21 @@ function DesktopIcon({
     }
 
     const handleMouseMove = (e: MouseEvent) => {
-      if (isDragging) {
+      if (isDragging && iconRef.current) {
         const newX = Math.max(0, e.clientX - dragStart.x)
         const newY = Math.max(0, e.clientY - dragStart.y)
-        onPositionChange(id, newX, newY)
+        
+        // Store for final commit
+        dragOffsetRef.current = { x: newX, y: newY }
+        
+        // Apply transform directly to DOM for smooth dragging
+        const deltaX = newX - position.x
+        const deltaY = newY - position.y
+        
+        iconRef.current.style.transform = `translate(${deltaX}px, ${deltaY}px)`
+        iconRef.current.style.willChange = 'transform'
+        
+        // Still call onDragOver for collision detection (needed for recycle bin)
         if (!isRecycleBin) {
           onDragOver(id, newX, newY)
         }
@@ -130,12 +143,23 @@ function DesktopIcon({
     }
 
     const handleTouchMove = (e: TouchEvent) => {
-      if (isDragging) {
+      if (isDragging && iconRef.current) {
         e.preventDefault()
         const touch = e.touches[0]
         const newX = Math.max(0, touch.clientX - dragStart.x)
         const newY = Math.max(0, touch.clientY - dragStart.y)
-        onPositionChange(id, newX, newY)
+        
+        // Store for final commit
+        dragOffsetRef.current = { x: newX, y: newY }
+        
+        // Apply transform directly to DOM for smooth dragging
+        const deltaX = newX - position.x
+        const deltaY = newY - position.y
+        
+        iconRef.current.style.transform = `translate(${deltaX}px, ${deltaY}px)`
+        iconRef.current.style.willChange = 'transform'
+        
+        // Still call onDragOver for collision detection (needed for recycle bin)
         if (!isRecycleBin) {
           onDragOver(id, newX, newY)
         }
@@ -144,6 +168,15 @@ function DesktopIcon({
 
     const handleMouseUp = () => {
       if (isDragging) {
+        // Commit final position to state
+        if (dragOffsetRef.current && iconRef.current) {
+          onPositionChange(id, dragOffsetRef.current.x, dragOffsetRef.current.y)
+          // Reset transform
+          iconRef.current.style.transform = ''
+          iconRef.current.style.willChange = 'auto'
+          dragOffsetRef.current = null
+        }
+        
         if (!isRecycleBin) {
           onDropOnRecycleBin(id)
         }
@@ -153,6 +186,15 @@ function DesktopIcon({
 
     const handleTouchEnd = () => {
       if (isDragging) {
+        // Commit final position to state
+        if (dragOffsetRef.current && iconRef.current) {
+          onPositionChange(id, dragOffsetRef.current.x, dragOffsetRef.current.y)
+          // Reset transform
+          iconRef.current.style.transform = ''
+          iconRef.current.style.willChange = 'auto'
+          dragOffsetRef.current = null
+        }
+        
         if (!isRecycleBin) {
           onDropOnRecycleBin(id)
         }
@@ -166,18 +208,25 @@ function DesktopIcon({
       document.addEventListener('touchmove', handleTouchMove, { passive: false })
       document.addEventListener('touchend', handleTouchEnd)
       return () => {
+        // Cleanup: reset transform if dragging was interrupted
+        if (iconRef.current && dragOffsetRef.current) {
+          iconRef.current.style.transform = ''
+          iconRef.current.style.willChange = 'auto'
+        }
+        
         document.removeEventListener('mousemove', handleMouseMove)
         document.removeEventListener('mouseup', handleMouseUp)
         document.removeEventListener('touchmove', handleTouchMove)
         document.removeEventListener('touchend', handleTouchEnd)
       }
     }
-  }, [isDragging, dragStart, id, onPositionChange, onDragOver, onDropOnRecycleBin, isRecycleBin, hasMultipleSelected])
+  }, [isDragging, dragStart, id, onPositionChange, onDragOver, onDropOnRecycleBin, isRecycleBin, hasMultipleSelected, position])
 
   return (
     <div
+      ref={iconRef}
       className={`desktop-icon ${isSelected ? 'selected' : ''} ${isRecycleBinHovered ? 'recycle-bin-hovered' : ''}`}
-      style={{ left: `${position.x}px`, top: `${position.y}px` }}
+      style={{ left: `${position.x}px`, top: `${position.y}px`, transform: 'translateZ(0)' }}
       onMouseDown={handleMouseDown}
       onTouchStart={handleTouchStart}
       data-icon-id={id}

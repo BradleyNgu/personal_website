@@ -30,6 +30,7 @@ function Window({
   const [openMenu, setOpenMenu] = useState<string | null>(null)
   const touchStartPosRef = useRef<{ x: number; y: number } | null>(null)
   const hasMovedRef = useRef<boolean>(false)
+  const dragOffsetRef = useRef<{ x: number; y: number } | null>(null)
   
   // Detect if device is mobile (more specific detection)
   const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
@@ -233,9 +234,24 @@ function Window({
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
-      if (isDragging) {
-        // Direct position updates for smooth dragging
-        // No throttling - let React handle batching
+      if (isDragging && windowRef.current && !window.isMaximized) {
+        // Use transform for smooth dragging - updates DOM directly without React re-renders
+        const newX = e.clientX - dragStart.x
+        const newY = e.clientY - dragStart.y
+        
+        // Store offset for final commit
+        dragOffsetRef.current = { x: newX, y: newY }
+        
+        // Apply transform directly to DOM for smooth animation
+        const baseX = window.position.x
+        const baseY = window.position.y
+        const deltaX = newX - baseX
+        const deltaY = newY - baseY
+        
+        windowRef.current.style.transform = `translate(${deltaX}px, ${deltaY}px)`
+        windowRef.current.style.willChange = 'transform'
+      } else if (isDragging) {
+        // For maximized windows or if ref not available, use state updates
         onPositionChange({
           x: e.clientX - dragStart.x,
           y: e.clientY - dragStart.y,
@@ -278,8 +294,26 @@ function Window({
         }
       }
       
-      if (isDragging) {
+      if (isDragging && windowRef.current && !window.isMaximized) {
         // Prevent scrolling when dragging (touchmove is already non-passive)
+        e.preventDefault()
+        if (touch) {
+          // Use transform for smooth dragging on touch devices too
+          const newX = touch.clientX - dragStart.x
+          const newY = touch.clientY - dragStart.y
+          
+          dragOffsetRef.current = { x: newX, y: newY }
+          
+          const baseX = window.position.x
+          const baseY = window.position.y
+          const deltaX = newX - baseX
+          const deltaY = newY - baseY
+          
+          windowRef.current.style.transform = `translate(${deltaX}px, ${deltaY}px)`
+          windowRef.current.style.willChange = 'transform'
+        }
+      } else if (isDragging) {
+        // For maximized windows, use state updates
         e.preventDefault()
         if (touch) {
           onPositionChange({
@@ -301,6 +335,14 @@ function Window({
     }
 
     const handleMouseUp = () => {
+      if (isDragging && dragOffsetRef.current && windowRef.current && !window.isMaximized) {
+        // Commit final position to state
+        onPositionChange(dragOffsetRef.current)
+        // Reset transform
+        windowRef.current.style.transform = ''
+        windowRef.current.style.willChange = 'auto'
+        dragOffsetRef.current = null
+      }
       setIsDragging(false)
       setIsResizing(false)
     }
@@ -308,6 +350,14 @@ function Window({
     const handleTouchEnd = () => {
       // On mobile, if maximized and user only tapped (didn't move), don't unmaximize
       // The hasMovedRef check ensures we only unmaximize if user actually dragged
+      
+      // Commit position if dragging
+      if (isDragging && dragOffsetRef.current && windowRef.current && !window.isMaximized) {
+        onPositionChange(dragOffsetRef.current)
+        windowRef.current.style.transform = ''
+        windowRef.current.style.willChange = 'auto'
+        dragOffsetRef.current = null
+      }
       
       // Reset touch tracking
       touchStartPosRef.current = null
@@ -329,6 +379,12 @@ function Window({
     document.addEventListener('touchend', handleTouchEnd)
     
     return () => {
+      // Cleanup: reset transform if dragging was interrupted
+      if (windowRef.current && dragOffsetRef.current) {
+        windowRef.current.style.transform = ''
+        windowRef.current.style.willChange = 'auto'
+      }
+      
       if (isDragging || isResizing) {
         document.removeEventListener('mousemove', handleMouseMove)
         document.removeEventListener('mouseup', handleMouseUp)
@@ -357,6 +413,7 @@ function Window({
         width: `${window.size.width}px`,
         height: `${window.size.height}px`,
         zIndex: window.zIndex,
+        transform: 'translateZ(0)', // Reset transform if dragging was interrupted
       }
 
   return (

@@ -232,12 +232,26 @@ function Window({
   }, [openMenu])
 
   useEffect(() => {
+    let rafId: number | null = null
+    let pendingUpdate: { x: number; y: number } | null = null
+
     const handleMouseMove = (e: MouseEvent) => {
       if (isDragging) {
-        onPositionChange({
+        // Use requestAnimationFrame for smooth updates
+        pendingUpdate = {
           x: e.clientX - dragStart.x,
           y: e.clientY - dragStart.y,
-        })
+        }
+        
+        if (rafId === null) {
+          rafId = requestAnimationFrame(() => {
+            if (pendingUpdate) {
+              onPositionChange(pendingUpdate)
+              pendingUpdate = null
+            }
+            rafId = null
+          })
+        }
       }
       if (isResizing) {
         const newWidth = Math.max(400, resizeStart.width + (e.clientX - resizeStart.x))
@@ -327,6 +341,10 @@ function Window({
     document.addEventListener('touchend', handleTouchEnd)
     
     return () => {
+      if (rafId !== null) {
+        cancelAnimationFrame(rafId)
+        rafId = null
+      }
       if (isDragging || isResizing) {
         document.removeEventListener('mousemove', handleMouseMove)
         document.removeEventListener('mouseup', handleMouseUp)
@@ -355,6 +373,8 @@ function Window({
         width: `${window.size.width}px`,
         height: `${window.size.height}px`,
         zIndex: window.zIndex,
+        // Use transform for GPU acceleration during dragging
+        willChange: isDragging ? 'transform' : 'auto',
       }
 
   return (

@@ -25,6 +25,8 @@
   max-width: 100dvw;
   max-height: calc(100vh - var(--taskbar-height, 40px));
   max-height: calc(100dvh - var(--taskbar-height, 40px));
+  /* Performance optimizations for dragging */
+  contain: layout style paint;
 }
 
 .window.maximized {

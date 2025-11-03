@@ -87,17 +87,19 @@ function Window({
     const target = e.target as HTMLElement
     if (target.closest('.window-controls, .window-button')) return
     
+    // On mobile, if maximized, only allow focusing - no dragging or unmaximizing
+    if (isMobile && window.isMaximized) {
+      e.preventDefault()
+      e.stopPropagation()
+      onFocus()
+      return
+    }
+    
     e.preventDefault()
     onFocus()
     const touch = e.touches[0]
     
     if (window.isMaximized) {
-      // On mobile, don't allow dragging/unmaximizing from title bar when maximized
-      if (isMobile) {
-        // Just focus the window, don't allow dragging or unmaximizing
-        return
-      }
-      
       // On desktop, when dragging a maximized window, restore it first
       const restoreX = touch.clientX - window.size.width / 2
       const restoreY = touch.clientY - 50

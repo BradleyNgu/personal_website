@@ -89,15 +89,31 @@ function Window({
     const target = e.target as HTMLElement
     if (target.closest('.window-controls, .window-button')) return
     
-    // On mobile, if maximized, only allow focusing - no dragging or unmaximizing
+    // On mobile, if maximized, ONLY allow focusing - prevent any dragging or unmaximizing
     if (isMobile && window.isMaximized) {
-      // Don't call preventDefault here to avoid passive listener warning
-      // CSS touch-action: none on the title bar will handle preventing scroll
+      e.preventDefault()
       e.stopPropagation()
       onFocus()
+      // Explicitly prevent dragging from starting
+      setIsDragging(false)
       return
     }
     
+    // On mobile, if not maximized, allow dragging
+    if (isMobile && !window.isMaximized) {
+      onFocus()
+      const touch = e.touches[0]
+      if (!touch) return
+      
+      setIsDragging(true)
+      setDragStart({
+        x: touch.clientX - window.position.x,
+        y: touch.clientY - window.position.y,
+      })
+      return
+    }
+    
+    // Desktop behavior
     // Don't call preventDefault on touchStart - CSS touch-action: none handles it
     // This avoids "passive event listener" warnings
     onFocus()
@@ -120,7 +136,7 @@ function Window({
         y: touch.clientY - restoreY,
       })
     } else {
-      // Allow dragging when window is not maximized (both mobile and desktop)
+      // Allow dragging when window is not maximized (desktop)
       setIsDragging(true)
       setDragStart({
         x: touch.clientX - window.position.x,
@@ -236,6 +252,12 @@ function Window({
     }
 
     const handleTouchMove = (e: TouchEvent) => {
+      // Prevent dragging on mobile when maximized - should never happen but safety check
+      if (isMobile && window.isMaximized) {
+        setIsDragging(false)
+        return
+      }
+      
       if (isDragging) {
         // Prevent scrolling when dragging (touchmove is already non-passive)
         e.preventDefault()

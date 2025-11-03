@@ -84,6 +84,8 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
   })
   const desktopRef = useRef<HTMLDivElement>(null)
   const selectionBoxRef = useRef<HTMLDivElement>(null)
+  const recycleBinHoveredRef = useRef<boolean>(false)
+  const lastDragOverTimeRef = useRef<number>(0)
 
   const openWindow = (id: string, title: string, icon: string, component: React.ReactNode) => {
     // Check if window is already open
@@ -192,15 +194,32 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
   }
 
   const handleIconDragOver = (iconId: string, x: number, y: number) => {
+    // Throttle updates to avoid too many re-renders (every 50ms)
+    const now = Date.now()
+    if (now - lastDragOverTimeRef.current < 50) {
+      return
+    }
+    lastDragOverTimeRef.current = now
+    
     // Check if dragging over recycle bin
     const recycleBinPos = iconPositions.find(p => p.id === 'recycle-bin')
     if (recycleBinPos && iconId !== 'recycle-bin') {
       const distance = Math.sqrt(
         Math.pow(x - recycleBinPos.x, 2) + Math.pow(y - recycleBinPos.y, 2)
       )
-      setIsRecycleBinHovered(distance < 100)
+      const isHovered = distance < 100
+      
+      // Only update state if hover state actually changed
+      if (isHovered !== recycleBinHoveredRef.current) {
+        recycleBinHoveredRef.current = isHovered
+        setIsRecycleBinHovered(isHovered)
+      }
     } else {
-      setIsRecycleBinHovered(false)
+      // Only update state if hover state actually changed
+      if (recycleBinHoveredRef.current) {
+        recycleBinHoveredRef.current = false
+        setIsRecycleBinHovered(false)
+      }
     }
   }
 

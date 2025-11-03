@@ -37,6 +37,7 @@ function DesktopIcon({
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 })
   const iconRef = useRef<HTMLDivElement>(null)
   const dragOffsetRef = useRef<{ x: number; y: number } | null>(null)
+  const lastDragOverTimeRef = useRef<number>(0)
 
   const handleMouseDown = (e: React.MouseEvent) => {
     const now = Date.now()
@@ -128,16 +129,18 @@ function DesktopIcon({
         // Store for final commit
         dragOffsetRef.current = { x: newX, y: newY }
         
-        // Apply transform directly to DOM for smooth dragging
+        // Apply transform directly to DOM immediately for smooth dragging
         const deltaX = newX - position.x
         const deltaY = newY - position.y
         
         iconRef.current.style.transform = `translate(${deltaX}px, ${deltaY}px)`
         iconRef.current.style.willChange = 'transform'
         
-        // Still call onDragOver for collision detection (needed for recycle bin)
-        if (!isRecycleBin) {
+        // Throttle onDragOver calls to avoid too many state updates (every 150ms)
+        const now = Date.now()
+        if (!isRecycleBin && now - lastDragOverTimeRef.current >= 150) {
           onDragOver(id, newX, newY)
+          lastDragOverTimeRef.current = now
         }
       }
     }
@@ -152,16 +155,18 @@ function DesktopIcon({
         // Store for final commit
         dragOffsetRef.current = { x: newX, y: newY }
         
-        // Apply transform directly to DOM for smooth dragging
+        // Apply transform directly to DOM immediately for smooth dragging
         const deltaX = newX - position.x
         const deltaY = newY - position.y
         
         iconRef.current.style.transform = `translate(${deltaX}px, ${deltaY}px)`
         iconRef.current.style.willChange = 'transform'
         
-        // Still call onDragOver for collision detection (needed for recycle bin)
-        if (!isRecycleBin) {
+        // Throttle onDragOver calls to avoid too many state updates (every 150ms)
+        const now = Date.now()
+        if (!isRecycleBin && now - lastDragOverTimeRef.current >= 150) {
           onDragOver(id, newX, newY)
+          lastDragOverTimeRef.current = now
         }
       }
     }

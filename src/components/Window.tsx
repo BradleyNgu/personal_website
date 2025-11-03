@@ -83,13 +83,6 @@ function Window({
   }
 
   const handleTouchStartTitle = (e: React.TouchEvent) => {
-    // Don't allow dragging on mobile devices
-    if (isMobile) {
-      // Just focus the window, don't allow dragging
-      onFocus()
-      return
-    }
-    
     // Don't allow dragging if touching window controls
     const target = e.target as HTMLElement
     if (target.closest('.window-controls, .window-button')) return
@@ -99,7 +92,13 @@ function Window({
     const touch = e.touches[0]
     
     if (window.isMaximized) {
-      // When dragging a maximized window, restore it first
+      // On mobile, don't allow dragging/unmaximizing from title bar when maximized
+      if (isMobile) {
+        // Just focus the window, don't allow dragging or unmaximizing
+        return
+      }
+      
+      // On desktop, when dragging a maximized window, restore it first
       const restoreX = touch.clientX - window.size.width / 2
       const restoreY = touch.clientY - 50
       
@@ -114,6 +113,7 @@ function Window({
         y: touch.clientY - restoreY,
       })
     } else {
+      // Allow dragging when window is not maximized (both mobile and desktop)
       setIsDragging(true)
       setDragStart({
         x: touch.clientX - window.position.x,

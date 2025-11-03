@@ -83,6 +83,13 @@ function Window({
   }
 
   const handleTouchStartTitle = (e: React.TouchEvent) => {
+    // Don't allow dragging on mobile devices
+    if (isMobile) {
+      // Just focus the window, don't allow dragging
+      onFocus()
+      return
+    }
+    
     // Don't allow dragging if touching window controls
     const target = e.target as HTMLElement
     if (target.closest('.window-controls, .window-button')) return

@@ -4,7 +4,7 @@
   background: linear-gradient(to bottom, #5a8fc7 0%, #3a6ea5 100%);
   display: grid;
   grid-template-columns: 1fr 1px 1fr;
-  grid-template-rows: 80px 1fr 100px;
+  grid-template-rows: 80px 1fr 80px;
   position: relative;
   overflow: hidden;
 }
@@ -125,9 +125,9 @@
 .loading-bottom-bar {
   grid-column: 1 / -1;
   grid-row: 3;
-  background: linear-gradient(to bottom, #1e3a5f 0%, #0f2442 100%);
+  background: linear-gradient(to bottom, #3159af 0%, #2347a5 100%);
   width: 100%;
-  border-top: 1px solid #0d1f3a;
+  border-top: 1px solid #1a3580;
 }
 
 /* Responsive */

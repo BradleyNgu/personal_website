@@ -24,6 +24,7 @@ function Taskbar({ windows, onWindowClick, onShutdown, onLogOff, onEmailClick, o
   const [currentTime, setCurrentTime] = useState(new Date())
   const startMenuRef = useRef<HTMLDivElement>(null)
   const systemTrayMenuRef = useRef<HTMLDivElement>(null)
+  const systemTrayTouchTimeRef = useRef<number>(0)
 
   // Initialize volume from manager
   useEffect(() => {
@@ -63,9 +64,18 @@ function Taskbar({ windows, onWindowClick, onShutdown, onLogOff, onEmailClick, o
 
   // Close system tray menu when clicking outside
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
+    const handleClickOutside = (event: MouseEvent | TouchEvent) => {
       const target = event.target as Node
       const systemTray = document.querySelector('.system-tray')
+      
+      // On mobile, ignore clicks that happen very soon after opening the menu (likely from the same touch)
+      const isTouchEvent = event.type === 'touchstart'
+      const timeSinceOpen = Date.now() - systemTrayTouchTimeRef.current
+      const shouldIgnore = isTouchEvent && timeSinceOpen < 300
+      
+      if (shouldIgnore) {
+        return
+      }
       
       if (showSystemTrayMenu && 
           systemTrayMenuRef.current && 
@@ -76,11 +86,18 @@ function Taskbar({ windows, onWindowClick, onShutdown, onLogOff, onEmailClick, o
     }
 
     if (showSystemTrayMenu) {
-      document.addEventListener('mousedown', handleClickOutside)
-    }
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside)
+      // Use a slight delay for mousedown to allow touch events to process first
+      const mousedownHandler = (e: MouseEvent) => {
+        setTimeout(() => handleClickOutside(e), 100)
+      }
+      
+      document.addEventListener('mousedown', mousedownHandler)
+      document.addEventListener('touchstart', handleClickOutside as EventListener, { passive: true })
+      
+      return () => {
+        document.removeEventListener('mousedown', mousedownHandler)
+        document.removeEventListener('touchstart', handleClickOutside as EventListener)
+      }
     }
   }, [showSystemTrayMenu])
 
@@ -102,8 +119,15 @@ function Taskbar({ windows, onWindowClick, onShutdown, onLogOff, onEmailClick, o
   const handleSystemTrayClick = (e: React.MouseEvent | React.TouchEvent) => {
     e.preventDefault()
     e.stopPropagation()
+    
+    // Track when the menu was opened via touch (for mobile)
+    const isTouchEvent = e.type === 'touchstart'
+    if (isTouchEvent) {
+      systemTrayTouchTimeRef.current = Date.now()
+    }
+    
     setShowSystemTrayMenu(!showSystemTrayMenu)
-    setShowStartMenu(false) // Close start menu when opening system tray menu
+    setShowStartMenu(false)
   }
 
   return (

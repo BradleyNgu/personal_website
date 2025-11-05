@@ -242,7 +242,7 @@
   justify-content: space-between;
   align-items: center;
   border-top: 1px solid #0d1f3a;
-  flex-shrink: 0;
+  width: 100%;
 }
 
 .turn-off-btn {
@@ -285,7 +285,7 @@
 @media (max-width: 768px) {
   .welcome-screen {
     grid-template-columns: 1fr;
-    grid-template-rows: 50px 1fr auto 50px;
+    grid-template-rows: 80px 1fr 80px;
     height: 100vh;
     height: 100dvh; /* Dynamic viewport height for mobile */
     min-height: 100vh;
@@ -293,15 +293,18 @@
   }
   
   .welcome-top-bar {
+    grid-column: 1 / -1;
     grid-row: 1;
+    width: 100%;
   }
   
   .welcome-main {
-    grid-column: 1;
+    grid-column: 1 / -1;
     grid-row: 2;
     padding: 15px 20px;
     align-items: center;
     text-align: center;
+    width: 100%;
   }
   
   .welcome-divider {
@@ -309,11 +312,7 @@
   }
   
   .welcome-right {
-    grid-column: 1;
-    grid-row: 3;
-    padding: 10px 20px 20px 20px;
-    align-items: center;
-    justify-content: center;
+    display: none; /* Hide right side on mobile */
   }
   
   .user-account-tile {
@@ -355,15 +354,17 @@
   }
   
   .welcome-footer {
-    grid-row: 4;
+    grid-column: 1 / -1;
+    grid-row: 3;
     flex-direction: column;
     gap: 15px;
     text-align: center;
-    height: 60px !important;
-    min-height: 60px !important;
-    padding: 10px 20px !important;
-    justify-content: center !important;
-    align-items: center !important;
+    height: 80px;
+    min-height: 80px;
+    padding: 10px 20px;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
   }
   
   .windows-xp-logo {
@@ -379,24 +380,35 @@
 /* Mobile phones - smaller screens */
 @media (max-width: 480px) {
   .welcome-screen {
-    grid-template-rows: 40px 1fr auto 60px !important;
+    grid-template-rows: 80px 1fr 80px !important;
     height: 100vh !important;
     height: 100dvh !important; /* Dynamic viewport height for mobile */
     min-height: 100vh !important;
     min-height: 100dvh !important;
   }
   
+  .welcome-top-bar {
+    grid-column: 1 / -1 !important;
+    grid-row: 1 !important;
+    width: 100% !important;
+  }
+  
   .welcome-main {
+    grid-column: 1 / -1 !important;
+    grid-row: 2 !important;
     padding: 8px 15px;
+    width: 100% !important;
+    overflow: visible !important;
   }
   
   .welcome-right {
-    padding: 5px 15px 10px 15px;
+    display: none !important;
   }
   
   .user-account-tile {
     padding: 12px;
     gap: 6px;
+    margin-bottom: 5px !important;
   }
   
   .user-account-icon {
@@ -417,7 +429,7 @@
   }
   
   .password-section {
-    margin-top: 8px;
+    margin-top: 5px !important;
   }
   
   .password-arrow-btn {
@@ -456,27 +468,13 @@
     flex-shrink: 0 !important;
   }
   
-  /* Ensure content fits on very small screens */
-  .welcome-main {
-    overflow: visible !important;
-  }
-  
-  .welcome-right {
-    overflow: visible !important;
-  }
-  
-  .user-account-tile {
-    margin-bottom: 5px !important;
-  }
-  
-  .password-section {
-    margin-top: 5px !important;
-  }
-  
   .welcome-footer {
-    height: 50px !important;
-    min-height: 50px !important;
+    grid-column: 1 / -1 !important;
+    grid-row: 3 !important;
+    height: 80px !important;
+    min-height: 80px !important;
     padding: 8px 15px !important;
+    width: 100% !important;
   }
   
   .turn-off-btn {
@@ -494,19 +492,34 @@
 /* Very small screens */
 @media (max-width: 320px) {
   .welcome-screen {
-    grid-template-rows: 35px 1fr auto 50px !important;
+    grid-template-rows: 80px 1fr 80px !important;
     height: 100vh !important;
     height: 100dvh !important; /* Dynamic viewport height for mobile */
     min-height: 100vh !important;
     min-height: 100dvh !important;
   }
   
+  .welcome-top-bar {
+    grid-column: 1 / -1 !important;
+    grid-row: 1 !important;
+    width: 100% !important;
+  }
+  
   .welcome-main {
+    grid-column: 1 / -1 !important;
+    grid-row: 2 !important;
     padding: 5px 10px !important;
+    width: 100% !important;
   }
   
   .welcome-right {
-    padding: 5px 10px 8px 10px !important;
+    display: none !important;
+  }
+  
+  .welcome-footer {
+    grid-column: 1 / -1 !important;
+    grid-row: 3 !important;
+    width: 100% !important;
   }
   
   .user-account-icon {

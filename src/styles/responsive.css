@@ -27,6 +27,9 @@
   
   /* Mobile viewport handling for very small screens */
   .welcome-screen {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    grid-template-rows: 80px 1fr 80px !important;
     height: 100vh !important;
     height: 100dvh !important;
     width: 100vw !important;
@@ -38,22 +41,26 @@
     box-sizing: border-box !important;
   }
   
-  /* Equal height bars for very small screens */
+  /* Equal height bars for very small screens - use grid positioning like loading screen */
   .welcome-top-bar {
+    grid-column: 1 / -1 !important;
+    grid-row: 1 !important;
     height: 80px !important;
     min-height: 80px !important;
     max-height: 80px !important;
-    flex-shrink: 0 !important;
+    width: 100% !important;
   }
   
   .welcome-footer {
+    grid-column: 1 / -1 !important;
+    grid-row: 3 !important;
     height: 80px !important;
     min-height: 80px !important;
     max-height: 80px !important;
-    flex-shrink: 0 !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
+    width: 100% !important;
   }
   
   .system-tray {
@@ -1843,7 +1850,9 @@
   }
   
   .welcome-footer {
-    position: relative;
+    grid-column: 1 / -1 !important;
+    grid-row: 3 !important;
+    width: 100% !important;
     margin-top: 20px;
   }
 }
@@ -1851,8 +1860,23 @@
 /* Landscape mobile */
 @media (max-width: 768px) and (orientation: landscape) {
   .welcome-screen {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    grid-template-rows: 80px 1fr 80px !important;
     justify-content: flex-start;
     padding-top: 20px;
+  }
+  
+  .welcome-top-bar {
+    grid-column: 1 / -1 !important;
+    grid-row: 1 !important;
+    width: 100% !important;
+  }
+  
+  .welcome-main {
+    grid-column: 1 / -1 !important;
+    grid-row: 2 !important;
+    width: 100% !important;
   }
   
   .welcome-content {
@@ -1874,7 +1898,9 @@
   }
   
   .welcome-footer {
-    position: relative;
+    grid-column: 1 / -1 !important;
+    grid-row: 3 !important;
+    width: 100% !important;
     padding: 10px 20px;
   }
 }

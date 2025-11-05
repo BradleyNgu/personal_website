@@ -19,6 +19,12 @@
   /* Removed will-change and contain: they can cause overhead on desktop */
 }
 
+/* Disable transitions when dragging to prevent conflicts with JS transforms */
+.desktop-icon.dragging {
+  transition: none !important;
+  pointer-events: none;
+}
+
 .desktop-icon:hover {
   background: rgba(51, 94, 168, 0.3);
 }

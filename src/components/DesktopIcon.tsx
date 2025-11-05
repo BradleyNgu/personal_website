@@ -38,6 +38,7 @@ function DesktopIcon({
   const iconRef = useRef<HTMLDivElement>(null)
   const dragOffsetRef = useRef<{ x: number; y: number } | null>(null)
   const lastDragOverTimeRef = useRef<number>(0)
+  const rafRef = useRef<number | null>(null)
 
   const handleMouseDown = (e: React.MouseEvent) => {
     const now = Date.now()
@@ -129,12 +130,21 @@ function DesktopIcon({
         // Store for final commit
         dragOffsetRef.current = { x: newX, y: newY }
         
-        // Apply transform directly to DOM immediately for smooth dragging
-        const deltaX = newX - position.x
-        const deltaY = newY - position.y
+        // Use requestAnimationFrame for smooth 60fps updates
+        if (rafRef.current) {
+          cancelAnimationFrame(rafRef.current)
+        }
         
-        iconRef.current.style.transform = `translate(${deltaX}px, ${deltaY}px)`
-        iconRef.current.style.willChange = 'transform'
+        rafRef.current = requestAnimationFrame(() => {
+          if (iconRef.current) {
+            // Apply transform directly to DOM for smooth dragging
+            const deltaX = newX - position.x
+            const deltaY = newY - position.y
+            
+            iconRef.current.style.transform = `translate(${deltaX}px, ${deltaY}px)`
+            iconRef.current.style.willChange = 'transform'
+          }
+        })
         
         // Throttle onDragOver calls to avoid too many state updates (every 150ms)
         const now = Date.now()
@@ -173,6 +183,12 @@ function DesktopIcon({
 
     const handleMouseUp = () => {
       if (isDragging) {
+        // Cancel any pending RAF
+        if (rafRef.current) {
+          cancelAnimationFrame(rafRef.current)
+          rafRef.current = null
+        }
+        
         // Commit final position to state
         if (dragOffsetRef.current && iconRef.current) {
           onPositionChange(id, dragOffsetRef.current.x, dragOffsetRef.current.y)
@@ -213,6 +229,12 @@ function DesktopIcon({
       document.addEventListener('touchmove', handleTouchMove, { passive: false })
       document.addEventListener('touchend', handleTouchEnd)
       return () => {
+        // Cancel any pending RAF
+        if (rafRef.current) {
+          cancelAnimationFrame(rafRef.current)
+          rafRef.current = null
+        }
+        
         // Cleanup: reset transform if dragging was interrupted
         if (iconRef.current && dragOffsetRef.current) {
           iconRef.current.style.transform = ''
@@ -230,7 +252,7 @@ function DesktopIcon({
   return (
     <div
       ref={iconRef}
-      className={`desktop-icon ${isSelected ? 'selected' : ''} ${isRecycleBinHovered ? 'recycle-bin-hovered' : ''}`}
+      className={`desktop-icon ${isSelected ? 'selected' : ''} ${isRecycleBinHovered ? 'recycle-bin-hovered' : ''} ${isDragging ? 'dragging' : ''}`}
       style={{ left: `${position.x}px`, top: `${position.y}px`, transform: 'translateZ(0)' }}
       onMouseDown={handleMouseDown}
       onTouchStart={handleTouchStart}

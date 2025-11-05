@@ -73,9 +73,6 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
   const [isRecycleBinHovered, setIsRecycleBinHovered] = useState(false)
   const [isDraggingSelected, setIsDraggingSelected] = useState(false)
   const [dragOffset, setDragOffset] = useState<{ x: number; y: number } | null>(null)
-  const selectedIconsStartPositionsRef = useRef<Map<string, { x: number; y: number }>>(new Map())
-  const initialDragOffsetRef = useRef<{ x: number; y: number } | null>(null)
-  const rafRef = useRef<number | null>(null)
   const [errorDialog, setErrorDialog] = useState<{
     isOpen: boolean
     title: string
@@ -358,18 +355,6 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
     if (clickedIcon && selectedIcons.length > 0) {
       const iconId = clickedIcon.getAttribute('data-icon-id')
       if (iconId && selectedIcons.includes(iconId)) {
-        // Store initial positions of all selected icons
-        selectedIconsStartPositionsRef.current.clear()
-        selectedIcons.forEach(id => {
-          const pos = iconPositions.find(p => p.id === id)
-          if (pos) {
-            selectedIconsStartPositionsRef.current.set(id, { x: pos.x, y: pos.y })
-          }
-        })
-        
-        // Store initial drag offset
-        initialDragOffsetRef.current = { x: e.clientX, y: e.clientY }
-        
         // Start dragging selected icons
         setIsDraggingSelected(true)
         setDragOffset({
@@ -399,30 +384,18 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
     
     // Check if touching a selected icon (even if not on desktop background)
     const touchedIcon = (e.target as HTMLElement).closest('.desktop-icon')
-      if (touchedIcon && selectedIcons.length > 0) {
-        const iconId = touchedIcon.getAttribute('data-icon-id')
-        if (iconId && selectedIcons.includes(iconId)) {
-          // Store initial positions of all selected icons
-          selectedIconsStartPositionsRef.current.clear()
-          selectedIcons.forEach(id => {
-            const pos = iconPositions.find(p => p.id === id)
-            if (pos) {
-              selectedIconsStartPositionsRef.current.set(id, { x: pos.x, y: pos.y })
-            }
-          })
-          
-          // Store initial drag offset
-          initialDragOffsetRef.current = { x: touch.clientX, y: touch.clientY }
-          
-          // Start dragging selected icons
-          setIsDraggingSelected(true)
-          setDragOffset({
-            x: touch.clientX,
-            y: touch.clientY
-          })
-          return
-        }
+    if (touchedIcon && selectedIcons.length > 0) {
+      const iconId = touchedIcon.getAttribute('data-icon-id')
+      if (iconId && selectedIcons.includes(iconId)) {
+        // Start dragging selected icons
+        setIsDraggingSelected(true)
+        setDragOffset({
+          x: touch.clientX,
+          y: touch.clientY
+        })
+        return
       }
+    }
     
     // Only start selection box if touching desktop background
     if (e.target === desktopRef.current || (e.target as HTMLElement).classList.contains('desktop-icons')) {
@@ -473,36 +446,18 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
         setSelectedIcons(selected)
       }
       
-      if (isDraggingSelected && dragOffset && initialDragOffsetRef.current && selectedIcons.length > 0) {
-        // Calculate total movement from initial drag start
-        const deltaX = e.clientX - initialDragOffsetRef.current.x
-        const deltaY = e.clientY - initialDragOffsetRef.current.y
+      if (isDraggingSelected && dragOffset && selectedIcons.length > 0) {
+        const deltaX = e.clientX - dragOffset.x
+        const deltaY = e.clientY - dragOffset.y
         
-        // Use requestAnimationFrame for smooth 60fps updates
-        if (rafRef.current) {
-          cancelAnimationFrame(rafRef.current)
-        }
-        
-        rafRef.current = requestAnimationFrame(() => {
-          // Apply transforms directly to DOM for smooth dragging
-          selectedIcons.forEach(iconId => {
-            const iconElement = document.querySelector(`[data-icon-id="${iconId}"]`) as HTMLElement
-            if (iconElement) {
-              const startPos = selectedIconsStartPositionsRef.current.get(iconId)
-              if (startPos) {
-                const newX = Math.max(0, startPos.x + deltaX)
-                const newY = Math.max(0, startPos.y + deltaY)
-                const currentPos = iconPositions.find(p => p.id === iconId)
-                if (currentPos) {
-                  const deltaXPos = newX - currentPos.x
-                  const deltaYPos = newY - currentPos.y
-                  iconElement.style.transform = `translate(${deltaXPos}px, ${deltaYPos}px)`
-                  iconElement.style.willChange = 'transform'
-                }
-              }
-            }
-          })
-        })
+        // Update positions of all selected icons
+        setIconPositions(prev => 
+          prev.map(icon => 
+            selectedIcons.includes(icon.id)
+              ? { ...icon, x: Math.max(0, icon.x + deltaX), y: Math.max(0, icon.y + deltaY) }
+              : icon
+          )
+        )
         
         // Check if hovering over recycle bin
         const recycleBinPos = iconPositions.find(p => p.id === 'recycle-bin')
@@ -524,44 +479,6 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
       }
       
       if (isDraggingSelected) {
-        // Cancel any pending RAF
-        if (rafRef.current) {
-          cancelAnimationFrame(rafRef.current)
-          rafRef.current = null
-        }
-        
-        // Commit final positions to state
-        if (dragOffset && initialDragOffsetRef.current && selectedIcons.length > 0) {
-          // Calculate total movement from initial drag start
-          const deltaX = dragOffset.x - initialDragOffsetRef.current.x
-          const deltaY = dragOffset.y - initialDragOffsetRef.current.y
-          
-          // Reset transforms and commit positions
-          selectedIcons.forEach(iconId => {
-            const iconElement = document.querySelector(`[data-icon-id="${iconId}"]`) as HTMLElement
-            if (iconElement) {
-              iconElement.style.transform = ''
-              iconElement.style.willChange = 'auto'
-            }
-            
-            const iconStartPos = selectedIconsStartPositionsRef.current.get(iconId)
-            if (iconStartPos) {
-              const newX = Math.max(0, iconStartPos.x + deltaX)
-              const newY = Math.max(0, iconStartPos.y + deltaY)
-              setIconPositions(prev => 
-                prev.map(icon => 
-                  icon.id === iconId
-                    ? { ...icon, x: newX, y: newY }
-                    : icon
-                )
-              )
-            }
-          })
-          
-          selectedIconsStartPositionsRef.current.clear()
-          initialDragOffsetRef.current = null
-        }
-        
         // Check if dropped on recycle bin
         if (isRecycleBinHovered && selectedIcons.length > 0) {
           const toRecycle = selectedIcons.filter(id => id !== 'recycle-bin')
@@ -651,29 +568,18 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
         setSelectedIcons(selected)
       }
       
-      if (isDraggingSelected && dragOffset && initialDragOffsetRef.current && selectedIcons.length > 0) {
-        // Calculate total movement from initial drag start
-        const deltaX = touch.clientX - initialDragOffsetRef.current.x
-        const deltaY = touch.clientY - initialDragOffsetRef.current.y
+      if (isDraggingSelected && dragOffset && selectedIcons.length > 0) {
+        const deltaX = touch.clientX - dragOffset.x
+        const deltaY = touch.clientY - dragOffset.y
         
-        // Apply transforms directly to DOM for smooth dragging
-        selectedIcons.forEach(iconId => {
-          const iconElement = document.querySelector(`[data-icon-id="${iconId}"]`) as HTMLElement
-          if (iconElement) {
-            const startPos = selectedIconsStartPositionsRef.current.get(iconId)
-            if (startPos) {
-              const newX = Math.max(0, startPos.x + deltaX)
-              const newY = Math.max(0, startPos.y + deltaY)
-              const currentPos = iconPositions.find(p => p.id === iconId)
-              if (currentPos) {
-                const deltaXPos = newX - currentPos.x
-                const deltaYPos = newY - currentPos.y
-                iconElement.style.transform = `translate(${deltaXPos}px, ${deltaYPos}px)`
-                iconElement.style.willChange = 'transform'
-              }
-            }
-          }
-        })
+        // Update positions of all selected icons
+        setIconPositions(prev => 
+          prev.map(icon => 
+            selectedIcons.includes(icon.id)
+              ? { ...icon, x: Math.max(0, icon.x + deltaX), y: Math.max(0, icon.y + deltaY) }
+              : icon
+          )
+        )
         
         // Check if hovering over recycle bin
         const recycleBinPos = iconPositions.find(p => p.id === 'recycle-bin')
@@ -689,45 +595,12 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
     }
 
     const handleTouchEnd = () => {
+      if (selectionBox) {
+        // Selection is already handled in real-time during touch move
+        setSelectionBox(null)
+      }
+      
       if (isDraggingSelected) {
-        // Cancel any pending RAF
-        if (rafRef.current) {
-          cancelAnimationFrame(rafRef.current)
-          rafRef.current = null
-        }
-        
-        // Commit final positions to state
-        if (dragOffset && initialDragOffsetRef.current && selectedIcons.length > 0) {
-          // Calculate total movement from initial drag start
-          const deltaX = dragOffset.x - initialDragOffsetRef.current.x
-          const deltaY = dragOffset.y - initialDragOffsetRef.current.y
-          
-          // Reset transforms and commit positions
-          selectedIcons.forEach(iconId => {
-            const iconElement = document.querySelector(`[data-icon-id="${iconId}"]`) as HTMLElement
-            if (iconElement) {
-              iconElement.style.transform = ''
-              iconElement.style.willChange = 'auto'
-            }
-            
-            const iconStartPos = selectedIconsStartPositionsRef.current.get(iconId)
-            if (iconStartPos) {
-              const newX = Math.max(0, iconStartPos.x + deltaX)
-              const newY = Math.max(0, iconStartPos.y + deltaY)
-              setIconPositions(prev => 
-                prev.map(icon => 
-                  icon.id === iconId
-                    ? { ...icon, x: newX, y: newY }
-                    : icon
-                )
-              )
-            }
-          })
-          
-          selectedIconsStartPositionsRef.current.clear()
-          initialDragOffsetRef.current = null
-        }
-        
         // Check if dropped on recycle bin
         if (isRecycleBinHovered && selectedIcons.length > 0) {
           const toRecycle = selectedIcons.filter(id => id !== 'recycle-bin')

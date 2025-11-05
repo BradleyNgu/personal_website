@@ -149,13 +149,12 @@
     height: 32px !important;
     min-width: 32px !important;
     min-height: 32px !important;
-    padding: 4px !important;
+    padding: 6px !important;
   }
   
   .window-button img {
-    width: 24px !important;
-    height: 24px !important;
-    object-fit: contain !important;
+    width: 100% !important;
+    height: 100% !important;
   }
   
   .window-controls {
@@ -333,13 +332,12 @@
     height: 34px !important;
     min-width: 34px !important;
     min-height: 34px !important;
-    padding: 4px !important;
+    padding: 6px !important;
   }
   
   .window-button img {
-    width: 26px !important;
-    height: 26px !important;
-    object-fit: contain !important;
+    width: 100% !important;
+    height: 100% !important;
   }
   
   .window-controls {
@@ -919,13 +917,12 @@
     height: 36px !important;
     min-width: 36px !important;
     min-height: 36px !important;
-    padding: 6px !important;
+    padding: 8px !important;
   }
   
   .window-button img {
-    width: 24px !important;
-    height: 24px !important;
-    object-fit: contain !important;
+    width: 100% !important;
+    height: 100% !important;
   }
   
   .window-controls {
@@ -1040,14 +1037,13 @@
     height: 36px !important;
     min-width: 36px !important;
     min-height: 36px !important;
-    padding: 6px !important;
+    padding: 8px !important;
     flex-shrink: 0 !important;
   }
   
   .window-button img {
-    width: 24px !important;
-    height: 24px !important;
-    object-fit: contain !important;
+    width: 100% !important;
+    height: 100% !important;
   }
   
   .window-menu-bar {

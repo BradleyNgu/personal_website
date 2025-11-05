@@ -407,7 +407,7 @@
   position: absolute;
   bottom: 40px;
   right: 0;
-  width: 220px;
+  width: 300px;
   background: white;
   border: none;
   border-radius: 0;
@@ -449,7 +449,7 @@
 
 .system-tray-menu-item {
   padding: 6px 10px;
-  cursor: default;
+  cursor: pointer;
   font-size: 12px;
   display: flex;
   align-items: center;
@@ -457,25 +457,11 @@
   position: relative;
   color: #000;
   min-height: auto;
-  pointer-events: none;
 }
 
 .system-tray-menu-item:hover {
-  background: transparent;
-  color: #000;
-}
-
-.system-tray-menu-item .volume-slider-container {
-  pointer-events: auto;
-}
-
-.system-tray-menu-item .volume-slider {
-  pointer-events: auto;
-  cursor: pointer;
-}
-
-.system-tray-menu-item .volume-percentage {
-  pointer-events: auto;
+  background: linear-gradient(180deg, #5db3f8 0%, #3d91e8 100%);
+  color: white;
 }
 
 .system-tray-menu-item-content {
@@ -552,7 +538,7 @@
 }
 
 .system-tray-menu-item:hover .volume-percentage {
-  color: #666;
+  color: rgba(255, 255, 255, 0.9);
 }
 
 

@@ -152,15 +152,6 @@ function InternetExplorer({ }: InternetExplorerProps) {
     }
   }, [])
 
-  // Get current video embed URL (fallback for if API fails)
-  const getCurrentVideoEmbedUrl = () => {
-    const currentVideo = playlistVideos[currentVideoIndex]
-    if (currentVideo) {
-      return `https://www.youtube.com/embed/${currentVideo.id}?autoplay=1&rel=0&modestbranding=1&showinfo=0&controls=1&iv_load_policy=3&fs=1&cc_load_policy=0`
-    }
-    return ''
-  }
-
   // Get current video title
   const getCurrentVideoTitle = () => {
     const currentVideo = playlistVideos[currentVideoIndex]

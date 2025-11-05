@@ -228,6 +228,8 @@
   border: none;
   background: white;
   box-shadow: inset 0 0 0 1px #808080;
+  pointer-events: auto;
+  touch-action: manipulation;
 }
 
 .ie-loading {

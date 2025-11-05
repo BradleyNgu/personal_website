@@ -1,5 +1,5 @@
 // Global audio volume manager
-let globalVolume = 75 // Default volume (0-100)
+let globalVolume = 30 // Default volume (0-100) - Lowered for better user experience
 const activeAudioElements = new Set<HTMLAudioElement>()
 
 export const AudioVolumeManager = {

@@ -407,7 +407,7 @@
   position: absolute;
   bottom: 40px;
   right: 0;
-  width: 300px;
+  width: 220px;
   background: white;
   border: none;
   border-radius: 0;
@@ -449,7 +449,7 @@
 
 .system-tray-menu-item {
   padding: 6px 10px;
-  cursor: pointer;
+  cursor: default;
   font-size: 12px;
   display: flex;
   align-items: center;
@@ -457,11 +457,25 @@
   position: relative;
   color: #000;
   min-height: auto;
+  pointer-events: none;
 }
 
 .system-tray-menu-item:hover {
-  background: linear-gradient(180deg, #5db3f8 0%, #3d91e8 100%);
-  color: white;
+  background: transparent;
+  color: #000;
+}
+
+.system-tray-menu-item .volume-slider-container {
+  pointer-events: auto;
+}
+
+.system-tray-menu-item .volume-slider {
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+.system-tray-menu-item .volume-percentage {
+  pointer-events: auto;
 }
 
 .system-tray-menu-item-content {
@@ -538,7 +552,7 @@
 }
 
 .system-tray-menu-item:hover .volume-percentage {
-  color: rgba(255, 255, 255, 0.9);
+  color: #666;
 }
 
 

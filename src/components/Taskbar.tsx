@@ -99,7 +99,7 @@ function Taskbar({ windows, onWindowClick, onShutdown, onLogOff, onEmailClick, o
     setShowSystemTrayMenu(false) // Close system tray menu when opening start menu
   }
 
-  const handleSystemTrayClick = (e: React.MouseEvent) => {
+  const handleSystemTrayClick = (e: React.MouseEvent | React.TouchEvent) => {
     e.preventDefault()
     e.stopPropagation()
     setShowSystemTrayMenu(!showSystemTrayMenu)
@@ -298,7 +298,7 @@ function Taskbar({ windows, onWindowClick, onShutdown, onLogOff, onEmailClick, o
       </div>
 
       <div className="system-tray">
-        <div className="tray-icons" onClick={handleSystemTrayClick}>
+        <div className="tray-icons" onClick={handleSystemTrayClick} onTouchStart={handleSystemTrayClick}>
           <img src="/assets/icons/Windows XP Icons/Volume.png" alt="Volume" className="tray-icon" title="Volume" />
           <img src="/assets/icons/Windows XP Icons/Wireless Network Connection.png" alt="Network" className="tray-icon" title="Network" />
         </div>

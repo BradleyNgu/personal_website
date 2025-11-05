@@ -2096,13 +2096,6 @@
     scroll-behavior: auto !important;
     -webkit-overflow-scrolling: auto !important;
   }
-  
-  /* Remove containment that can cause overhead on desktop */
-  .window-title-bar,
-  .window-menu-bar,
-  .taskbar {
-    /* Let desktop browsers optimize naturally */
-  }
 }
 
 /* Landscape orientation improvements */
@@ -2364,9 +2357,6 @@
 .window {
   transform: translateZ(0);
   backface-visibility: hidden;
-}
-
-.window:not(.maximized) {
   /* Don't use will-change: desktop browsers handle this better automatically */
 }
 
@@ -2424,5 +2414,53 @@ html, body {
     -webkit-overflow-scrolling: touch !important;
     touch-action: pan-y !important; /* Only allow vertical pan in content areas */
   }
+}
+
+/* Universal fix: Ensure welcome screen bars are always flush at all zoom levels */
+.welcome-screen {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  width: 100vw !important;
+  width: 100dvw !important;
+  height: 100vh !important;
+  height: 100dvh !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  box-sizing: border-box !important;
+  display: grid !important;
+  overflow: hidden !important;
+}
+
+.welcome-top-bar {
+  grid-column: 1 / -1 !important;
+  grid-row: 1 !important;
+  align-self: start !important;
+  justify-self: stretch !important;
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  box-sizing: border-box !important;
+  position: relative !important;
+}
+
+.welcome-footer {
+  grid-column: 1 / -1 !important;
+  grid-row: 3 !important;
+  align-self: end !important;
+  justify-self: stretch !important;
+  width: 100% !important;
+  margin: 0 !important;
+  box-sizing: border-box !important;
+  position: relative !important;
+}
+
+.welcome-main,
+.welcome-right,
+.welcome-divider {
+  grid-row: 2 !important;
+  position: relative !important;
 }
 

@@ -68,7 +68,7 @@
   }
 
   .system-tray-menu {
-    width: 240px !important;
+    width: 180px !important;
     max-width: 90vw !important;
     position: fixed !important;
     bottom: 35px !important;
@@ -242,7 +242,7 @@
   }
 
   .system-tray-menu {
-    width: 260px !important;
+    width: 200px !important;
     max-width: 90vw !important;
     position: fixed !important;
     bottom: 38px !important;
@@ -726,7 +726,7 @@
   }
 
   .system-tray-menu {
-    width: 280px !important;
+    width: 220px !important;
     max-width: 90vw !important;
     position: fixed !important;
     bottom: 40px !important;
@@ -1455,7 +1455,7 @@
   }
 
   .system-tray-menu {
-    width: 280px !important;
+    width: 220px !important;
     max-width: 90vw !important;
     position: fixed !important;
     bottom: 45px !important;

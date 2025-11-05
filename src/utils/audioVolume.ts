@@ -2,11 +2,6 @@
 let globalVolume = 75 // Default volume (0-100)
 const activeAudioElements = new Set<HTMLAudioElement>()
 
-// Event to notify when volume changes
-const volumeChangeEvent = new CustomEvent('volumechange', { 
-  detail: { volume: globalVolume } 
-})
-
 export const AudioVolumeManager = {
   // Get current volume (0-100)
   getVolume(): number {

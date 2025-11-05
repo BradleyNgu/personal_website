@@ -40,6 +40,12 @@ function Window({
     const target = e.target as HTMLElement
     if (target.closest('.window-controls, .window-button')) return
     
+    // On mobile, disable dragging when maximized (only allow when not maximized)
+    if (isMobile && window.isMaximized) {
+      onFocus()
+      return
+    }
+    
     e.preventDefault()
     onFocus()
     
@@ -102,9 +108,8 @@ function Window({
     // Always focus on touch start
     onFocus()
     
-    // On mobile, if maximized, ONLY allow focusing - wait for movement before doing anything
+    // On mobile, if maximized, ONLY allow focusing - disable dragging completely
     if (isMobile && window.isMaximized) {
-      // Don't start dragging yet - wait to see if user actually moves finger
       setIsDragging(false)
       return
     }
@@ -423,7 +428,11 @@ function Window({
       style={style}
       onMouseDown={() => onFocus()}
     >
-      <div className="window-title-bar" onMouseDown={handleMouseDownTitle} onTouchStart={handleTouchStartTitle}>
+      <div 
+        className="window-title-bar" 
+        onMouseDown={isMobile && window.isMaximized ? undefined : handleMouseDownTitle} 
+        onTouchStart={handleTouchStartTitle}
+      >
         <div className="window-title">
           <img src={window.icon} alt="" className="window-icon" />
           <span style={{ flexShrink: 0 }}>{window.title}</span>

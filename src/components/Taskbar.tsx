@@ -25,6 +25,7 @@ function Taskbar({ windows, onWindowClick, onShutdown, onLogOff, onEmailClick, o
   const startMenuRef = useRef<HTMLDivElement>(null)
   const systemTrayMenuRef = useRef<HTMLDivElement>(null)
   const systemTrayOpenTimeRef = useRef<number>(0)
+  const touchHandledRef = useRef(false)
 
   // Initialize volume from manager
   useEffect(() => {
@@ -109,6 +110,18 @@ function Taskbar({ windows, onWindowClick, onShutdown, onLogOff, onEmailClick, o
   const handleSystemTrayClick = (e: React.MouseEvent | React.TouchEvent) => {
     e.preventDefault()
     e.stopPropagation()
+    
+    // On mobile, prevent the click event from firing after touchstart
+    if (e.type === 'touchstart') {
+      touchHandledRef.current = true
+      setTimeout(() => {
+        touchHandledRef.current = false
+      }, 500)
+    } else if (e.type === 'click' && touchHandledRef.current) {
+      // Ignore click if touch was just handled
+      return
+    }
+    
     const isOpening = !showSystemTrayMenu
     setShowSystemTrayMenu(!showSystemTrayMenu)
     setShowStartMenu(false) // Close start menu when opening system tray menu

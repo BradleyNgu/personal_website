@@ -74,6 +74,9 @@
   display: grid;
   grid-template-rows: auto 1fr auto;
   grid-template-columns: 1fr;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
 }
 
 @keyframes slideUp {
@@ -94,6 +97,9 @@
   padding: 0;
   border-bottom: 2px solid #1e4a8a;
   width: 100%;
+  min-width: 100%;
+  box-sizing: border-box;
+  margin: 0;
 }
 
 .user-profile-banner {
@@ -212,6 +218,9 @@
   align-items: center;
   border-top: 2px solid #1e4a8a;
   width: 100%;
+  min-width: 100%;
+  box-sizing: border-box;
+  margin: 0;
 }
 
 .start-menu-left .all-programs {

@@ -572,6 +572,9 @@
     grid-column: 1 / -1 !important;
     grid-row: 1 !important;
     width: 100% !important;
+    min-width: 100% !important;
+    box-sizing: border-box !important;
+    margin: 0 !important;
   }
   
   /* Start Menu Footer Mobile Styles */
@@ -586,6 +589,9 @@
     align-items: center !important;
     flex-wrap: nowrap !important;
     width: 100% !important;
+    min-width: 100% !important;
+    box-sizing: border-box !important;
+    margin: 0 !important;
   }
   
   .bottom-buttons {
@@ -994,6 +1000,9 @@
     transform: translateY(0) !important;
     touch-action: auto !important;
     pointer-events: auto !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    box-sizing: border-box !important;
   }
   
   .start-menu-main {

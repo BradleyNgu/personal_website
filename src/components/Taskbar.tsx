@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import type { WindowState } from './Desktop'
+import { AudioVolumeManager } from '../utils/audioVolume'
 import '../styles/taskbar.css'
 
 interface TaskbarProps {
@@ -18,8 +19,16 @@ interface TaskbarProps {
 
 function Taskbar({ windows, onWindowClick, onShutdown, onLogOff, onEmailClick, onCommandPromptClick, onMyPicturesClick, onMyMusicClick, onResumeClick, onAutobiographyClick, onInternetExplorerClick }: TaskbarProps) {
   const [showStartMenu, setShowStartMenu] = useState(false)
+  const [showSystemTrayMenu, setShowSystemTrayMenu] = useState(false)
+  const [volume, setVolume] = useState(AudioVolumeManager.getVolume())
   const [currentTime, setCurrentTime] = useState(new Date())
   const startMenuRef = useRef<HTMLDivElement>(null)
+  const systemTrayMenuRef = useRef<HTMLDivElement>(null)
+
+  // Initialize volume from manager
+  useEffect(() => {
+    setVolume(AudioVolumeManager.getVolume())
+  }, [])
 
   // Update time every second
   useEffect(() => {
@@ -52,6 +61,29 @@ function Taskbar({ windows, onWindowClick, onShutdown, onLogOff, onEmailClick, o
     }
   }, [showStartMenu])
 
+  // Close system tray menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as Node
+      const systemTray = document.querySelector('.system-tray')
+      
+      if (showSystemTrayMenu && 
+          systemTrayMenuRef.current && 
+          !systemTrayMenuRef.current.contains(target) &&
+          !systemTray?.contains(target)) {
+        setShowSystemTrayMenu(false)
+      }
+    }
+
+    if (showSystemTrayMenu) {
+      document.addEventListener('mousedown', handleClickOutside)
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [showSystemTrayMenu])
+
   const formatTime = (date: Date) => {
     return date.toLocaleTimeString('en-US', { 
       hour: 'numeric', 
@@ -64,6 +96,14 @@ function Taskbar({ windows, onWindowClick, onShutdown, onLogOff, onEmailClick, o
     e.preventDefault()
     e.stopPropagation()
     setShowStartMenu(!showStartMenu)
+    setShowSystemTrayMenu(false) // Close system tray menu when opening start menu
+  }
+
+  const handleSystemTrayClick = (e: React.MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    setShowSystemTrayMenu(!showSystemTrayMenu)
+    setShowStartMenu(false) // Close start menu when opening system tray menu
   }
 
   return (
@@ -258,12 +298,54 @@ function Taskbar({ windows, onWindowClick, onShutdown, onLogOff, onEmailClick, o
       </div>
 
       <div className="system-tray">
-        <div className="tray-icons">
+        <div className="tray-icons" onClick={handleSystemTrayClick}>
           <img src="/assets/icons/Windows XP Icons/Volume.png" alt="Volume" className="tray-icon" title="Volume" />
           <img src="/assets/icons/Windows XP Icons/Wireless Network Connection.png" alt="Network" className="tray-icon" title="Network" />
         </div>
         <div className="clock">{formatTime(currentTime)}</div>
       </div>
+
+      {showSystemTrayMenu && (
+        <div className="system-tray-menu" ref={systemTrayMenuRef}>
+          <div className="system-tray-menu-top">
+            <div className="system-tray-menu-title">System Tray</div>
+          </div>
+          
+          <div className="system-tray-menu-main">
+            <div className="system-tray-menu-section">
+              <div className="system-tray-menu-item">
+                <img src="/assets/icons/Windows XP Icons/Volume.png" alt="" className="menu-icon-small" />
+                <div className="system-tray-menu-item-content">
+                  <span className="system-tray-menu-item-title">Volume</span>
+                  <div className="volume-slider-container">
+                    <input 
+                      type="range" 
+                      min="0" 
+                      max="100" 
+                      value={volume} 
+                      onChange={(e) => {
+                        const newVolume = Number(e.target.value)
+                        setVolume(newVolume)
+                        AudioVolumeManager.setVolume(newVolume)
+                      }}
+                      className="volume-slider" 
+                    />
+                    <span className="volume-percentage">{volume}%</span>
+                  </div>
+                </div>
+              </div>
+              <div className="system-tray-menu-divider"></div>
+              <div className="system-tray-menu-item">
+                <img src="/assets/icons/Windows XP Icons/Wireless Network Connection.png" alt="" className="menu-icon-small" />
+                <div className="system-tray-menu-item-content">
+                  <span className="system-tray-menu-item-title">Network Connection</span>
+                  <span className="system-tray-menu-item-subtitle">Connected</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

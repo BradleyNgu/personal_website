@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react'
+import { AudioVolumeManager } from '../utils/audioVolume'
 import '../styles/shutdown.css'
 
 interface ShutdownScreenProps {
@@ -13,17 +14,22 @@ function ShutdownScreen({ onComplete }: ShutdownScreenProps) {
     if (!hasPlayedSound.current) {
       hasPlayedSound.current = true
       const audio = new Audio('/assets/Microsoft Windows XP Shutdown Sound.mp3')
-      audio.volume = 0.05 // Set volume to 50% (0.0 = silent, 1.0 = full volume)
+      AudioVolumeManager.registerAudio(audio)
       audio.play().catch(error => {
         console.log('Audio playback failed:', error)
       })
-    }
 
-    const timer = setTimeout(() => {
-      onComplete()
-    }, 3000) // Redirect after 3 seconds
-    return () => clearTimeout(timer)
-  }, []) // Empty dependency array - run only once on mount
+      const timer = setTimeout(() => {
+        onComplete()
+      }, 3000) // Redirect after 3 seconds
+      
+      // Cleanup: unregister when component unmounts
+      return () => {
+        AudioVolumeManager.unregisterAudio(audio)
+        clearTimeout(timer)
+      }
+    }
+  }, [onComplete]) // Empty dependency array - run only once on mount
 
   return (
     <div className="shutdown-screen">

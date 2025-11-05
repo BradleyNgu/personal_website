@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import { AudioVolumeManager } from '../utils/audioVolume'
 import '../styles/loading.css'
 
 interface LoadingScreenProps {
@@ -9,7 +10,7 @@ function LoadingScreen({ onComplete }: LoadingScreenProps) {
   useEffect(() => {
     // Play startup sound
     const audio = new Audio('/assets/Microsoft Windows XP Startup Sound.mp3')
-    audio.volume = 0.05 // Set volume to 50% (0.0 = silent, 1.0 = full volume)
+    AudioVolumeManager.registerAudio(audio)
     audio.play().catch(error => {
       console.log('Audio playback failed:', error)
     })
@@ -17,7 +18,12 @@ function LoadingScreen({ onComplete }: LoadingScreenProps) {
     const timer = setTimeout(() => {
       onComplete()
     }, 4000) // Show loading for 4 seconds
-    return () => clearTimeout(timer)
+    
+    // Cleanup: unregister when component unmounts
+    return () => {
+      AudioVolumeManager.unregisterAudio(audio)
+      clearTimeout(timer)
+    }
   }, [onComplete])
 
   return (

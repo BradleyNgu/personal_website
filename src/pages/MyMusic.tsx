@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { AudioVolumeManager } from '../utils/audioVolume'
 
 interface MusicFile {
   name: string
@@ -88,10 +89,12 @@ function MyMusic() {
     if (audioElement) {
       audioElement.pause()
       audioElement.currentTime = 0
+      AudioVolumeManager.unregisterAudio(audioElement)
     }
 
     // Create new audio element
     const audio = new Audio(`/MyMusic/${musicName}`)
+    AudioVolumeManager.registerAudio(audio)
     setAudioElement(audio)
     setCurrentTrack(musicName)
     setIsPlaying(true)
@@ -100,12 +103,14 @@ function MyMusic() {
     audio.onended = () => {
       setIsPlaying(false)
       setCurrentTrack(null)
+      AudioVolumeManager.unregisterAudio(audio)
     }
 
     audio.onerror = () => {
       console.log(`Error playing: ${musicName}`)
       setIsPlaying(false)
       setCurrentTrack(null)
+      AudioVolumeManager.unregisterAudio(audio)
     }
 
     // Play the audio
@@ -113,6 +118,7 @@ function MyMusic() {
       console.log(`Playback failed: ${error}`)
       setIsPlaying(false)
       setCurrentTrack(null)
+      AudioVolumeManager.unregisterAudio(audio)
     })
   }
 
@@ -312,6 +318,7 @@ function MyMusic() {
                     if (audioElement) {
                       audioElement.pause()
                       audioElement.currentTime = 0
+                      AudioVolumeManager.unregisterAudio(audioElement)
                     }
                     setCurrentTrack(null)
                     setIsPlaying(false)

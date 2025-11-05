@@ -403,4 +403,142 @@
   text-align: center;
 }
 
+.system-tray-menu {
+  position: absolute;
+  bottom: 40px;
+  right: 0;
+  width: 300px;
+  background: white;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  animation: slideUp 0.2s ease-out;
+  overflow: hidden;
+  z-index: 10001;
+  display: flex;
+  flex-direction: column;
+}
+
+.system-tray-menu-top {
+  background: linear-gradient(180deg, #5c95d6 0%, #3d7fb7 100%);
+  padding: 4px 10px;
+  border-bottom: 2px solid #1e4a8a;
+  width: 100%;
+}
+
+.system-tray-menu-title {
+  color: white;
+  font-weight: bold;
+  font-size: 12px;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+}
+
+.system-tray-menu-main {
+  flex: 1;
+  background: white;
+  padding: 0;
+  min-height: auto;
+  width: 100%;
+}
+
+.system-tray-menu-section {
+  display: flex;
+  flex-direction: column;
+  padding: 2px 0;
+}
+
+.system-tray-menu-item {
+  padding: 6px 10px;
+  cursor: pointer;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+  color: #000;
+  min-height: auto;
+}
+
+.system-tray-menu-item:hover {
+  background: linear-gradient(180deg, #5db3f8 0%, #3d91e8 100%);
+  color: white;
+}
+
+.system-tray-menu-item-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.system-tray-menu-item-title {
+  font-size: 12px;
+  font-weight: normal;
+}
+
+.system-tray-menu-item-subtitle {
+  font-size: 10px;
+  color: #666;
+  opacity: 0.8;
+}
+
+.system-tray-menu-item:hover .system-tray-menu-item-subtitle {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.system-tray-menu-divider {
+  height: 1px;
+  background: #abc1de;
+  margin: 2px 10px;
+}
+
+.volume-slider-container {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  margin-top: 2px;
+}
+
+.volume-slider {
+  flex: 1;
+  height: 4px;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+  background: #ddd;
+  border-radius: 2px;
+  outline: none;
+}
+
+.volume-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  background: #4a90e2;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.volume-slider::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  background: #4a90e2;
+  border-radius: 50%;
+  cursor: pointer;
+  border: none;
+}
+
+.volume-percentage {
+  font-size: 10px;
+  color: #666;
+  min-width: 35px;
+  text-align: right;
+}
+
+.system-tray-menu-item:hover .volume-percentage {
+  color: rgba(255, 255, 255, 0.9);
+}
+
 

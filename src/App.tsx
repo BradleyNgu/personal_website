@@ -10,7 +10,8 @@ function App() {
   const [loading, setLoading] = useState(false)
   const [shuttingDown, setShuttingDown] = useState(false)
 
-  // Ensure page is always at 100% zoom
+  // ZOOM LOCK DISABLED - User can now zoom in/out
+  /*
   useEffect(() => {
     // Prevent zoom gestures
     const preventZoom = (e: WheelEvent) => {
@@ -56,6 +57,7 @@ function App() {
       document.removeEventListener('touchend', preventDoubleTapZoom)
     }
   }, [])
+  */
 
   const handleLogin = () => {
     setLoading(true)

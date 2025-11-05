@@ -402,7 +402,7 @@
     overflow-y: hidden !important;
     position: fixed !important;
     width: 100% !important;
-    touch-action: none !important; /* Prevent pull-to-refresh and overscroll */
+    /* touch-action: none !important; */ /* ZOOM ENABLED: Commented out to allow zoom */
   }
   
   /* Handle safe area insets for devices with notches */
@@ -421,7 +421,7 @@
     width: 100dvw !important;
     overflow: hidden !important;
     position: relative !important;
-    touch-action: none !important;
+    /* touch-action: none !important; */ /* ZOOM ENABLED */
   }
   
   /* Fix app container */
@@ -448,7 +448,7 @@
     max-height: 100dvh !important;
     overflow: hidden !important;
     position: relative !important;
-    touch-action: none !important;
+    /* touch-action: none !important; */ /* ZOOM ENABLED */
   }
   /* Welcome Screen Mobile - Use grid layout like loading screen */
   .welcome-screen {
@@ -852,7 +852,7 @@
     width: 100dvw !important;
     overflow: hidden !important;
     position: relative !important;
-    touch-action: none !important; /* Prevent overscroll */
+    /* touch-action: none !important; */ /* ZOOM ENABLED: Commented out to allow zoom */
   }
   
   .desktop-icons {
@@ -1221,12 +1221,12 @@
     min-width: 14px !important;
   }
   
-  /* Prevent zoom on double tap */
-  .desktop-icon,
+  /* ZOOM ENABLED: Allow zoom on double tap */
+  /* .desktop-icon,
   .taskbar-window,
   .window-button {
     touch-action: manipulation !important;
-  }
+  } */
   
   /* Better touch feedback */
   .desktop-icon:active,
@@ -2392,7 +2392,7 @@ html, body {
     height: 100dvh !important;
     height: -webkit-fill-available !important;
     overflow: hidden !important;
-    touch-action: none !important;
+    /* touch-action: none !important; */ /* ZOOM ENABLED */
   }
   
   /* Ensure no scrolling on any main containers */
@@ -2404,7 +2404,7 @@ html, body {
   .shutdown-screen {
     overscroll-behavior: none !important;
     -webkit-overflow-scrolling: auto !important;
-    touch-action: none !important;
+    /* touch-action: none !important; */ /* ZOOM ENABLED */
   }
   
   /* Only allow scrolling within window content and page containers */

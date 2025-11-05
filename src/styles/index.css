@@ -26,7 +26,7 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-  touch-action: none; /* Prevent pull-to-refresh and overscroll */
+  /* touch-action: none; */ /* ZOOM ENABLED: Commented out to allow zoom */
   overscroll-behavior: none; /* Prevent bounce scrolling */
   -webkit-overflow-scrolling: auto; /* Disable momentum scrolling on body */
 }
@@ -36,7 +36,7 @@ html {
   height: 100%;
   overflow: hidden;
   position: fixed;
-  touch-action: none;
+  /* touch-action: none; */ /* ZOOM ENABLED: Commented out to allow zoom */
 }
 
 #root {

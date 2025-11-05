@@ -129,7 +129,7 @@
     height: 56px !important;
     min-height: 56px !important;
     max-height: 56px !important;
-    padding: 8px 16px !important;
+    padding: 8px 12px !important;
   }
   
   .window-title {
@@ -159,7 +159,7 @@
   }
   
   .window-controls {
-    gap: 12px !important;
+    gap: 8px !important;
   }
   
   /* Start Menu Footer for Very Small Screens */
@@ -313,7 +313,7 @@
     height: 56px !important;
     min-height: 56px !important;
     max-height: 56px !important;
-    padding: 8px 16px !important;
+    padding: 8px 12px !important;
   }
   
   .window-title {
@@ -343,7 +343,7 @@
   }
   
   .window-controls {
-    gap: 12px !important;
+    gap: 8px !important;
   }
   
   /* Start Menu Footer for Small Screens */
@@ -899,7 +899,7 @@
     height: 56px !important;
     min-height: 56px !important;
     max-height: 56px !important;
-    padding: 10px 18px !important;
+    padding: 10px 14px !important;
   }
   
   .window-title {
@@ -929,7 +929,7 @@
   }
   
   .window-controls {
-    gap: 14px !important;
+    gap: 10px !important;
   }
   
   /* Additional mobile window optimizations */
@@ -1014,7 +1014,7 @@
     height: 56px !important;
     min-height: 56px !important;
     max-height: 56px !important;
-    padding: 10px 18px !important;
+    padding: 10px 14px !important;
   }
   
   .window-title {

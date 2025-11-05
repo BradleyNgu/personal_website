@@ -71,9 +71,6 @@
   animation: slideUp 0.2s ease-out;
   overflow: hidden;
   z-index: 10001;
-  display: grid;
-  grid-template-rows: auto 1fr auto;
-  grid-template-columns: 1fr;
 }
 
 @keyframes slideUp {
@@ -88,12 +85,9 @@
 }
 
 .start-menu-top {
-  grid-column: 1 / -1;
-  grid-row: 1;
   background: linear-gradient(180deg, #5c95d6 0%, #3d7fb7 100%);
   padding: 0;
   border-bottom: 2px solid #1e4a8a;
-  width: 100%;
 }
 
 .user-profile-banner {
@@ -119,11 +113,8 @@
 }
 
 .start-menu-main {
-  grid-column: 1 / -1;
-  grid-row: 2;
   display: flex;
   min-height: 350px;
-  width: 100%;
 }
 
 .start-menu-left {
@@ -203,15 +194,12 @@
 }
 
 .start-menu-bottom {
-  grid-column: 1 / -1;
-  grid-row: 3;
   background: linear-gradient(180deg, #5991d6 0%, #2e6ab7 100%);
   padding: 8px;
   display: flex;
   justify-content: flex-end;
   align-items: center;
   border-top: 2px solid #1e4a8a;
-  width: 100%;
 }
 
 .start-menu-left .all-programs {

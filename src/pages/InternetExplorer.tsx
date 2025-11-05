@@ -1,5 +1,16 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
+import { AudioVolumeManager } from '../utils/audioVolume'
 import '../styles/internet-explorer.css'
+
+// Type declarations for YouTube IFrame API
+declare global {
+  interface Window {
+    YT?: {
+      Player: new (elementId: HTMLElement | string, config: any) => any
+    }
+    onYouTubeIframeAPIReady?: () => void
+  }
+}
 
 interface InternetExplorerProps {
   onClose?: () => void
@@ -8,7 +19,9 @@ interface InternetExplorerProps {
 function InternetExplorer({ }: InternetExplorerProps) {
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0)
   const [isLoading, setIsLoading] = useState(false)
-  const iframeRef = useRef<HTMLIFrameElement>(null)
+  const iframeRef = useRef<HTMLDivElement>(null)
+  const youtubePlayerRef = useRef<any>(null)
+  const youtubeApiLoadedRef = useRef(false)
 
   // YouTube playlist videos using the provided links in correct order
   const playlistVideos = [
@@ -39,7 +52,107 @@ function InternetExplorer({ }: InternetExplorerProps) {
     }
   ]
 
-  // Get current video embed URL
+  // Load YouTube IFrame API
+  useEffect(() => {
+    if (youtubeApiLoadedRef.current) return
+    
+    // Check if script already exists
+    if (window.YT && window.YT.Player) {
+      youtubeApiLoadedRef.current = true
+      return
+    }
+
+    // Load YouTube IFrame API script
+    const tag = document.createElement('script')
+    tag.src = 'https://www.youtube.com/iframe_api'
+    const firstScriptTag = document.getElementsByTagName('script')[0]
+    firstScriptTag.parentNode?.insertBefore(tag, firstScriptTag)
+
+    // Set up callback for when API is ready
+    window.onYouTubeIframeAPIReady = () => {
+      youtubeApiLoadedRef.current = true
+      initializeYouTubePlayer()
+    }
+
+    // If API is already loaded (race condition)
+    if (window.YT && window.YT.Player) {
+      youtubeApiLoadedRef.current = true
+      initializeYouTubePlayer()
+    }
+  }, [])
+
+  // Initialize YouTube player when API is ready
+  const initializeYouTubePlayer = () => {
+    if (!iframeRef.current || !window.YT || !window.YT.Player) return
+    
+    const currentVideo = playlistVideos[currentVideoIndex]
+    if (!currentVideo) return
+
+    try {
+      // Destroy existing player if any
+      if (youtubePlayerRef.current && typeof youtubePlayerRef.current.destroy === 'function') {
+        youtubePlayerRef.current.destroy()
+        AudioVolumeManager.unregisterYouTubePlayer(youtubePlayerRef.current)
+      }
+
+      // Create new YouTube player - use the div element directly
+      const player = new window.YT.Player(iframeRef.current, {
+        videoId: currentVideo.id,
+        playerVars: {
+          autoplay: 1,
+          rel: 0,
+          modestbranding: 1,
+          showinfo: 0,
+          controls: 1,
+          iv_load_policy: 3,
+          fs: 1,
+          cc_load_policy: 0
+        },
+        events: {
+          onReady: (event: any) => {
+            // Set initial volume when player is ready
+            const playerInstance = event.target
+            AudioVolumeManager.registerYouTubePlayer(playerInstance)
+          },
+          onError: () => {
+            console.log('YouTube player error')
+          }
+        }
+      })
+
+      youtubePlayerRef.current = player
+    } catch (error) {
+      console.log('Error initializing YouTube player:', error)
+    }
+  }
+
+  // Reinitialize player when video changes
+  useEffect(() => {
+    if (youtubeApiLoadedRef.current && iframeRef.current) {
+      // Small delay to ensure DOM is ready
+      setTimeout(() => {
+        initializeYouTubePlayer()
+      }, 100)
+    }
+  }, [currentVideoIndex])
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      if (youtubePlayerRef.current) {
+        try {
+          if (typeof youtubePlayerRef.current.destroy === 'function') {
+            youtubePlayerRef.current.destroy()
+          }
+          AudioVolumeManager.unregisterYouTubePlayer(youtubePlayerRef.current)
+        } catch (error) {
+          console.log('Error cleaning up YouTube player:', error)
+        }
+      }
+    }
+  }, [])
+
+  // Get current video embed URL (fallback for if API fails)
   const getCurrentVideoEmbedUrl = () => {
     const currentVideo = playlistVideos[currentVideoIndex]
     if (currentVideo) {
@@ -126,13 +239,10 @@ function InternetExplorer({ }: InternetExplorerProps) {
               <span className="ie-video-title">{getCurrentVideoTitle()}</span>
               <span className="ie-video-position">({currentVideoIndex + 1} of {playlistVideos.length})</span>
             </div>
-            <iframe
+            <div 
               ref={iframeRef}
-              src={getCurrentVideoEmbedUrl()}
               className="ie-iframe"
-              title="YouTube Playlist"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
+              style={{ width: '100%', height: '100%' }}
             />
           </div>
         )}

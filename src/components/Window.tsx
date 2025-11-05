@@ -40,6 +40,12 @@ function Window({
     const target = e.target as HTMLElement
     if (target.closest('.window-controls, .window-button')) return
     
+    // On mobile, disable title bar dragging when window is maximized
+    if (isMobile && window.isMaximized) {
+      onFocus()
+      return
+    }
+    
     e.preventDefault()
     onFocus()
     
@@ -102,9 +108,9 @@ function Window({
     // Always focus on touch start
     onFocus()
     
-    // On mobile, if maximized, ONLY allow focusing - wait for movement before doing anything
+    // On mobile, disable title bar dragging when window is maximized
     if (isMobile && window.isMaximized) {
-      // Don't start dragging yet - wait to see if user actually moves finger
+      // Don't allow dragging on maximized windows on mobile
       setIsDragging(false)
       return
     }

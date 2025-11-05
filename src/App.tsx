@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import WelcomeScreen from './components/WelcomeScreen'
 import LoadingScreen from './components/LoadingScreen'
 import Desktop from './components/Desktop'

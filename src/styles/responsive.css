@@ -100,7 +100,7 @@
     width: 180px !important;
     max-width: 90vw !important;
     position: fixed !important;
-    bottom: 35px !important;
+    bottom: var(--taskbar-height, 35px) !important;
     right: 0 !important;
     z-index: 10001 !important;
     max-height: calc(100vh - 75px) !important;
@@ -274,7 +274,7 @@
     width: 200px !important;
     max-width: 90vw !important;
     position: fixed !important;
-    bottom: 38px !important;
+    bottom: var(--taskbar-height, 38px) !important;
     right: 0 !important;
     z-index: 10001 !important;
     max-height: calc(100vh - 78px) !important;
@@ -758,7 +758,7 @@
     width: 220px !important;
     max-width: 90vw !important;
     position: fixed !important;
-    bottom: 40px !important;
+    bottom: var(--taskbar-height, 40px) !important;
     right: 0 !important;
     z-index: 10001 !important;
     max-height: calc(100vh - 80px) !important;
@@ -1502,7 +1502,7 @@
     width: 220px !important;
     max-width: 90vw !important;
     position: fixed !important;
-    bottom: 45px !important;
+    bottom: var(--taskbar-height, 40px) !important;
     right: 0 !important;
     z-index: 10001 !important;
     max-height: calc(100vh - 85px) !important;

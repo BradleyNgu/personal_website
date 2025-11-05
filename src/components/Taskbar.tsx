@@ -24,6 +24,7 @@ function Taskbar({ windows, onWindowClick, onShutdown, onLogOff, onEmailClick, o
   const [currentTime, setCurrentTime] = useState(new Date())
   const startMenuRef = useRef<HTMLDivElement>(null)
   const systemTrayMenuRef = useRef<HTMLDivElement>(null)
+  const systemTrayOpenTimeRef = useRef<number>(0)
 
   // Initialize volume from manager
   useEffect(() => {
@@ -67,6 +68,12 @@ function Taskbar({ windows, onWindowClick, onShutdown, onLogOff, onEmailClick, o
       const target = event.target as Node
       const systemTray = document.querySelector('.system-tray')
       
+      // Ignore clicks that happen very soon after opening (prevents immediate close from touch-to-mouse conversion)
+      const timeSinceOpen = Date.now() - systemTrayOpenTimeRef.current
+      if (timeSinceOpen < 300) {
+        return
+      }
+      
       if (showSystemTrayMenu && 
           systemTrayMenuRef.current && 
           !systemTrayMenuRef.current.contains(target) &&
@@ -102,8 +109,14 @@ function Taskbar({ windows, onWindowClick, onShutdown, onLogOff, onEmailClick, o
   const handleSystemTrayClick = (e: React.MouseEvent | React.TouchEvent) => {
     e.preventDefault()
     e.stopPropagation()
+    const isOpening = !showSystemTrayMenu
     setShowSystemTrayMenu(!showSystemTrayMenu)
     setShowStartMenu(false) // Close start menu when opening system tray menu
+    
+    // Track when menu is opened (for mobile touch-to-mouse conversion)
+    if (isOpening) {
+      systemTrayOpenTimeRef.current = Date.now()
+    }
   }
 
   return (

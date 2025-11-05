@@ -66,17 +66,6 @@
   .system-tray {
     height: 35px !important;
   }
-
-  .system-tray-menu {
-    width: 240px !important;
-    max-width: 90vw !important;
-    position: fixed !important;
-    bottom: 35px !important;
-    right: 0 !important;
-    z-index: 10001 !important;
-    max-height: calc(100vh - 75px) !important;
-    overflow-y: auto !important;
-  }
   
   /* Mobile-only: Remove gap between quick launch and taskbar windows */
   .quick-launch {
@@ -239,17 +228,6 @@
   
   .system-tray {
     height: 38px !important;
-  }
-
-  .system-tray-menu {
-    width: 260px !important;
-    max-width: 90vw !important;
-    position: fixed !important;
-    bottom: 38px !important;
-    right: 0 !important;
-    z-index: 10001 !important;
-    max-height: calc(100vh - 78px) !important;
-    overflow-y: auto !important;
   }
   
   /* Mobile-only: Remove gap between quick launch and taskbar windows */
@@ -723,17 +701,6 @@
     display: flex !important;
     align-items: center !important;
     gap: 6px !important;
-  }
-
-  .system-tray-menu {
-    width: 280px !important;
-    max-width: 90vw !important;
-    position: fixed !important;
-    bottom: 40px !important;
-    right: 0 !important;
-    z-index: 10001 !important;
-    max-height: calc(100vh - 80px) !important;
-    overflow-y: auto !important;
   }
   
   /* Mobile-only: Remove gap between quick launch and taskbar windows */
@@ -1451,17 +1418,6 @@
     grid-template-rows: auto 1fr auto !important;
     grid-template-columns: 1fr !important;
     max-height: calc(100vh - 80px) !important;
-    overflow-y: auto !important;
-  }
-
-  .system-tray-menu {
-    width: 280px !important;
-    max-width: 90vw !important;
-    position: fixed !important;
-    bottom: 45px !important;
-    right: 0 !important;
-    z-index: 10001 !important;
-    max-height: calc(100vh - 85px) !important;
     overflow-y: auto !important;
   }
   

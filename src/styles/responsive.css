@@ -4,11 +4,11 @@
 @media (max-width: 320px) {
   :root {
     --taskbar-height: 35px;
-    --window-title-bar-height: 24px;
+    --window-title-bar-height: 56px;
     --window-menu-bar-height: 20px;
-    --window-button-size: 10px;
-    --window-icon-size: 10px;
-    --window-title-font-size: 9px;
+    --window-button-size: 32px;
+    --window-icon-size: 28px;
+    --window-title-font-size: 18px;
     --window-menu-font-size: 8px;
     --mobile-buffer: 40px;
   }
@@ -126,30 +126,39 @@
   }
   
   .window-title-bar {
-    height: 24px !important;
-    min-height: 24px !important;
-    max-height: 24px !important;
-    padding: 1px 2px !important;
+    height: 56px !important;
+    min-height: 56px !important;
+    max-height: 56px !important;
+    padding: 8px 12px !important;
   }
   
   .window-title {
-    font-size: 9px !important;
-    gap: 2px !important;
+    font-size: 18px !important;
+    gap: 8px !important;
   }
   
   .window-icon {
-    width: 10px !important;
-    height: 10px !important;
+    width: 28px !important;
+    height: 28px !important;
+    min-width: 28px !important;
+    min-height: 28px !important;
   }
   
   .window-button {
-    width: 10px !important;
-    height: 10px !important;
+    width: 32px !important;
+    height: 32px !important;
+    min-width: 32px !important;
+    min-height: 32px !important;
+    padding: 6px !important;
   }
   
   .window-button img {
-    width: 10px !important;
-    height: 10px !important;
+    width: 100% !important;
+    height: 100% !important;
+  }
+  
+  .window-controls {
+    gap: 8px !important;
   }
   
   /* Start Menu Footer for Very Small Screens */
@@ -178,11 +187,11 @@
 @media (max-width: 375px) and (min-width: 321px) {
   :root {
     --taskbar-height: 38px;
-    --window-title-bar-height: 26px;
+    --window-title-bar-height: 56px;
     --window-menu-bar-height: 22px;
-    --window-button-size: 12px;
-    --window-icon-size: 12px;
-    --window-title-font-size: 10px;
+    --window-button-size: 34px;
+    --window-icon-size: 30px;
+    --window-title-font-size: 19px;
     --window-menu-font-size: 9px;
     --mobile-buffer: 38px;
   }
@@ -300,30 +309,39 @@
   }
   
   .window-title-bar {
-    height: 26px !important;
-    min-height: 26px !important;
-    max-height: 26px !important;
-    padding: 1px 3px !important;
+    height: 56px !important;
+    min-height: 56px !important;
+    max-height: 56px !important;
+    padding: 8px 12px !important;
   }
   
   .window-title {
-    font-size: 10px !important;
-    gap: 3px !important;
+    font-size: 19px !important;
+    gap: 8px !important;
   }
   
   .window-icon {
-    width: 12px !important;
-    height: 12px !important;
+    width: 30px !important;
+    height: 30px !important;
+    min-width: 30px !important;
+    min-height: 30px !important;
   }
   
   .window-button {
-    width: 12px !important;
-    height: 12px !important;
+    width: 34px !important;
+    height: 34px !important;
+    min-width: 34px !important;
+    min-height: 34px !important;
+    padding: 6px !important;
   }
   
   .window-button img {
-    width: 12px !important;
-    height: 12px !important;
+    width: 100% !important;
+    height: 100% !important;
+  }
+  
+  .window-controls {
+    gap: 8px !important;
   }
   
   /* Start Menu Footer for Small Screens */
@@ -352,11 +370,11 @@
 @media (max-width: 480px) {
   :root {
     --taskbar-height: 40px;
-    --window-title-bar-height: 28px;
+    --window-title-bar-height: 56px;
     --window-menu-bar-height: 24px;
-    --window-button-size: 14px;
-    --window-icon-size: 14px;
-    --window-title-font-size: 11px;
+    --window-button-size: 36px;
+    --window-icon-size: 32px;
+    --window-title-font-size: 16px;
     --window-menu-font-size: 10px;
     --mobile-buffer: 40px;
   }
@@ -876,34 +894,39 @@
   }
   
   .window-title-bar {
-    height: 28px !important;
-    min-height: 28px !important;
-    max-height: 28px !important;
-    padding: 2px 4px !important;
+    height: 56px !important;
+    min-height: 56px !important;
+    max-height: 56px !important;
+    padding: 10px 14px !important;
   }
   
   .window-title {
-    font-size: 11px !important;
-    gap: 4px !important;
+    font-size: 20px !important;
+    gap: 10px !important;
   }
   
   .window-icon {
-    width: 14px !important;
-    height: 14px !important;
+    width: 32px !important;
+    height: 32px !important;
+    min-width: 32px !important;
+    min-height: 32px !important;
   }
   
   .window-button {
-    width: 14px !important;
-    height: 14px !important;
+    width: 36px !important;
+    height: 36px !important;
+    min-width: 36px !important;
+    min-height: 36px !important;
+    padding: 8px !important;
   }
   
   .window-button img {
-    width: 14px !important;
-    height: 14px !important;
+    width: 100% !important;
+    height: 100% !important;
   }
   
   .window-controls {
-    gap: 1px !important;
+    gap: 10px !important;
   }
   
   /* Additional mobile window optimizations */
@@ -985,37 +1008,42 @@
   }
   
   .window-title-bar {
-    height: 35px !important;
-    padding: 2px 4px !important;
+    height: 56px !important;
+    min-height: 56px !important;
+    max-height: 56px !important;
+    padding: 10px 14px !important;
   }
   
   .window-title {
-    font-size: 11px !important;
-    gap: 4px !important;
+    font-size: 20px !important;
+    gap: 10px !important;
   }
   
   .window-icon {
-    width: 14px !important;
-    height: 14px !important;
+    width: 32px !important;
+    height: 32px !important;
+    min-width: 32px !important;
+    min-height: 32px !important;
   }
   
   .window-controls {
     display: flex !important;
-    gap: 1px !important;
+    gap: 10px !important;
     flex-shrink: 0 !important;
   }
   
   .window-button {
-    width: 14px !important;
-    height: 14px !important;
-    min-width: 14px !important;
-    min-height: 14px !important;
+    width: 36px !important;
+    height: 36px !important;
+    min-width: 36px !important;
+    min-height: 36px !important;
+    padding: 8px !important;
     flex-shrink: 0 !important;
   }
   
   .window-button img {
-    width: 12px !important;
-    height: 12px !important;
+    width: 100% !important;
+    height: 100% !important;
   }
   
   .window-menu-bar {

@@ -31,6 +31,8 @@ function Window({
   const touchStartPosRef = useRef<{ x: number; y: number } | null>(null)
   const hasMovedRef = useRef<boolean>(false)
   const dragOffsetRef = useRef<{ x: number; y: number } | null>(null)
+  const resizeSizeRef = useRef<{ width: number; height: number } | null>(null)
+  const rafRef = useRef<number | null>(null)
   
   // Detect if device is mobile (more specific detection)
   const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
@@ -262,10 +264,25 @@ function Window({
           y: e.clientY - dragStart.y,
         })
       }
-      if (isResizing) {
+      if (isResizing && windowRef.current) {
         const newWidth = Math.max(400, resizeStart.width + (e.clientX - resizeStart.x))
         const newHeight = Math.max(300, resizeStart.height + (e.clientY - resizeStart.y))
-        onSizeChange({ width: newWidth, height: newHeight })
+        
+        // Store for final commit
+        resizeSizeRef.current = { width: newWidth, height: newHeight }
+        
+        // Use requestAnimationFrame for smooth 60fps updates
+        if (rafRef.current) {
+          cancelAnimationFrame(rafRef.current)
+        }
+        
+        rafRef.current = requestAnimationFrame(() => {
+          if (windowRef.current && resizeSizeRef.current) {
+            // Apply size directly to DOM for smooth resizing
+            windowRef.current.style.width = `${resizeSizeRef.current.width}px`
+            windowRef.current.style.height = `${resizeSizeRef.current.height}px`
+          }
+        })
       }
     }
 
@@ -327,19 +344,31 @@ function Window({
           })
         }
       }
-      if (isResizing) {
+      if (isResizing && windowRef.current) {
         // Prevent scrolling when resizing (touchmove is already non-passive)
         e.preventDefault()
         const touch = e.touches[0]
         if (touch) {
           const newWidth = Math.max(400, resizeStart.width + (touch.clientX - resizeStart.x))
           const newHeight = Math.max(300, resizeStart.height + (touch.clientY - resizeStart.y))
-          onSizeChange({ width: newWidth, height: newHeight })
+          
+          // Store for final commit
+          resizeSizeRef.current = { width: newWidth, height: newHeight }
+          
+          // Apply size directly to DOM for smooth resizing
+          windowRef.current.style.width = `${newWidth}px`
+          windowRef.current.style.height = `${newHeight}px`
         }
       }
     }
 
     const handleMouseUp = () => {
+      // Cancel any pending RAF
+      if (rafRef.current) {
+        cancelAnimationFrame(rafRef.current)
+        rafRef.current = null
+      }
+      
       if (isDragging && dragOffsetRef.current && windowRef.current && !window.isMaximized) {
         // Commit final position to state
         onPositionChange(dragOffsetRef.current)
@@ -348,11 +377,27 @@ function Window({
         windowRef.current.style.willChange = 'auto'
         dragOffsetRef.current = null
       }
+      
+      if (isResizing && resizeSizeRef.current && windowRef.current) {
+        // Commit final size to state
+        onSizeChange(resizeSizeRef.current)
+        // Reset inline styles to let state control
+        windowRef.current.style.width = ''
+        windowRef.current.style.height = ''
+        resizeSizeRef.current = null
+      }
+      
       setIsDragging(false)
       setIsResizing(false)
     }
 
     const handleTouchEnd = () => {
+      // Cancel any pending RAF
+      if (rafRef.current) {
+        cancelAnimationFrame(rafRef.current)
+        rafRef.current = null
+      }
+      
       // On mobile, if maximized and user only tapped (didn't move), don't unmaximize
       // The hasMovedRef check ensures we only unmaximize if user actually dragged
       
@@ -362,6 +407,14 @@ function Window({
         windowRef.current.style.transform = ''
         windowRef.current.style.willChange = 'auto'
         dragOffsetRef.current = null
+      }
+      
+      // Commit size if resizing
+      if (isResizing && resizeSizeRef.current && windowRef.current) {
+        onSizeChange(resizeSizeRef.current)
+        windowRef.current.style.width = ''
+        windowRef.current.style.height = ''
+        resizeSizeRef.current = null
       }
       
       // Reset touch tracking
@@ -384,10 +437,22 @@ function Window({
     document.addEventListener('touchend', handleTouchEnd)
     
     return () => {
+      // Cancel any pending RAF
+      if (rafRef.current) {
+        cancelAnimationFrame(rafRef.current)
+        rafRef.current = null
+      }
+      
       // Cleanup: reset transform if dragging was interrupted
-      if (windowRef.current && dragOffsetRef.current) {
-        windowRef.current.style.transform = ''
-        windowRef.current.style.willChange = 'auto'
+      if (windowRef.current) {
+        if (dragOffsetRef.current) {
+          windowRef.current.style.transform = ''
+          windowRef.current.style.willChange = 'auto'
+        }
+        if (resizeSizeRef.current) {
+          windowRef.current.style.width = ''
+          windowRef.current.style.height = ''
+        }
       }
       
       if (isDragging || isResizing) {
@@ -424,7 +489,7 @@ function Window({
   return (
     <div
       ref={windowRef}
-      className={`window ${window.isMaximized ? 'maximized' : ''}`}
+      className={`window ${window.isMaximized ? 'maximized' : ''} ${isResizing ? 'resizing' : ''}`}
       style={style}
       onMouseDown={() => onFocus()}
     >

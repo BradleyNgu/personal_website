@@ -33,6 +33,15 @@
   /* Removed isolation: can cause unnecessary compositing layers */
 }
 
+/* Disable transitions when resizing to prevent conflicts with JS updates */
+.window.resizing {
+  transition: none !important;
+}
+
+.window.resizing * {
+  transition: none !important;
+}
+
 .window.maximized {
   border-radius: 0;
   box-shadow: none;

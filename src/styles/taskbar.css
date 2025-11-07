@@ -412,7 +412,6 @@
   border: none;
   border-radius: 0;
   box-shadow: none;
-  animation: slideUp 0.2s ease-out;
   overflow: hidden;
   z-index: 10001;
   display: flex;

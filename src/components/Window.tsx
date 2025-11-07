@@ -39,8 +39,7 @@ function Window({
 
   // Constrain window position to stay within viewport bounds
   const constrainPosition = (x: number, y: number): { x: number; y: number } => {
-    // Get taskbar height from CSS variable or use mobile-specific value
-    const taskbarHeight = isMobile ? 35 : 40 // Mobile: 35px, Desktop: 40px
+    const taskbarHeight = 40 // --taskbar-height
     const viewportWidth = globalThis.innerWidth ?? 0
     const viewportHeight = (globalThis.innerHeight ?? 0) - taskbarHeight
     
@@ -331,17 +330,10 @@ function Window({
         
         // On mobile, if not maximized and we haven't started dragging yet, start it now
         if (isMobile && !window.isMaximized && !isDragging) {
-          // Ensure current position is within bounds before starting drag
-          const currentPos = constrainPosition(window.position.x, window.position.y)
-          if (currentPos.x !== window.position.x || currentPos.y !== window.position.y) {
-            // Snap window back to valid position if it's off-screen
-            onPositionChange(currentPos)
-          }
-          
           setIsDragging(true)
           setDragStart({
-            x: touch.clientX - currentPos.x,
-            y: touch.clientY - currentPos.y,
+            x: touch.clientX - window.position.x,
+            y: touch.clientY - window.position.y,
           })
         }
       }

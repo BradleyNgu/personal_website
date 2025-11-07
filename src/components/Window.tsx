@@ -37,6 +37,25 @@ function Window({
   // Detect if device is mobile (more specific detection)
   const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
 
+  // Constrain window position to stay within viewport bounds
+  const constrainPosition = (x: number, y: number): { x: number; y: number } => {
+    const taskbarHeight = 40 // --taskbar-height
+    const viewportWidth = globalThis.innerWidth ?? 0
+    const viewportHeight = (globalThis.innerHeight ?? 0) - taskbarHeight
+    
+    // Constrain X position: window must stay within viewport horizontally
+    const minX = 0
+    const maxX = Math.max(0, viewportWidth - window.size.width)
+    const constrainedX = Math.max(minX, Math.min(maxX, x))
+    
+    // Constrain Y position: window must stay within viewport vertically (above taskbar)
+    const minY = 0
+    const maxY = Math.max(0, viewportHeight - window.size.height)
+    const constrainedY = Math.max(minY, Math.min(maxY, y))
+    
+    return { x: constrainedX, y: constrainedY }
+  }
+
   const handleMouseDownTitle = (e: React.MouseEvent) => {
     // Don't allow dragging if clicking on window controls
     const target = e.target as HTMLElement
@@ -246,23 +265,26 @@ function Window({
         const newX = e.clientX - dragStart.x
         const newY = e.clientY - dragStart.y
         
+        // Constrain position to viewport bounds
+        const constrained = constrainPosition(newX, newY)
+        
         // Store offset for final commit
-        dragOffsetRef.current = { x: newX, y: newY }
+        dragOffsetRef.current = constrained
         
         // Apply transform directly to DOM for smooth animation
         const baseX = window.position.x
         const baseY = window.position.y
-        const deltaX = newX - baseX
-        const deltaY = newY - baseY
+        const deltaX = constrained.x - baseX
+        const deltaY = constrained.y - baseY
         
         windowRef.current.style.transform = `translate(${deltaX}px, ${deltaY}px)`
         windowRef.current.style.willChange = 'transform'
       } else if (isDragging) {
         // For maximized windows or if ref not available, use state updates
-        onPositionChange({
-          x: e.clientX - dragStart.x,
-          y: e.clientY - dragStart.y,
-        })
+        const newX = e.clientX - dragStart.x
+        const newY = e.clientY - dragStart.y
+        const constrained = constrainPosition(newX, newY)
+        onPositionChange(constrained)
       }
       if (isResizing && windowRef.current) {
         const newWidth = Math.max(400, resizeStart.width + (e.clientX - resizeStart.x))
@@ -324,12 +346,15 @@ function Window({
           const newX = touch.clientX - dragStart.x
           const newY = touch.clientY - dragStart.y
           
-          dragOffsetRef.current = { x: newX, y: newY }
+          // Constrain position to viewport bounds
+          const constrained = constrainPosition(newX, newY)
+          
+          dragOffsetRef.current = constrained
           
           const baseX = window.position.x
           const baseY = window.position.y
-          const deltaX = newX - baseX
-          const deltaY = newY - baseY
+          const deltaX = constrained.x - baseX
+          const deltaY = constrained.y - baseY
           
           windowRef.current.style.transform = `translate(${deltaX}px, ${deltaY}px)`
           windowRef.current.style.willChange = 'transform'
@@ -338,10 +363,10 @@ function Window({
         // For maximized windows, use state updates
         e.preventDefault()
         if (touch) {
-          onPositionChange({
-            x: touch.clientX - dragStart.x,
-            y: touch.clientY - dragStart.y,
-          })
+          const newX = touch.clientX - dragStart.x
+          const newY = touch.clientY - dragStart.y
+          const constrained = constrainPosition(newX, newY)
+          onPositionChange(constrained)
         }
       }
       if (isResizing && windowRef.current) {
@@ -370,8 +395,10 @@ function Window({
       }
       
       if (isDragging && dragOffsetRef.current && windowRef.current && !window.isMaximized) {
+        // Constrain final position to viewport bounds before committing
+        const constrained = constrainPosition(dragOffsetRef.current.x, dragOffsetRef.current.y)
         // Commit final position to state
-        onPositionChange(dragOffsetRef.current)
+        onPositionChange(constrained)
         // Reset transform
         windowRef.current.style.transform = ''
         windowRef.current.style.willChange = 'auto'
@@ -403,7 +430,9 @@ function Window({
       
       // Commit position if dragging
       if (isDragging && dragOffsetRef.current && windowRef.current && !window.isMaximized) {
-        onPositionChange(dragOffsetRef.current)
+        // Constrain final position to viewport bounds before committing
+        const constrained = constrainPosition(dragOffsetRef.current.x, dragOffsetRef.current.y)
+        onPositionChange(constrained)
         windowRef.current.style.transform = ''
         windowRef.current.style.willChange = 'auto'
         dragOffsetRef.current = null
@@ -517,9 +546,7 @@ function Window({
       
       <div 
         ref={menuBarRef}
-        className="window-menu-bar" 
-        onMouseDown={handleMouseDownContent} 
-        onTouchStart={isMobile ? undefined : handleTouchStartContent}
+        className="window-menu-bar"
       >
         <div className="menu-item-wrapper">
           <span 
@@ -596,7 +623,7 @@ function Window({
         </div>
       </div>
 
-      <div className="window-content" onMouseDown={handleMouseDownContent} onTouchStart={isMobile ? undefined : handleTouchStartContent}>
+      <div className="window-content">
         {window.component}
       </div>
 

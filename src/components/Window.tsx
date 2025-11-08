@@ -184,7 +184,7 @@ function Window({
   }
 
   const handleTouchStartResize = (e: React.TouchEvent) => {
-    if (window.isMaximized || isMobile) return
+    if (window.isMaximized) return
     
     // Don't call preventDefault on touchStart - rely on CSS touch-action
     // stopPropagation is safe to call
@@ -599,7 +599,7 @@ function Window({
       </div>
 
       {!window.isMaximized && (
-        <div className="window-resize-handle" onMouseDown={handleMouseDownResize} onTouchStart={isMobile ? undefined : handleTouchStartResize}></div>
+        <div className="window-resize-handle" onMouseDown={handleMouseDownResize} onTouchStart={handleTouchStartResize}></div>
       )}
     </div>
   )

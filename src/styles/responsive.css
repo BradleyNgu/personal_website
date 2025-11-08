@@ -2375,8 +2375,8 @@
 }
 
 /* Zoom level support - ensures usability at different zoom levels */
-@media (min-width: 1px) {
-  /* Ensure minimum readable font sizes at all zoom levels */
+@media (min-width: 769px) {
+  /* Ensure minimum readable font sizes at all zoom levels - desktop only */
   body {
     font-size: clamp(10px, 1vw, 16px) !important;
   }

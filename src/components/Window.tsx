@@ -77,24 +77,6 @@ function Window({
     }
   }
 
-  const handleMouseDownContent = (e: React.MouseEvent) => {
-    if (window.isMaximized || isMobile) return
-    
-    // Check if the clicked element is interactive (button, link, input, etc.)
-    const target = e.target as HTMLElement
-    const isInteractive = target.closest('button, a, input, select, textarea, [role="button"], [onclick]')
-    
-    if (isInteractive) return
-    
-    e.preventDefault()
-    onFocus()
-    setIsDragging(true)
-    setDragStart({
-      x: e.clientX - window.position.x,
-      y: e.clientY - window.position.y,
-    })
-  }
-
   const handleTouchStartTitle = (e: React.TouchEvent) => {
     // Don't allow dragging if touching window controls
     const target = e.target as HTMLElement
@@ -146,27 +128,6 @@ function Window({
         y: touch.clientY - window.position.y,
       })
     }
-  }
-
-  const handleTouchStartContent = (e: React.TouchEvent) => {
-    if (window.isMaximized || isMobile) return
-    
-    // Check if the touched element is interactive (button, link, input, etc.)
-    const target = e.target as HTMLElement
-    const isInteractive = target.closest('button, a, input, select, textarea, [role="button"], [onclick]')
-    
-    if (isInteractive) return
-    
-    // Don't call preventDefault on touchStart - rely on CSS touch-action
-    onFocus()
-    const touch = e.touches[0]
-    if (!touch) return
-    
-    setIsDragging(true)
-    setDragStart({
-      x: touch.clientX - window.position.x,
-      y: touch.clientY - window.position.y,
-    })
   }
 
   const handleMouseDownResize = (e: React.MouseEvent) => {

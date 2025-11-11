@@ -70,88 +70,34 @@ function CommandPrompt() {
       case 'help':
         output = [
           'For more information on a specific command, type HELP command-name',
-          'ASSOC          Displays or modifies file extension associations.',
-          'ATTRIB         Displays or changes file attributes.',
-          'BREAK          Sets or clears extended CTRL+C checking.',
-          'BCDEDIT        Sets properties in boot database to control boot loading.',
-          'CACLS          Displays or modifies access control lists (ACLs) of files.',
-          'CALL           Calls one batch program from another.',
-          'CD             Displays the name of or changes the current directory.',
-          'CHCP           Displays or sets the active code page number.',
-          'CHDIR          Displays the name of or changes the current directory.',
-          'CHKDSK         Checks a disk and displays a status report.',
-          'CHKNTFS        Displays or modifies the checking of disk at boot time.',
+          '\n',
+          '════════════════ PORTFOLIO COMMANDS ════════════════',
+          'CONTACT        Displays contact information and links.',
+          'EDUCATION      Displays educational background and coursework.',
+          'JOKE           Tells a random programming joke.',
+          'SOCIAL         Displays social media links.',
+          'TYPE           Displays the contents of a text file. Try "type readme.txt"',
+          '\n',
+          '════════════════ SYSTEM COMMANDS ════════════════',
           'CLS            Clears the screen.',
-          'CMD            Starts a new instance of the Windows command interpreter.',
-          'COLOR          Sets the default console foreground and background colors.',
-          'COMP           Compares the contents of two files or sets of files.',
-          'COMPACT        Displays or alters the compression of files on NTFS partitions.',
-          'COPY           Copies one or more files to another location.',
           'DATE           Displays or sets the date.',
-          'DEL            Deletes one or more files.',
           'DIR            Displays a list of files and subdirectories in a directory.',
-          'DISKPART       Displays or configures Disk Partition properties.',
-          'DOSKEY         Edits command lines, recalls Windows commands, and creates macros.',
-          'DRIVERQUERY    Displays current device driver status and properties.',
           'ECHO           Displays messages, or turns command echoing on or off.',
-          'ENDLOCAL       Ends localization of environment changes in a batch file.',
-          'ERASE          Deletes one or more files.',
-          'EXIT           Quits the CMD.EXE program (command interpreter).',
-          'FC             Compares two files or sets of files, and displays the differences between them.',
-          'FIND           Searches for a text string in a file or files.',
-          'FINDSTR        Searches for strings in files.',
-          'FOR            Runs a specified command for each file in a set of files.',
-          'FORMAT         Formats a disk for use with Windows.',
-          'FSUTIL         Displays or configures the file system utilities.',
-          'FTYPE          Displays or modifies file types used in file extension associations.',
-          'GOTO           Directs the Windows command interpreter to a labeled line in a batch program.',
-          'GPRESULT       Displays Group Policy information for machine or user.',
-          'GRAFTABL       Enables Windows to display an extended character set in graphics mode.',
           'HELP           Provides Help information for Windows commands.',
-          'ICACLS         Display, modify, backup, or restore ACLs for files and directories.',
-          'IF             Performs conditional processing in batch programs.',
-          'LABEL          Creates, changes, or deletes the volume label of a disk.',
-          'MD             Creates a directory.',
-          'MKDIR          Creates a directory.',
-          'MODE           Configures a system device.',
-          'MORE           Displays output one screen at a time.',
-          'MOVE           Moves one or more files from one directory to another directory.',
-          'OPENFILES      Displays files opened by remote users for a file share.',
-          'PATH           Displays or sets a search path for executable files.',
-          'PAUSE          Suspends processing of a batch file and displays a message.',
-          'POPD           Restores the previous value of the current directory saved by PUSHD.',
-          'PRINT          Prints a text file.',
-          'PROMPT         Changes the Windows command prompt.',
-          'PUSHD          Saves the current directory then changes it.',
-          'RD             Removes a directory.',
-          'RECOVER        Recovers readable information from a bad or defective disk.',
-          'REM            Records comments (remarks) in batch files or CONFIG.SYS.',
-          'REN            Renames a file or files.',
-          'RENAME         Renames a file or files.',
-          'REPLACE        Replaces files.',
-          'RMDIR          Removes a directory.',
-          'ROBOCOPY       Advanced utility to copy files and directory trees.',
-          'SET            Displays, sets, or removes Windows environment variables.',
-          'SETLOCAL       Begins localization of environment changes in a batch file.',
-          'SC             Displays or configures services (background processes).',
-          'SCHTASKS       Schedules commands and programs to run on a computer.',
-          'SHIFT          Shifts the position of replaceable parameters in batch files.',
-          'SHUTDOWN       Allows proper local or remote shutdown of machine.',
-          'SORT           Sorts input.',
-          'START          Starts a separate window to run a specified program or command.',
-          'SUBST          Associates a path with a drive letter.',
+          'HOSTNAME       Displays the computer name.',
+          'IPCONFIG       Displays IP configuration information.',
+          'NETSTAT        Displays active network connections.',
+          'PING           Tests network connectivity.',
           'SYSTEMINFO     Displays machine specific properties and configuration.',
           'TASKLIST       Displays all currently running tasks including services.',
-          'TASKKILL       Kill or stop a running process or application.',
           'TIME           Displays or sets the system time.',
-          'TITLE          Sets the window title for a CMD.EXE session.',
           'TREE           Graphically displays the directory structure of a drive or path.',
-          'TYPE           Displays the contents of a text file.',
           'VER            Displays the Windows version.',
-          'VOL            Displays a disk volume label and serial number.',
-          'XCOPY          Copies files and directory trees.',
-          '',
-          'For more information on tools see the online Help.'
+          'WHOAMI         Displays current user name.',
+          '\n',
+          '════════════════ EASTER EGGS ════════════════',
+          'Type "secret" to discover hidden commands...',
+          '\n',
         ]
         break
       case 'cls':
@@ -196,7 +142,7 @@ function CommandPrompt() {
         output = [echoText]
         break
       case 'whoami':
-        output = ['Bradley\\Bradley']
+        output = ['Bradley Nguyen']
         break
       case 'hostname':
         output = ['BRADLEY-PC']
@@ -226,6 +172,210 @@ function CommandPrompt() {
           '    Minimum = 12ms, Maximum = 18ms, Average = 14ms'
         ]
         break
+      case 'tree':
+        output = [
+          'Folder PATH listing',
+          'Volume serial number is 1234-5678',
+          'C:\\USERS\\BRADLEY',
+          '├───Documents',
+          '│   ├───Projects',
+          '│   │   ├───React',
+          '│   │   ├───TypeScript',
+          '│   │   └───Python',
+          '│   └───Resume',
+          '├───Desktop',
+          '│   └───Portfolio',
+          '├───Downloads',
+          '├───Pictures',
+          '│   └───Screenshots',
+          '├───Music',
+          '└───Videos'
+        ]
+        break
+      case 'systeminfo':
+        output = [
+          'Host Name:                 BRADLEY-PC',
+          'OS Name:                   Microsoft Windows XP Professional',
+          'OS Version:                5.1.2600 Service Pack 3 Build 2600',
+          'OS Manufacturer:           Microsoft Corporation',
+          'System Manufacturer:       Custom Build',
+          'System Model:              Portfolio Edition',
+          'System Type:               x64-based PC',
+          'Processor(s):              1 Processor(s) Installed.',
+          '                           [01]: Intel64 Family 6 Model 158',
+          'BIOS Version:              American Megatrends Inc. 1.0',
+          'Total Physical Memory:     16,384 MB',
+          'Available Physical Memory: 8,192 MB',
+          'Virtual Memory: Max Size:  32,768 MB',
+          'Virtual Memory: Available: 16,384 MB',
+          'Page File Location(s):     C:\\pagefile.sys',
+          'Domain:                    WORKGROUP',
+          'Logon Server:              \\\\BRADLEY-PC',
+          'Time Zone:                 (UTC-08:00) Pacific Time (US & Canada)'
+        ]
+        break
+      case 'tasklist':
+        output = [
+          '',
+          'Image Name                     PID Session Name        Session#    Mem Usage',
+          '========================= ======== ================ =========== ============',
+          'System Idle Process              0 Services                   0         24 K',
+          'System                           4 Services                   0        236 K',
+          'smss.exe                       368 Services                   0        416 K',
+          'csrss.exe                      584 Services                   0      3,284 K',
+          'winlogon.exe                   608 Services                   0      2,848 K',
+          'services.exe                   652 Services                   0      3,780 K',
+          'lsass.exe                      664 Services                   0      6,224 K',
+          'svchost.exe                    856 Services                   0      4,956 K',
+          'explorer.exe                 1,424 Console                    1     23,108 K',
+          'chrome.exe                   2,156 Console                    1    156,892 K',
+          'vscode.exe                   3,248 Console                    1    245,760 K',
+          'node.exe                     4,892 Console                    1     89,432 K',
+          'portfolio.exe                5,120 Console                    1     42,688 K'
+        ]
+        break
+      case 'netstat':
+        output = [
+          '',
+          'Active Connections',
+          '',
+          '  Proto  Local Address          Foreign Address        State',
+          '  TCP    127.0.0.1:3000         0.0.0.0:0              LISTENING',
+          '  TCP    127.0.0.1:5173         0.0.0.0:0              LISTENING',
+          '  TCP    192.168.1.100:443      github.com:443         ESTABLISHED',
+          '  TCP    192.168.1.100:443      linkedin.com:443       ESTABLISHED',
+          '  TCP    192.168.1.100:80       bradleynguyen.dev:80   ESTABLISHED',
+          '  TCP    192.168.1.100:22       gitlab.com:22          TIME_WAIT'
+        ]
+        break
+      case 'contact':
+        output = [
+          '════════════════════ CONTACT INFORMATION ════════════════════',
+          '',
+          '📧 Email:    bradleynguyen2004@gmail.com',
+          '💼 LinkedIn: linkedin.com/in/bradley-nguyen-cs',
+          '🐙 GitHub:   github.com/bradleyngu',
+          '📍 Location: Toronto, Ontario',
+          '',
+          'Click the Email icon on the desktop to send me a message!',
+          ''
+        ]
+        break
+      case 'social':
+      case 'links':
+        output = [
+          '════════════════════ SOCIAL LINKS ════════════════════',
+          '',
+          '💼 LinkedIn: https://linkedin.com/in/bradley-nguyen-cs',
+          '🐙 GitHub:   https://github.com/bradleynguyen',
+          ''
+        ]
+        break
+      case 'education':
+      case 'edu':
+        output = [
+          '════════════════════ EDUCATION ════════════════════',
+          '',
+          '🎓 Bachelor of Science in Computer Science',
+          '   Carleton University',
+          '   Expected Graduation: Fall 2027',
+          '   GPA: 3.77/4.0',
+          '',
+          '📚 Relevant Coursework:',
+          '   • Data Structures & Algorithms',
+          '   • Software Engineering',
+          '   • Database Systems',
+          '   • Web Development',
+          '   • Machine Learning',
+          '   • Computer Networks',
+          ''
+        ]
+        break
+      case 'type readme.txt':
+        output = [
+          '════════════════════════════════════════════════════════',
+          '                    README.TXT                          ',
+          '════════════════════════════════════════════════════════',
+          '',
+          'Welcome to Bradley\'s Portfolio!',
+          '',
+          'This is a fully interactive Windows XP themed portfolio',
+          'website built with React and TypeScript.',
+          '',
+          'Features:',
+          '  ✓ Draggable and resizable windows',
+          '  ✓ Desktop icons with double-click functionality',
+          '  ✓ Working command prompt with custom commands',
+          '  ✓ Taskbar with window management',
+          '  ✓ Start menu with applications',
+          '  ✓ Recycle bin functionality',
+          '  ✓ Fully responsive design',
+          '',
+          'Try exploring different applications on the desktop!',
+          '',
+          'Type "help" for a list of available commands.',
+          ''
+        ]
+        break
+      case 'easter egg':
+      case 'secret':
+        output = [
+          '🎮 You found a secret command!',
+          '',
+          '    ╔═══════════════════════════════════╗',
+          '    ║  Konami Code: ↑↑↓↓←→←→BA        ║',
+          '    ╚═══════════════════════════════════╝',
+          '',
+          'Fun fact: This portfolio took 100+ hours to build!',
+          '',
+          'Try these hidden commands:',
+          '  • matrix',
+          '  • starwars', 
+          '  • coffee',
+          ''
+        ]
+        break
+      case 'starwars':
+        output = [
+          '    _________ __                 __      __                     ',
+          '   /   _____//  |______ _______ /  \\    /  \\_____ _______  ______',
+          '   \\_____  \\\\   __\\__  \\\\_  __ \\\\   \\/\\/   /\\__  \\\\_  __ \\/  ___/',
+          '   /        \\|  |  / __ \\|  | \\/ \\        /  / __ \\|  | \\/\\___ \\ ',
+          '  /_______  /|__| (____  /__|     \\__/\\  /  (____  /__|  /____  >',
+          '          \\/           \\/              \\/        \\/           \\/ ',
+          '',
+          '"May the Force be with you."',
+          '                    - Obi-Wan Kenobi',
+          ''
+        ]
+        break
+      case 'coffee':
+      case 'brew':
+        output = [
+          '      ( (',
+          '       ) )',
+          '    .........', 
+          '    |       |]',
+          '    \\       /',
+          '     `-----\'',
+          '',
+          '☕ Brewing coffee...',
+          '☕ Coffee ready! Time to code.',
+          '',
+          'Error 418: I\'m a teapot (but I made coffee anyway)',
+          ''
+        ]
+        break
+      case 'joke':
+        const jokes = [
+          'Why do programmers prefer dark mode?\nBecause light attracts bugs! 🐛',
+          'How many programmers does it take to change a light bulb?\nNone. It\'s a hardware problem. 💡',
+          'Why did the developer go broke?\nBecause he used up all his cache! 💰',
+          'What\'s a programmer\'s favorite hangout place?\nFoo Bar! 🍺',
+          'Why do Java developers wear glasses?\nBecause they don\'t C#! 👓'
+        ]
+        output = [jokes[Math.floor(Math.random() * jokes.length)]]
+        break
       default:
         output = [`'${command}' is not recognized as an internal or external command, operable program or batch file.`]
     }
@@ -250,12 +400,19 @@ function CommandPrompt() {
     setCurrentCommand(e.target.value)
   }
 
+  const handleTerminalClick = () => {
+    // Focus input when clicking anywhere in the terminal
+    if (inputRef.current) {
+      inputRef.current.focus()
+    }
+  }
+
   return (
     <div className="command-prompt">
-      <div className="terminal-content" ref={terminalRef}>
+      <div className="terminal-content" ref={terminalRef} onClick={handleTerminalClick}>
         <div className="welcome-message">
           Microsoft Windows XP [Version 5.1.2600]<br />
-          (C) Copyright 1985-2001 Microsoft Corp.<br />
+          Bradley Nguyen 1985-2001 Microsoft Corp.<br />
           <br />
           {showInputAtTop && (
             <div className="initial-prompt-line">

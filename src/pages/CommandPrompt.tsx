@@ -329,7 +329,6 @@ function CommandPrompt() {
           'Fun fact: This portfolio took 100+ hours to build!',
           '',
           'Try these hidden commands:',
-          '  • matrix',
           '  • starwars', 
           '  • coffee',
           ''

@@ -219,7 +219,17 @@
   font-weight: bold;
   text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
   white-space: nowrap;
-  flex-shrink: 0;
+  flex-shrink: 1; /* Allow title to shrink */
+  min-width: 0; /* Enable flex shrinking */
+  overflow: hidden; /* Enable text truncation */
+}
+
+.window-title span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex-shrink: 1;
+  min-width: 0;
 }
 
 .window-icon {

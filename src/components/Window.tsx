@@ -461,7 +461,7 @@ function Window({
       >
         <div className="window-title">
           <img src={window.icon} alt="" className="window-icon" />
-          <span style={{ flexShrink: 0 }}>{window.title}</span>
+          <span>{window.title}</span>
         </div>
         <div className="window-controls">
           <button className="window-button minimize" onClick={onMinimize} title="Minimize">

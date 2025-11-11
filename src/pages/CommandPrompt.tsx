@@ -69,7 +69,6 @@ function CommandPrompt() {
     switch (cmd) {
       case 'help':
         output = [
-          'For more information on a specific command, type HELP command-name',
           '\n',
           '════════════════ PORTFOLIO COMMANDS ════════════════',
           'CONTACT        Displays contact information and links.',

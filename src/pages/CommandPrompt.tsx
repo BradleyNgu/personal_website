@@ -70,14 +70,14 @@ function CommandPrompt() {
       case 'help':
         output = [
           '\n',
-          '════════════════ PORTFOLIO COMMANDS ════════════════',
+          'PORTFOLIO COMMANDS',
           'CONTACT        Displays contact information and links.',
           'EDUCATION      Displays educational background and coursework.',
           'JOKE           Tells a random programming joke.',
           'SOCIAL         Displays social media links.',
           'TYPE           Displays the contents of a text file. Try "type readme.txt"',
           '\n',
-          '════════════════ SYSTEM COMMANDS ════════════════',
+          'SYSTEM COMMANDS',
           'CLS            Clears the screen.',
           'DATE           Displays or sets the date.',
           'DIR            Displays a list of files and subdirectories in a directory.',
@@ -94,7 +94,7 @@ function CommandPrompt() {
           'VER            Displays the Windows version.',
           'WHOAMI         Displays current user name.',
           '\n',
-          '════════════════ EASTER EGGS ════════════════',
+          'EASTER EGGS',
           'Type "secret" to discover hidden commands...',
           '\n',
         ]

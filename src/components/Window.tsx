@@ -425,8 +425,7 @@ function Window({
     }
   }, [isDragging, isResizing, dragStart, resizeStart, onPositionChange, onSizeChange, window.position, window.size, isMobile, window.isMaximized])
 
-  if (window.isMinimized) return null
-
+  // Don't unmount when minimized - just hide it to preserve scroll position
   const style: React.CSSProperties = window.isMaximized
     ? {
         position: 'fixed',
@@ -436,6 +435,7 @@ function Window({
         height: 'calc(100vh - var(--taskbar-height, 40px))',
         zIndex: window.zIndex,
         borderRadius: 0,
+        display: window.isMinimized ? 'none' : 'flex',
       }
     : {
         position: 'absolute',
@@ -445,6 +445,7 @@ function Window({
         height: `${window.size.height}px`,
         zIndex: window.zIndex,
         transform: 'translateZ(0)', // Reset transform if dragging was interrupted
+        display: window.isMinimized ? 'none' : 'flex',
       }
 
   return (

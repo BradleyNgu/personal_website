@@ -477,84 +477,86 @@ function Window({
         </div>
       </div>
       
-      <div 
-        ref={menuBarRef}
-        className="window-menu-bar"
-      >
-        <div className="menu-item-wrapper">
-          <span 
-            className={`menu-item ${openMenu === 'File' ? 'active' : ''}`}
-            onClick={(e) => handleMenuClick('File', e)}
-          >
-            File
-          </span>
-          {openMenu === 'File' && (
-            <div className="menu-dropdown">
-              <div className="menu-dropdown-item" onClick={(e) => handleMenuItemClick('New', e)}>New</div>
-              <div className="menu-dropdown-item" onClick={(e) => handleMenuItemClick('Open', e)}>Open</div>
-              <div className="menu-dropdown-item" onClick={(e) => handleMenuItemClick('Save', e)}>Save</div>
-              <div className="menu-dropdown-item" onClick={(e) => handleMenuItemClick('Save As', e)}>Save As...</div>
-              <div className="menu-dropdown-separator"></div>
-              <div className="menu-dropdown-item" onClick={(e) => handleMenuItemClick('Exit', e)}>Exit</div>
-            </div>
-          )}
+      {!window.hideMenuBar && (
+        <div 
+          ref={menuBarRef}
+          className="window-menu-bar"
+        >
+          <div className="menu-item-wrapper">
+            <span 
+              className={`menu-item ${openMenu === 'File' ? 'active' : ''}`}
+              onClick={(e) => handleMenuClick('File', e)}
+            >
+              File
+            </span>
+            {openMenu === 'File' && (
+              <div className="menu-dropdown">
+                <div className="menu-dropdown-item" onClick={(e) => handleMenuItemClick('New', e)}>New</div>
+                <div className="menu-dropdown-item" onClick={(e) => handleMenuItemClick('Open', e)}>Open</div>
+                <div className="menu-dropdown-item" onClick={(e) => handleMenuItemClick('Save', e)}>Save</div>
+                <div className="menu-dropdown-item" onClick={(e) => handleMenuItemClick('Save As', e)}>Save As...</div>
+                <div className="menu-dropdown-separator"></div>
+                <div className="menu-dropdown-item" onClick={(e) => handleMenuItemClick('Exit', e)}>Exit</div>
+              </div>
+            )}
+          </div>
+          <div className="menu-item-wrapper">
+            <span 
+              className={`menu-item ${openMenu === 'Edit' ? 'active' : ''}`}
+              onClick={(e) => handleMenuClick('Edit', e)}
+            >
+              Edit
+            </span>
+            {openMenu === 'Edit' && (
+              <div className="menu-dropdown">
+                <div className="menu-dropdown-item" onClick={(e) => handleMenuItemClick('Undo', e)}>Undo</div>
+                <div className="menu-dropdown-item" onClick={(e) => handleMenuItemClick('Redo', e)}>Redo</div>
+                <div className="menu-dropdown-separator"></div>
+                <div className="menu-dropdown-item" onClick={(e) => handleMenuItemClick('Cut', e)}>Cut</div>
+                <div className="menu-dropdown-item" onClick={(e) => handleMenuItemClick('Copy', e)}>Copy</div>
+                <div className="menu-dropdown-item" onClick={(e) => handleMenuItemClick('Paste', e)}>Paste</div>
+                <div className="menu-dropdown-separator"></div>
+                <div className="menu-dropdown-item" onClick={(e) => handleMenuItemClick('Select All', e)}>Select All</div>
+              </div>
+            )}
+          </div>
+          <div className="menu-item-wrapper">
+            <span 
+              className={`menu-item ${openMenu === 'View' ? 'active' : ''}`}
+              onClick={(e) => handleMenuClick('View', e)}
+            >
+              View
+            </span>
+            {openMenu === 'View' && (
+              <div className="menu-dropdown">
+                <div className="menu-dropdown-item" onClick={(e) => handleMenuItemClick('Toolbar', e)}>Toolbar</div>
+                <div className="menu-dropdown-item" onClick={(e) => handleMenuItemClick('Status Bar', e)}>Status Bar</div>
+                <div className="menu-dropdown-separator"></div>
+                <div className="menu-dropdown-item" onClick={(e) => handleMenuItemClick('Large Icons', e)}>Large Icons</div>
+                <div className="menu-dropdown-item" onClick={(e) => handleMenuItemClick('Small Icons', e)}>Small Icons</div>
+                <div className="menu-dropdown-item" onClick={(e) => handleMenuItemClick('List', e)}>List</div>
+                <div className="menu-dropdown-item" onClick={(e) => handleMenuItemClick('Details', e)}>Details</div>
+                <div className="menu-dropdown-separator"></div>
+                <div className="menu-dropdown-item" onClick={(e) => handleMenuItemClick('Refresh', e)}>Refresh</div>
+              </div>
+            )}
+          </div>
+          <div className="menu-item-wrapper">
+            <span 
+              className={`menu-item ${openMenu === 'Help' ? 'active' : ''}`}
+              onClick={(e) => handleMenuClick('Help', e)}
+            >
+              Help
+            </span>
+            {openMenu === 'Help' && (
+              <div className="menu-dropdown">
+                <div className="menu-dropdown-item" onClick={(e) => handleMenuItemClick('Help Topics', e)}>Help Topics</div>
+                <div className="menu-dropdown-item" onClick={(e) => handleMenuItemClick('About', e)}>About</div>
+              </div>
+            )}
+          </div>
         </div>
-        <div className="menu-item-wrapper">
-          <span 
-            className={`menu-item ${openMenu === 'Edit' ? 'active' : ''}`}
-            onClick={(e) => handleMenuClick('Edit', e)}
-          >
-            Edit
-          </span>
-          {openMenu === 'Edit' && (
-            <div className="menu-dropdown">
-              <div className="menu-dropdown-item" onClick={(e) => handleMenuItemClick('Undo', e)}>Undo</div>
-              <div className="menu-dropdown-item" onClick={(e) => handleMenuItemClick('Redo', e)}>Redo</div>
-              <div className="menu-dropdown-separator"></div>
-              <div className="menu-dropdown-item" onClick={(e) => handleMenuItemClick('Cut', e)}>Cut</div>
-              <div className="menu-dropdown-item" onClick={(e) => handleMenuItemClick('Copy', e)}>Copy</div>
-              <div className="menu-dropdown-item" onClick={(e) => handleMenuItemClick('Paste', e)}>Paste</div>
-              <div className="menu-dropdown-separator"></div>
-              <div className="menu-dropdown-item" onClick={(e) => handleMenuItemClick('Select All', e)}>Select All</div>
-            </div>
-          )}
-        </div>
-        <div className="menu-item-wrapper">
-          <span 
-            className={`menu-item ${openMenu === 'View' ? 'active' : ''}`}
-            onClick={(e) => handleMenuClick('View', e)}
-          >
-            View
-          </span>
-          {openMenu === 'View' && (
-            <div className="menu-dropdown">
-              <div className="menu-dropdown-item" onClick={(e) => handleMenuItemClick('Toolbar', e)}>Toolbar</div>
-              <div className="menu-dropdown-item" onClick={(e) => handleMenuItemClick('Status Bar', e)}>Status Bar</div>
-              <div className="menu-dropdown-separator"></div>
-              <div className="menu-dropdown-item" onClick={(e) => handleMenuItemClick('Large Icons', e)}>Large Icons</div>
-              <div className="menu-dropdown-item" onClick={(e) => handleMenuItemClick('Small Icons', e)}>Small Icons</div>
-              <div className="menu-dropdown-item" onClick={(e) => handleMenuItemClick('List', e)}>List</div>
-              <div className="menu-dropdown-item" onClick={(e) => handleMenuItemClick('Details', e)}>Details</div>
-              <div className="menu-dropdown-separator"></div>
-              <div className="menu-dropdown-item" onClick={(e) => handleMenuItemClick('Refresh', e)}>Refresh</div>
-            </div>
-          )}
-        </div>
-        <div className="menu-item-wrapper">
-          <span 
-            className={`menu-item ${openMenu === 'Help' ? 'active' : ''}`}
-            onClick={(e) => handleMenuClick('Help', e)}
-          >
-            Help
-          </span>
-          {openMenu === 'Help' && (
-            <div className="menu-dropdown">
-              <div className="menu-dropdown-item" onClick={(e) => handleMenuItemClick('Help Topics', e)}>Help Topics</div>
-              <div className="menu-dropdown-item" onClick={(e) => handleMenuItemClick('About', e)}>About</div>
-            </div>
-          )}
-        </div>
-      </div>
+      )}
 
       <div className="window-content">
         {window.component}

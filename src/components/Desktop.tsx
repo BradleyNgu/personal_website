@@ -25,6 +25,7 @@ export interface WindowState {
   position: { x: number; y: number }
   size: { width: number; height: number }
   zIndex: number
+  hideMenuBar?: boolean
 }
 
 export interface IconPosition {
@@ -87,7 +88,7 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
   const recycleBinHoveredRef = useRef<boolean>(false)
   const lastDragOverTimeRef = useRef<number>(0)
 
-  const openWindow = (id: string, title: string, icon: string, component: React.ReactNode) => {
+  const openWindow = (id: string, title: string, icon: string, component: React.ReactNode, hideMenuBar: boolean = false) => {
     // Check if window is already open
     const existingWindow = windows.find(w => w.id === id)
     if (existingWindow) {
@@ -109,6 +110,7 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
       position: { x: 100 + windows.length * 30, y: 50 + windows.length * 30 },
       size: { width: 800, height: 600 },
       zIndex: highestZIndex + 1,
+      hideMenuBar,
     }
 
     setWindows([...windows, newWindow])
@@ -163,7 +165,7 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
   }
 
   const openCommandPrompt = () => {
-    openWindow('cmd', 'C:\\WINDOWS\\system32\\cmd.exe', '/assets/icons/Windows XP Icons/Command Prompt.png', <CommandPrompt />)
+    openWindow('cmd', 'C:\\WINDOWS\\system32\\cmd.exe', '/assets/icons/Windows XP Icons/Command Prompt.png', <CommandPrompt />, true)
   }
 
   const openMyPictures = () => {

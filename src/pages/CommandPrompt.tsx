@@ -266,7 +266,7 @@ function CommandPrompt() {
           'SOCIAL LINKS',
           '',
           '💼 LinkedIn: https://linkedin.com/in/bradley-nguyen-cs',
-          '🐙 GitHub:   https://github.com/bradleynguyen',
+          '🐙 GitHub:   https://github.com/bradleyngu',
           ''
         ]
         break

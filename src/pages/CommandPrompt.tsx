@@ -403,20 +403,25 @@ function CommandPrompt() {
           Bradley Nguyen 1985-2001 Microsoft Corp.<br />
           <br />
           {showInputAtTop && (
-            <div className="initial-prompt-line">
-              <span className="prompt">C:\Users\Bradley&gt;</span>
-              <input
-                ref={inputRef}
-                type="text"
-                value={currentCommand}
-                onChange={handleInputChange}
-                onKeyPress={handleKeyPress}
-                className="command-input"
-                autoFocus
-                disabled={isExecuting}
-                placeholder=""
-              />
-            </div>
+            <>
+              <div style={{ marginBottom: '8px', color: '#c0c0c0' }}>
+                Type 'help' to see available commands.
+              </div>
+              <div className="initial-prompt-line">
+                <span className="prompt">C:\Users\Bradley&gt;</span>
+                <input
+                  ref={inputRef}
+                  type="text"
+                  value={currentCommand}
+                  onChange={handleInputChange}
+                  onKeyPress={handleKeyPress}
+                  className="command-input"
+                  autoFocus
+                  disabled={isExecuting}
+                  placeholder=""
+                />
+              </div>
+            </>
           )}
         </div>
         {commands.map((cmd, index) => (

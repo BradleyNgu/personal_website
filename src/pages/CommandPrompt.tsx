@@ -285,8 +285,6 @@ function CommandPrompt() {
           '   • Software Engineering',
           '   • Database Systems',
           '   • Web Development',
-          '   • Machine Learning',
-          '   • Computer Networks',
           ''
         ]
         break

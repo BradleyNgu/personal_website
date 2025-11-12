@@ -249,7 +249,7 @@ function CommandPrompt() {
         break
       case 'contact':
         output = [
-          '════════════════════ CONTACT INFORMATION ════════════════════',
+          'CONTACT INFORMATION',
           '',
           '📧 Email:    bradleynguyen2004@gmail.com',
           '💼 LinkedIn: linkedin.com/in/bradley-nguyen-cs',
@@ -263,7 +263,7 @@ function CommandPrompt() {
       case 'social':
       case 'links':
         output = [
-          '════════════════════ SOCIAL LINKS ════════════════════',
+          'SOCIAL LINKS',
           '',
           '💼 LinkedIn: https://linkedin.com/in/bradley-nguyen-cs',
           '🐙 GitHub:   https://github.com/bradleynguyen',
@@ -273,7 +273,7 @@ function CommandPrompt() {
       case 'education':
       case 'edu':
         output = [
-          '════════════════════ EDUCATION ════════════════════',
+          'EDUCATION',
           '',
           '🎓 Bachelor of Science in Computer Science',
           '   Carleton University',
@@ -292,10 +292,7 @@ function CommandPrompt() {
         break
       case 'type readme.txt':
         output = [
-          '════════════════════════════════════════════════════════',
-          '                    README.TXT                          ',
-          '════════════════════════════════════════════════════════',
-          '',
+          'README.TXT',
           'Welcome to Bradley\'s Portfolio!',
           '',
           'This is a fully interactive Windows XP themed portfolio',
@@ -320,13 +317,8 @@ function CommandPrompt() {
       case 'secret':
         output = [
           '🎮 You found a secret command!',
-          '',
-          '    ╔═══════════════════════════════════╗',
-          '    ║  Konami Code: ↑↑↓↓←→←→BA        ║',
-          '    ╚═══════════════════════════════════╝',
-          '',
-          'Fun fact: This portfolio took 100+ hours to build!',
-          '',
+          'Fun fact: I can name any roller coaster if given an image!',
+          '\n',
           'Try these hidden commands:',
           '  • starwars', 
           '  • coffee',

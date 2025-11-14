@@ -1,6 +1,28 @@
 import { useState, useEffect, useRef } from 'react'
 import '../styles/icon.css'
 
+// Helper function to constrain icon within viewport
+const constrainIconPosition = (x: number, y: number, iconWidth: number, iconHeight: number): { x: number; y: number } => {
+  const viewportWidth = window.innerWidth
+  const viewportHeight = window.innerHeight
+  const taskbarHeight = 40 // --taskbar-height (default)
+  
+  // Get actual taskbar height from CSS variable if available
+  const rootStyle = getComputedStyle(document.documentElement)
+  const actualTaskbarHeight = parseInt(rootStyle.getPropertyValue('--taskbar-height')) || taskbarHeight
+  
+  // Constrain X: icon must stay within viewport horizontally
+  const constrainedX = iconWidth > viewportWidth
+    ? Math.max(0, x) // Only prevent going off left edge
+    : Math.max(0, Math.min(x, viewportWidth - iconWidth)) // Keep entire icon visible
+  
+  // Constrain Y: icon must stay within viewport vertically (accounting for taskbar)
+  const maxY = viewportHeight - actualTaskbarHeight - iconHeight
+  const constrainedY = Math.max(0, Math.min(y, maxY))
+  
+  return { x: constrainedX, y: constrainedY }
+}
+
 interface DesktopIconProps {
   id: string
   title: string
@@ -124,8 +146,15 @@ function DesktopIcon({
 
     const handleMouseMove = (e: MouseEvent) => {
       if (isDragging && iconRef.current) {
-        const newX = Math.max(0, e.clientX - dragStart.x)
-        const newY = Math.max(0, e.clientY - dragStart.y)
+        let newX = e.clientX - dragStart.x
+        let newY = e.clientY - dragStart.y
+        
+        // Constrain icon to stay within viewport
+        const iconWidth = iconRef.current.offsetWidth
+        const iconHeight = iconRef.current.offsetHeight
+        const constrained = constrainIconPosition(newX, newY, iconWidth, iconHeight)
+        newX = constrained.x
+        newY = constrained.y
         
         // Store for final commit
         dragOffsetRef.current = { x: newX, y: newY }
@@ -159,8 +188,15 @@ function DesktopIcon({
       if (isDragging && iconRef.current) {
         e.preventDefault()
         const touch = e.touches[0]
-        const newX = Math.max(0, touch.clientX - dragStart.x)
-        const newY = Math.max(0, touch.clientY - dragStart.y)
+        let newX = touch.clientX - dragStart.x
+        let newY = touch.clientY - dragStart.y
+        
+        // Constrain icon to stay within viewport
+        const iconWidth = iconRef.current.offsetWidth
+        const iconHeight = iconRef.current.offsetHeight
+        const constrained = constrainIconPosition(newX, newY, iconWidth, iconHeight)
+        newX = constrained.x
+        newY = constrained.y
         
         // Store for final commit
         dragOffsetRef.current = { x: newX, y: newY }

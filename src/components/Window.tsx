@@ -12,6 +12,31 @@ interface WindowProps {
   onSizeChange: (size: { width: number; height: number }) => void
 }
 
+// Helper function to constrain title bar within viewport
+const constrainTitleBarPosition = (x: number, y: number, windowWidth: number): { x: number; y: number } => {
+  const viewportWidth = window.innerWidth
+  const viewportHeight = window.innerHeight
+  const titleBarHeight = 48 // --window-title-bar-height
+  const taskbarHeight = 40 // --taskbar-height (default)
+  
+  // Get actual taskbar height from CSS variable if available
+  const rootStyle = getComputedStyle(document.documentElement)
+  const actualTaskbarHeight = parseInt(rootStyle.getPropertyValue('--taskbar-height')) || taskbarHeight
+  
+  // Constrain X: title bar must stay within viewport horizontally
+  // If window is wider than viewport, keep left edge visible (x >= 0)
+  // Otherwise, keep entire title bar within viewport
+  const constrainedX = windowWidth > viewportWidth
+    ? Math.max(0, x) // Only prevent going off left edge
+    : Math.max(0, Math.min(x, viewportWidth - windowWidth)) // Keep entire title bar visible
+  
+  // Constrain Y: title bar must stay within viewport vertically (accounting for taskbar)
+  const maxY = viewportHeight - actualTaskbarHeight - titleBarHeight
+  const constrainedY = Math.max(0, Math.min(y, maxY))
+  
+  return { x: constrainedX, y: constrainedY }
+}
+
 function Window({
   window,
   onClose,
@@ -204,8 +229,14 @@ function Window({
     const handleMouseMove = (e: MouseEvent) => {
       if (isDragging && windowRef.current && !window.isMaximized) {
         // Use transform for smooth dragging - updates DOM directly without React re-renders
-        const newX = e.clientX - dragStart.x
-        const newY = e.clientY - dragStart.y
+        let newX = e.clientX - dragStart.x
+        let newY = e.clientY - dragStart.y
+        
+        // Constrain title bar to stay within viewport
+        const windowWidth = windowRef.current.offsetWidth || window.size.width
+        const constrained = constrainTitleBarPosition(newX, newY, windowWidth)
+        newX = constrained.x
+        newY = constrained.y
         
         // Store offset for final commit
         dragOffsetRef.current = { x: newX, y: newY }
@@ -282,8 +313,14 @@ function Window({
         e.preventDefault()
         if (touch) {
           // Use transform for smooth dragging on touch devices too
-          const newX = touch.clientX - dragStart.x
-          const newY = touch.clientY - dragStart.y
+          let newX = touch.clientX - dragStart.x
+          let newY = touch.clientY - dragStart.y
+          
+          // Constrain title bar to stay within viewport
+          const windowWidth = windowRef.current.offsetWidth || window.size.width
+          const constrained = constrainTitleBarPosition(newX, newY, windowWidth)
+          newX = constrained.x
+          newY = constrained.y
           
           dragOffsetRef.current = { x: newX, y: newY }
           

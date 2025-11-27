@@ -13,6 +13,11 @@ import MyPictures from '../pages/MyPictures'
 import MyMusic from '../pages/MyMusic'
 import Resume from '../pages/Resume'
 import InternetExplorer from '../pages/InternetExplorer'
+import MyComputer from '../pages/MyComputer'
+import ControlPanel from '../pages/ControlPanel'
+import HelpAndSupport from '../pages/HelpAndSupport'
+import Search from '../pages/Search'
+import Run from '../pages/Run'
 import '../styles/desktop.css'
 
 export interface WindowState {
@@ -184,6 +189,26 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
 
   const openInternetExplorer = () => {
     openWindow('internet-explorer', 'Internet Explorer', '/assets/icons/Windows XP Icons/Internet Explorer 6.png', <InternetExplorer />)
+  }
+
+  const openMyComputer = () => {
+    openWindow('my-computer', 'My Computer', '/assets/icons/Windows XP Icons/My Computer.png', <MyComputer />)
+  }
+
+  const openControlPanel = () => {
+    openWindow('control-panel', 'Control Panel', '/assets/icons/Windows XP Icons/Control Panel.png', <ControlPanel />)
+  }
+
+  const openHelpAndSupport = () => {
+    openWindow('help-and-support', 'Help and Support Center', '/assets/icons/Windows XP Icons/Help and Support.png', <HelpAndSupport />)
+  }
+
+  const openSearch = () => {
+    openWindow('search', 'Search', '/assets/icons/Windows XP Icons/Search.png', <Search />)
+  }
+
+  const openRun = () => {
+    openWindow('run', 'Run', '/assets/icons/Windows XP Icons/Run.png', <Run />)
   }
 
 
@@ -802,6 +827,11 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
         onResumeClick={openResume}
         onAutobiographyClick={openAutobiography}
         onInternetExplorerClick={openInternetExplorer}
+        onMyComputerClick={openMyComputer}
+        onControlPanelClick={openControlPanel}
+        onHelpAndSupportClick={openHelpAndSupport}
+        onSearchClick={openSearch}
+        onRunClick={openRun}
       />
 
       <ErrorDialog

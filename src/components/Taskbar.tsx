@@ -25,10 +25,12 @@ interface TaskbarProps {
 function Taskbar({ windows, onWindowClick, onShutdown, onLogOff, onEmailClick, onCommandPromptClick, onMyPicturesClick, onMyMusicClick, onResumeClick, onAutobiographyClick, onInternetExplorerClick, onMyComputerClick, onControlPanelClick, onHelpAndSupportClick, onSearchClick, onRunClick }: TaskbarProps) {
   const [showStartMenu, setShowStartMenu] = useState(false)
   const [showSystemTrayMenu, setShowSystemTrayMenu] = useState(false)
+  const [showAllPrograms, setShowAllPrograms] = useState(false)
   const [volume, setVolume] = useState(AudioVolumeManager.getVolume())
   const [currentTime, setCurrentTime] = useState(new Date())
   const startMenuRef = useRef<HTMLDivElement>(null)
   const systemTrayMenuRef = useRef<HTMLDivElement>(null)
+  const allProgramsRef = useRef<HTMLDivElement>(null)
   const systemTrayOpenTimeRef = useRef<number>(0)
   const touchHandledRef = useRef(false)
 
@@ -54,8 +56,10 @@ function Taskbar({ windows, onWindowClick, onShutdown, onLogOff, onEmailClick, o
       if (showStartMenu && 
           startMenuRef.current && 
           !startMenuRef.current.contains(target) &&
+          !allProgramsRef.current?.contains(target) &&
           !startButton?.contains(target)) {
         setShowStartMenu(false)
+        setShowAllPrograms(false)
       }
     }
 
@@ -203,11 +207,155 @@ function Taskbar({ windows, onWindowClick, onShutdown, onLogOff, onEmailClick, o
                 </div>
               </div>
               <div className="start-menu-divider"></div>
-              <div className="start-menu-item all-programs">
+              <div 
+                className="start-menu-item all-programs"
+                onMouseEnter={() => setShowAllPrograms(true)}
+                onMouseLeave={() => {
+                  // Delay closing to allow moving to submenu
+                  setTimeout(() => {
+                    if (!allProgramsRef.current?.matches(':hover')) {
+                      setShowAllPrograms(false)
+                    }
+                  }, 200)
+                }}
+                onClick={() => setShowAllPrograms(!showAllPrograms)}
+              >
                 <span>All Programs</span>
                 <span className="arrow-icon">▶</span>
               </div>
             </div>
+            
+            {showAllPrograms && (
+              <div 
+                className="all-programs-submenu"
+                ref={allProgramsRef}
+                onMouseEnter={() => setShowAllPrograms(true)}
+                onMouseLeave={() => setShowAllPrograms(false)}
+              >
+                <div className="all-programs-list">
+                  <div className="all-programs-item"
+                    onClick={() => {
+                      onEmailClick()
+                      setShowStartMenu(false)
+                      setShowAllPrograms(false)
+                    }}
+                  >
+                    <img src="/assets/icons/Windows XP Icons/Email.png" alt="" className="menu-icon-small" />
+                    <span>Email</span>
+                  </div>
+                  <div className="all-programs-item"
+                    onClick={() => {
+                      onInternetExplorerClick()
+                      setShowStartMenu(false)
+                      setShowAllPrograms(false)
+                    }}
+                  >
+                    <img src="/assets/icons/Windows XP Icons/Internet Explorer 6.png" alt="" className="menu-icon-small" />
+                    <span>Internet Explorer</span>
+                  </div>
+                  <div className="all-programs-item"
+                    onClick={() => {
+                      onCommandPromptClick()
+                      setShowStartMenu(false)
+                      setShowAllPrograms(false)
+                    }}
+                  >
+                    <img src="/assets/icons/Windows XP Icons/Command Prompt.png" alt="" className="menu-icon-small" />
+                    <span>Command Prompt</span>
+                  </div>
+                  <div className="all-programs-item"
+                    onClick={() => {
+                      onMyPicturesClick()
+                      setShowStartMenu(false)
+                      setShowAllPrograms(false)
+                    }}
+                  >
+                    <img src="/assets/icons/Windows XP Icons/My Pictures.png" alt="" className="menu-icon-small" />
+                    <span>My Pictures</span>
+                  </div>
+                  <div className="all-programs-item"
+                    onClick={() => {
+                      onMyMusicClick()
+                      setShowStartMenu(false)
+                      setShowAllPrograms(false)
+                    }}
+                  >
+                    <img src="/assets/icons/Windows XP Icons/My Music.png" alt="" className="menu-icon-small" />
+                    <span>My Music</span>
+                  </div>
+                  <div className="all-programs-item"
+                    onClick={() => {
+                      onResumeClick()
+                      setShowStartMenu(false)
+                      setShowAllPrograms(false)
+                    }}
+                  >
+                    <img src="/assets/icons/Windows XP Icons/pdf.png" alt="" className="menu-icon-small" />
+                    <span>My Resume</span>
+                  </div>
+                  <div className="all-programs-item"
+                    onClick={() => {
+                      onAutobiographyClick()
+                      setShowStartMenu(false)
+                      setShowAllPrograms(false)
+                    }}
+                  >
+                    <img src="/assets/icons/Windows XP Icons/My Documents.png" alt="" className="menu-icon-small" />
+                    <span>About Me</span>
+                  </div>
+                  <div className="all-programs-item"
+                    onClick={() => {
+                      onMyComputerClick()
+                      setShowStartMenu(false)
+                      setShowAllPrograms(false)
+                    }}
+                  >
+                    <img src="/assets/icons/Windows XP Icons/My Computer.png" alt="" className="menu-icon-small" />
+                    <span>My Computer</span>
+                  </div>
+                  <div className="all-programs-item"
+                    onClick={() => {
+                      onControlPanelClick()
+                      setShowStartMenu(false)
+                      setShowAllPrograms(false)
+                    }}
+                  >
+                    <img src="/assets/icons/Windows XP Icons/Control Panel.png" alt="" className="menu-icon-small" />
+                    <span>Control Panel</span>
+                  </div>
+                  <div className="all-programs-item"
+                    onClick={() => {
+                      onHelpAndSupportClick()
+                      setShowStartMenu(false)
+                      setShowAllPrograms(false)
+                    }}
+                  >
+                    <img src="/assets/icons/Windows XP Icons/Help and Support.png" alt="" className="menu-icon-small" />
+                    <span>Help and Support</span>
+                  </div>
+                  <div className="all-programs-item"
+                    onClick={() => {
+                      onSearchClick()
+                      setShowStartMenu(false)
+                      setShowAllPrograms(false)
+                    }}
+                  >
+                    <img src="/assets/icons/Windows XP Icons/Search.png" alt="" className="menu-icon-small" />
+                    <span>Search</span>
+                  </div>
+                  <div className="all-programs-item"
+                    onClick={() => {
+                      onRunClick()
+                      setShowStartMenu(false)
+                      setShowAllPrograms(false)
+                    }}
+                  >
+                    <img src="/assets/icons/Windows XP Icons/Run.png" alt="" className="menu-icon-small" />
+                    <span>Run...</span>
+                  </div>
+                </div>
+              </div>
+            )}
             
             <div className="start-menu-right">
               <div className="start-menu-item" 
@@ -338,7 +486,6 @@ function Taskbar({ windows, onWindowClick, onShutdown, onLogOff, onEmailClick, o
           </div>
         </div>
       )}
-
 
       <div className="quick-launch">
         <img 

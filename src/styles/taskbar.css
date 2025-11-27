@@ -124,6 +124,7 @@
   display: flex;
   min-height: 350px;
   width: 100%;
+  position: relative;
 }
 
 .start-menu-left {
@@ -552,6 +553,56 @@
 
 .system-tray-menu-item:hover .volume-percentage {
   color: #666;
+}
+
+.all-programs-submenu {
+  position: absolute;
+  bottom: 0;
+  left: 200px;
+  background: white;
+  border: 1px solid #999;
+  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+  z-index: 10002;
+  min-width: 200px;
+  max-width: 300px;
+  max-height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.all-programs-list {
+  display: flex;
+  flex-direction: column;
+  padding: 4px 0;
+}
+
+.all-programs-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 12px;
+  cursor: pointer;
+  font-size: 12px;
+  color: #000;
+  white-space: nowrap;
+}
+
+.all-programs-item:hover {
+  background: linear-gradient(180deg, #5db3f8 0%, #3d91e8 100%);
+  color: white;
+}
+
+.all-programs-item img {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.all-programs-item span {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 

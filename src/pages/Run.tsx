@@ -28,38 +28,6 @@ function Run({ onRunCommand }: RunProps) {
     }
   }
 
-  // Map of commands to application names
-  const commandMap: { [key: string]: string } = {
-    'cmd': 'Command Prompt',
-    'command': 'Command Prompt',
-    'command prompt': 'Command Prompt',
-    'email': 'Email',
-    'mail': 'Email',
-    'internet': 'Internet Explorer',
-    'ie': 'Internet Explorer',
-    'explorer': 'Internet Explorer',
-    'browser': 'Internet Explorer',
-    'pictures': 'My Pictures',
-    'my pictures': 'My Pictures',
-    'photos': 'My Pictures',
-    'music': 'My Music',
-    'my music': 'My Music',
-    'resume': 'Resume',
-    'cv': 'Resume',
-    'about': 'About Me',
-    'autobiography': 'About Me',
-    'about me': 'About Me',
-    'computer': 'My Computer',
-    'my computer': 'My Computer',
-    'control': 'Control Panel',
-    'control panel': 'Control Panel',
-    'help': 'Help and Support',
-    'help and support': 'Help and Support',
-    'support': 'Help and Support',
-    'search': 'Search',
-    'find': 'Search',
-  }
-
   const commonCommands = [
     'cmd',
     'email',

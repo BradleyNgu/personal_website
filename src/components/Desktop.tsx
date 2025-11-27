@@ -264,8 +264,37 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
     openWindow('search', 'Search', '/assets/icons/Windows XP Icons/Search.png', <Search />)
   }
 
+  const handleRunCommand = (command: string) => {
+    const cmd = command.toLowerCase().trim()
+    
+    // Map commands to application openers
+    if (cmd === 'cmd' || cmd === 'command' || cmd === 'command prompt') {
+      openCommandPrompt()
+    } else if (cmd === 'email' || cmd === 'mail') {
+      openEmailWindow()
+    } else if (cmd === 'internet' || cmd === 'ie' || cmd === 'explorer' || cmd === 'browser') {
+      openInternetExplorer()
+    } else if (cmd === 'pictures' || cmd === 'my pictures' || cmd === 'photos') {
+      openMyPictures()
+    } else if (cmd === 'music' || cmd === 'my music') {
+      openMyMusic()
+    } else if (cmd === 'resume' || cmd === 'cv') {
+      openResume()
+    } else if (cmd === 'about' || cmd === 'autobiography' || cmd === 'about me') {
+      openAutobiography()
+    } else if (cmd === 'computer' || cmd === 'my computer') {
+      openMyComputer()
+    } else if (cmd === 'control' || cmd === 'control panel') {
+      openControlPanel()
+    } else if (cmd === 'help' || cmd === 'help and support' || cmd === 'support') {
+      openHelpAndSupport()
+    } else if (cmd === 'search' || cmd === 'find') {
+      openSearch()
+    }
+  }
+
   const openRun = () => {
-    openWindow('run', 'Run', '/assets/icons/Windows XP Icons/Run.png', <Run />)
+    openWindow('run', 'Run', '/assets/icons/Windows XP Icons/Run.png', <Run onRunCommand={handleRunCommand} />)
   }
 
 

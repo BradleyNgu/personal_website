@@ -1,12 +1,23 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 
-function Run() {
+interface RunProps {
+  onRunCommand?: (command: string) => void
+}
+
+function Run({ onRunCommand }: RunProps) {
   const [command, setCommand] = useState('')
   const [history, setHistory] = useState<string[]>([])
 
   const handleRun = () => {
     if (command.trim()) {
+      const cmd = command.trim().toLowerCase()
       setHistory(prev => [...prev, command])
+      
+      // Call the handler if provided
+      if (onRunCommand) {
+        onRunCommand(cmd)
+      }
+      
       setCommand('')
     }
   }
@@ -17,12 +28,50 @@ function Run() {
     }
   }
 
+  // Map of commands to application names
+  const commandMap: { [key: string]: string } = {
+    'cmd': 'Command Prompt',
+    'command': 'Command Prompt',
+    'command prompt': 'Command Prompt',
+    'email': 'Email',
+    'mail': 'Email',
+    'internet': 'Internet Explorer',
+    'ie': 'Internet Explorer',
+    'explorer': 'Internet Explorer',
+    'browser': 'Internet Explorer',
+    'pictures': 'My Pictures',
+    'my pictures': 'My Pictures',
+    'photos': 'My Pictures',
+    'music': 'My Music',
+    'my music': 'My Music',
+    'resume': 'Resume',
+    'cv': 'Resume',
+    'about': 'About Me',
+    'autobiography': 'About Me',
+    'about me': 'About Me',
+    'computer': 'My Computer',
+    'my computer': 'My Computer',
+    'control': 'Control Panel',
+    'control panel': 'Control Panel',
+    'help': 'Help and Support',
+    'help and support': 'Help and Support',
+    'support': 'Help and Support',
+    'search': 'Search',
+    'find': 'Search',
+  }
+
   const commonCommands = [
-    'notepad',
-    'calc',
     'cmd',
-    'mspaint',
-    'explorer',
+    'email',
+    'internet',
+    'pictures',
+    'music',
+    'resume',
+    'about',
+    'computer',
+    'control panel',
+    'help',
+    'search',
   ]
 
   return (
@@ -139,12 +188,15 @@ function Run() {
           )}
 
           <div style={{ marginTop: '20px', padding: '15px', backgroundColor: '#f0f8ff', borderRadius: '4px' }}>
-            <h3 style={{ marginBottom: '10px', color: '#1e3f7a' }}>Common Commands</h3>
+            <h3 style={{ marginBottom: '10px', color: '#1e3f7a' }}>Available Applications</h3>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
               {commonCommands.map((cmd, index) => (
                 <button
                   key={index}
-                  onClick={() => setCommand(cmd)}
+                  onClick={() => {
+                    setCommand(cmd)
+                    setTimeout(() => handleRun(), 100)
+                  }}
                   style={{
                     padding: '5px 12px',
                     backgroundColor: 'white',
@@ -173,5 +225,3 @@ function Run() {
 }
 
 export default Run
-
-

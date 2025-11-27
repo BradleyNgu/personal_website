@@ -1,5 +1,3 @@
-import React from 'react'
-
 function MyComputer() {
   return (
     <div className="page-container">
@@ -56,4 +54,5 @@ function MyComputer() {
 }
 
 export default MyComputer
+
 

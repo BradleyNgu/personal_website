@@ -1,5 +1,3 @@
-import React from 'react'
-
 function HelpAndSupport() {
   const helpTopics = [
     { title: 'Getting Started', description: 'Learn the basics of using Windows XP' },
@@ -70,4 +68,5 @@ function HelpAndSupport() {
 }
 
 export default HelpAndSupport
+
 

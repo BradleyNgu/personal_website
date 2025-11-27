@@ -15,14 +15,11 @@ interface TaskbarProps {
   onResumeClick: () => void
   onAutobiographyClick: () => void
   onInternetExplorerClick: () => void
-  onMyComputerClick: () => void
-  onControlPanelClick: () => void
-  onHelpAndSupportClick: () => void
   onSearchClick: () => void
   onRunClick: () => void
 }
 
-function Taskbar({ windows, onWindowClick, onShutdown, onLogOff, onEmailClick, onCommandPromptClick, onMyPicturesClick, onMyMusicClick, onResumeClick, onAutobiographyClick, onInternetExplorerClick, onMyComputerClick, onControlPanelClick, onHelpAndSupportClick, onSearchClick, onRunClick }: TaskbarProps) {
+function Taskbar({ windows, onWindowClick, onShutdown, onLogOff, onEmailClick, onCommandPromptClick, onMyPicturesClick, onMyMusicClick, onResumeClick, onAutobiographyClick, onInternetExplorerClick, onSearchClick, onRunClick }: TaskbarProps) {
   const [showStartMenu, setShowStartMenu] = useState(false)
   const [showSystemTrayMenu, setShowSystemTrayMenu] = useState(false)
   const [showAllPrograms, setShowAllPrograms] = useState(false)
@@ -305,36 +302,6 @@ function Taskbar({ windows, onWindowClick, onShutdown, onLogOff, onEmailClick, o
                   </div>
                   <div className="all-programs-item"
                     onClick={() => {
-                      onMyComputerClick()
-                      setShowStartMenu(false)
-                      setShowAllPrograms(false)
-                    }}
-                  >
-                    <img src="/assets/icons/Windows XP Icons/My Computer.png" alt="" className="menu-icon-small" />
-                    <span>My Computer</span>
-                  </div>
-                  <div className="all-programs-item"
-                    onClick={() => {
-                      onControlPanelClick()
-                      setShowStartMenu(false)
-                      setShowAllPrograms(false)
-                    }}
-                  >
-                    <img src="/assets/icons/Windows XP Icons/Control Panel.png" alt="" className="menu-icon-small" />
-                    <span>Control Panel</span>
-                  </div>
-                  <div className="all-programs-item"
-                    onClick={() => {
-                      onHelpAndSupportClick()
-                      setShowStartMenu(false)
-                      setShowAllPrograms(false)
-                    }}
-                  >
-                    <img src="/assets/icons/Windows XP Icons/Help and Support.png" alt="" className="menu-icon-small" />
-                    <span>Help and Support</span>
-                  </div>
-                  <div className="all-programs-item"
-                    onClick={() => {
                       onSearchClick()
                       setShowStartMenu(false)
                       setShowAllPrograms(false)
@@ -397,46 +364,7 @@ function Taskbar({ windows, onWindowClick, onShutdown, onLogOff, onEmailClick, o
                 <img src="/assets/icons/Windows XP Icons/My Music.png" alt="" className="menu-icon-small" />
                 <span>My Music</span>
               </div>
-              <div className="start-menu-item" 
-                onClick={() => {
-                  onMyComputerClick()
-                  setShowStartMenu(false)
-                }}
-                onTouchStart={() => {
-                  onMyComputerClick()
-                  setShowStartMenu(false)
-                }}
-              >
-                <img src="/assets/icons/Windows XP Icons/My Computer.png" alt="" className="menu-icon-small" />
-                <span>My Computer</span>
-              </div>
               <div className="start-menu-divider"></div>
-              <div className="start-menu-item" 
-                onClick={() => {
-                  onControlPanelClick()
-                  setShowStartMenu(false)
-                }}
-                onTouchStart={() => {
-                  onControlPanelClick()
-                  setShowStartMenu(false)
-                }}
-              >
-                <img src="/assets/icons/Windows XP Icons/Control Panel.png" alt="" className="menu-icon-small" />
-                <span>Control Panel</span>
-              </div>
-              <div className="start-menu-item" 
-                onClick={() => {
-                  onHelpAndSupportClick()
-                  setShowStartMenu(false)
-                }}
-                onTouchStart={() => {
-                  onHelpAndSupportClick()
-                  setShowStartMenu(false)
-                }}
-              >
-                <img src="/assets/icons/Windows XP Icons/Help and Support.png" alt="" className="menu-icon-small" />
-                <span>Help and Support</span>
-              </div>
               <div className="start-menu-item" 
                 onClick={() => {
                   onSearchClick()

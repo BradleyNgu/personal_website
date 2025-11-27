@@ -36,9 +36,6 @@ function Run({ onRunCommand }: RunProps) {
     'music',
     'resume',
     'about',
-    'computer',
-    'control panel',
-    'help',
     'search',
   ]
 

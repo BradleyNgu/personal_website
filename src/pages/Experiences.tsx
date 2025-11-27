@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react'
 import '../styles/pages.css'
 
 interface Experience {
@@ -7,6 +8,10 @@ interface Experience {
   period: string
   description: string
   responsibilities: string[]
+}
+
+interface ExperiencesProps {
+  highlightExperienceId?: string
 }
 
 const experiences: Experience[] = [
@@ -24,7 +29,32 @@ const experiences: Experience[] = [
   },
 ]
 
-function Experiences() {
+function Experiences({ highlightExperienceId }: ExperiencesProps = {}) {
+  const experienceRefs = useRef<{ [key: string]: HTMLDivElement | null }>({})
+
+  useEffect(() => {
+    if (highlightExperienceId && experienceRefs.current[highlightExperienceId]) {
+      const element = experienceRefs.current[highlightExperienceId]
+      if (element) {
+        // Scroll to the element
+        element.scrollIntoView({ behavior: 'smooth', block: 'center' })
+        // Add highlight effect
+        element.style.backgroundColor = '#fff3cd'
+        element.style.transition = 'background-color 0.3s'
+        setTimeout(() => {
+          if (element) {
+            element.style.backgroundColor = ''
+            setTimeout(() => {
+              if (element) {
+                element.style.transition = ''
+              }
+            }, 300)
+          }
+        }, 2000)
+      }
+    }
+  }, [highlightExperienceId])
+
   return (
     <div className="page-container">
       <div className="page-header">
@@ -33,7 +63,13 @@ function Experiences() {
 
       <div className="experiences-timeline">
         {experiences.map(experience => (
-          <div key={experience.id} className="experience-card">
+          <div 
+            key={experience.id} 
+            className="experience-card"
+            ref={(el) => {
+              experienceRefs.current[experience.id] = el
+            }}
+          >
             <div className="experience-header">
               <div className="experience-company-info">
                 <img src="/assets/icons/dynacert.png" alt="dynaCERT Logo" className="company-logo" />

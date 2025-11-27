@@ -165,10 +165,6 @@ function MyPictures() {
               <span>Shared Documents</span>
             </div>
             <div className="place-item">
-              <img src="/assets/icons/Windows XP Icons/My Computer.png" alt="" />
-              <span>My Computer</span>
-            </div>
-            <div className="place-item">
               <img src="/assets/icons/Windows XP Icons/My Network Places.png" alt="" />
               <span>My Network Places</span>
             </div>

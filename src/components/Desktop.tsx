@@ -13,9 +13,6 @@ import MyPictures from '../pages/MyPictures'
 import MyMusic from '../pages/MyMusic'
 import Resume from '../pages/Resume'
 import InternetExplorer from '../pages/InternetExplorer'
-import MyComputer from '../pages/MyComputer'
-import ControlPanel from '../pages/ControlPanel'
-import HelpAndSupport from '../pages/HelpAndSupport'
 import Search from '../pages/Search'
 import Run from '../pages/Run'
 import '../styles/desktop.css'
@@ -152,6 +149,10 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
     // Check if window is already open
     const existingWindow = windows.find(w => w.id === id)
     if (existingWindow) {
+      // Update the component (useful for highlighting specific items from search)
+      setWindows(prevWindows => prevWindows.map(w => 
+        w.id === id ? { ...w, component } : w
+      ))
       // Bring to front and restore if minimized
       bringToFront(id)
       if (existingWindow.isMinimized) {
@@ -248,20 +249,10 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
     openWindow('internet-explorer', 'Internet Explorer', '/assets/icons/Windows XP Icons/Internet Explorer 6.png', <InternetExplorer />)
   }
 
-  const openMyComputer = () => {
-    openWindow('my-computer', 'My Computer', '/assets/icons/Windows XP Icons/My Computer.png', <MyComputer />)
-  }
 
-  const openControlPanel = () => {
-    openWindow('control-panel', 'Control Panel', '/assets/icons/Windows XP Icons/Control Panel.png', <ControlPanel />)
-  }
-
-  const openHelpAndSupport = () => {
-    openWindow('help-and-support', 'Help and Support Center', '/assets/icons/Windows XP Icons/Help and Support.png', <HelpAndSupport />)
-  }
 
   const openSearch = () => {
-    openWindow('search', 'Search', '/assets/icons/Windows XP Icons/Search.png', <Search />)
+    openWindow('search', 'Search', '/assets/icons/Windows XP Icons/Search.png', <Search onOpenWindow={openWindow} />)
   }
 
   const handleRunCommand = (command: string) => {
@@ -282,12 +273,6 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
       openResume()
     } else if (cmd === 'about' || cmd === 'autobiography' || cmd === 'about me') {
       openAutobiography()
-    } else if (cmd === 'computer' || cmd === 'my computer') {
-      openMyComputer()
-    } else if (cmd === 'control' || cmd === 'control panel') {
-      openControlPanel()
-    } else if (cmd === 'help' || cmd === 'help and support' || cmd === 'support') {
-      openHelpAndSupport()
     } else if (cmd === 'search' || cmd === 'find') {
       openSearch()
     }
@@ -919,9 +904,6 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
         onResumeClick={openResume}
         onAutobiographyClick={openAutobiography}
         onInternetExplorerClick={openInternetExplorer}
-        onMyComputerClick={openMyComputer}
-        onControlPanelClick={openControlPanel}
-        onHelpAndSupportClick={openHelpAndSupport}
         onSearchClick={openSearch}
         onRunClick={openRun}
       />

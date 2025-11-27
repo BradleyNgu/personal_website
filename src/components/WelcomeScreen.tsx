@@ -119,8 +119,7 @@ function WelcomeScreen({ onLogin, onShutdown }: WelcomeScreenProps) {
           Turn off computer
         </button>
         <div className="footer-info">
-          After you log on, you can add or change accounts.<br />
-          Just go to Control Panel and click User Accounts.
+          After you log on, you can add or change accounts.
         </div>
       </div>
     </div>

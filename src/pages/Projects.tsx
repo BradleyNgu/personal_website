@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react'
 import '../styles/pages.css'
 
 interface Project {
@@ -8,6 +9,10 @@ interface Project {
   link?: string
   award?: string
   highlights: string[]
+}
+
+interface ProjectsProps {
+  highlightProjectId?: string
 }
 
 const projects: Project[] = [
@@ -121,7 +126,32 @@ const projects: Project[] = [
   },
 ]
 
-function Projects() {
+function Projects({ highlightProjectId }: ProjectsProps = {}) {
+  const projectRefs = useRef<{ [key: string]: HTMLDivElement | null }>({})
+
+  useEffect(() => {
+    if (highlightProjectId && projectRefs.current[highlightProjectId]) {
+      const element = projectRefs.current[highlightProjectId]
+      if (element) {
+        // Scroll to the element
+        element.scrollIntoView({ behavior: 'smooth', block: 'center' })
+        // Add highlight effect
+        element.style.backgroundColor = '#fff3cd'
+        element.style.transition = 'background-color 0.3s'
+        setTimeout(() => {
+          if (element) {
+            element.style.backgroundColor = ''
+            setTimeout(() => {
+              if (element) {
+                element.style.transition = ''
+              }
+            }, 300)
+          }
+        }, 2000)
+      }
+    }
+  }, [highlightProjectId])
+
   return (
     <div className="page-container">
       <div className="page-header">
@@ -130,7 +160,13 @@ function Projects() {
 
       <div className="projects-grid">
         {projects.map(project => (
-          <div key={project.id} className="project-card">
+          <div 
+            key={project.id} 
+            className="project-card"
+            ref={(el) => {
+              projectRefs.current[project.id] = el
+            }}
+          >
             <h3>{project.title}</h3>
             {project.award && (
               <div className="project-award">{project.award}</div>

@@ -164,6 +164,14 @@
   .window-title {
     font-size: 14px !important;
     gap: 6px !important;
+    flex-shrink: 1 !important;
+    min-width: 0 !important;
+    max-width: calc(100vw - 120px) !important;
+  }
+  
+  .window-title span {
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
   }
   
   .window-icon {
@@ -2382,7 +2390,18 @@
   }
   
   .window-title {
-    font-size: clamp(10px, 1.2vw, 14px) !important;
+    font-size: clamp(8px, 2vw, 14px) !important;
+    flex-shrink: 1 !important;
+    min-width: 0 !important;
+    max-width: calc(100vw - 200px) !important; /* Leave room for window controls */
+  }
+  
+  .window-title span {
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+    flex-shrink: 1 !important;
+    min-width: 0 !important;
   }
   
   .taskbar-window-title {
@@ -2548,5 +2567,44 @@ html, body {
 .welcome-divider {
   grid-row: 2 !important;
   position: relative !important;
+}
+
+/* Universal fix: Ensure window title text is responsive on all screen sizes */
+@media (max-width: 1200px) {
+  .window-title {
+    flex-shrink: 1 !important;
+    min-width: 0 !important;
+    max-width: calc(100vw - 180px) !important;
+  }
+  
+  .window-title span {
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+    flex-shrink: 1 !important;
+    min-width: 0 !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .window-title {
+    max-width: calc(100vw - 140px) !important;
+    font-size: clamp(10px, 3vw, 14px) !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .window-title {
+    max-width: calc(100vw - 110px) !important;
+    font-size: clamp(9px, 3.5vw, 12px) !important;
+  }
+}
+
+@media (max-width: 320px) {
+  .window-title {
+    max-width: calc(100vw - 90px) !important;
+    font-size: clamp(8px, 4vw, 11px) !important;
+    gap: 2px !important;
+  }
 }
 

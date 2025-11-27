@@ -30,6 +30,7 @@ export interface WindowState {
   position: { x: number; y: number }
   size: { width: number; height: number }
   zIndex: number
+  hideMenuBar?: boolean
 }
 
 export interface IconPosition {
@@ -48,6 +49,61 @@ export interface RecycleBinItem {
 interface DesktopProps {
   onShutdown: () => void
   onLogOff: () => void
+}
+
+// Helper function to constrain multi-selection icon positions within viewport
+const constrainMultiSelectionDelta = (
+  iconPositions: IconPosition[],
+  selectedIds: string[],
+  deltaX: number,
+  deltaY: number,
+  iconWidth: number = 75,
+  iconHeight: number = 100
+): { deltaX: number; deltaY: number } => {
+  if (selectedIds.length === 0) return { deltaX, deltaY }
+  
+  const viewportWidth = window.innerWidth
+  const viewportHeight = window.innerHeight
+  const taskbarHeight = 40 // --taskbar-height (default)
+  
+  // Get actual taskbar height from CSS variable if available
+  const rootStyle = getComputedStyle(document.documentElement)
+  const actualTaskbarHeight = parseInt(rootStyle.getPropertyValue('--taskbar-height')) || taskbarHeight
+  
+  // Get selected icon positions
+  const selectedIcons = iconPositions.filter(icon => selectedIds.includes(icon.id))
+  if (selectedIcons.length === 0) return { deltaX, deltaY }
+  
+  // Calculate bounding box of selected icons
+  const minX = Math.min(...selectedIcons.map(icon => icon.x))
+  const maxX = Math.max(...selectedIcons.map(icon => icon.x + iconWidth))
+  const minY = Math.min(...selectedIcons.map(icon => icon.y))
+  const maxY = Math.max(...selectedIcons.map(icon => icon.y + iconHeight))
+  
+  // Calculate proposed new positions
+  const newMinX = minX + deltaX
+  const newMaxX = maxX + deltaX
+  const newMinY = minY + deltaY
+  const newMaxY = maxY + deltaY
+  
+  // Constrain deltaX
+  let constrainedDeltaX = deltaX
+  if (newMinX < 0) {
+    constrainedDeltaX = -minX // Move to left edge
+  } else if (newMaxX > viewportWidth) {
+    constrainedDeltaX = viewportWidth - maxX // Move to right edge
+  }
+  
+  // Constrain deltaY (accounting for taskbar)
+  const maxViewportY = viewportHeight - actualTaskbarHeight
+  let constrainedDeltaY = deltaY
+  if (newMinY < 0) {
+    constrainedDeltaY = -minY // Move to top edge
+  } else if (newMaxY > maxViewportY) {
+    constrainedDeltaY = maxViewportY - maxY // Move to bottom edge (above taskbar)
+  }
+  
+  return { deltaX: constrainedDeltaX, deltaY: constrainedDeltaY }
 }
 
 function Desktop({ onShutdown, onLogOff }: DesktopProps) {
@@ -92,7 +148,7 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
   const recycleBinHoveredRef = useRef<boolean>(false)
   const lastDragOverTimeRef = useRef<number>(0)
 
-  const openWindow = (id: string, title: string, icon: string, component: React.ReactNode) => {
+  const openWindow = (id: string, title: string, icon: string, component: React.ReactNode, hideMenuBar: boolean = false) => {
     // Check if window is already open
     const existingWindow = windows.find(w => w.id === id)
     if (existingWindow) {
@@ -114,6 +170,7 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
       position: { x: 100 + windows.length * 30, y: 50 + windows.length * 30 },
       size: { width: 800, height: 600 },
       zIndex: highestZIndex + 1,
+      hideMenuBar,
     }
 
     setWindows([...windows, newWindow])
@@ -168,7 +225,7 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
   }
 
   const openCommandPrompt = () => {
-    openWindow('cmd', 'C:\\WINDOWS\\system32\\cmd.exe', '/assets/icons/Windows XP Icons/Command Prompt.png', <CommandPrompt />)
+    openWindow('cmd', 'C:\\WINDOWS\\system32\\cmd.exe', '/assets/icons/Windows XP Icons/Command Prompt.png', <CommandPrompt />, true)
   }
 
   const openMyPictures = () => {
@@ -475,11 +532,14 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
         const deltaX = e.clientX - dragOffset.x
         const deltaY = e.clientY - dragOffset.y
         
-        // Update positions of all selected icons
+        // Constrain the delta to keep all selected icons within viewport
+        const constrained = constrainMultiSelectionDelta(iconPositions, selectedIcons, deltaX, deltaY)
+        
+        // Update positions of all selected icons with constrained delta
         setIconPositions(prev => 
           prev.map(icon => 
             selectedIcons.includes(icon.id)
-              ? { ...icon, x: Math.max(0, icon.x + deltaX), y: Math.max(0, icon.y + deltaY) }
+              ? { ...icon, x: icon.x + constrained.deltaX, y: icon.y + constrained.deltaY }
               : icon
           )
         )
@@ -597,11 +657,14 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
         const deltaX = touch.clientX - dragOffset.x
         const deltaY = touch.clientY - dragOffset.y
         
-        // Update positions of all selected icons
+        // Constrain the delta to keep all selected icons within viewport
+        const constrained = constrainMultiSelectionDelta(iconPositions, selectedIcons, deltaX, deltaY)
+        
+        // Update positions of all selected icons with constrained delta
         setIconPositions(prev => 
           prev.map(icon => 
             selectedIcons.includes(icon.id)
-              ? { ...icon, x: Math.max(0, icon.x + deltaX), y: Math.max(0, icon.y + deltaY) }
+              ? { ...icon, x: icon.x + constrained.deltaX, y: icon.y + constrained.deltaY }
               : icon
           )
         )

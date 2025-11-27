@@ -219,7 +219,17 @@
   font-weight: bold;
   text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
   white-space: nowrap;
-  flex-shrink: 0;
+  flex-shrink: 1; /* Allow title to shrink */
+  min-width: 0; /* Enable flex shrinking */
+  overflow: hidden; /* Enable text truncation */
+}
+
+.window-title span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex-shrink: 1;
+  min-width: 0;
 }
 
 .window-icon {
@@ -343,6 +353,16 @@
   -ms-user-select: text !important;
 }
 
+/* When window has no menu bar (like command prompt), only subtract title bar height */
+.window.maximized:has(.command-prompt) .window-content {
+  height: calc(100vh - var(--taskbar-height, 40px) - var(--window-title-bar-height, 30px)) !important;
+  height: calc(-webkit-fill-available - var(--taskbar-height, 40px) - var(--window-title-bar-height, 30px)) !important;
+  height: calc(100dvh - var(--taskbar-height, 40px) - var(--window-title-bar-height, 30px)) !important;
+  max-height: calc(100vh - var(--taskbar-height, 40px) - var(--window-title-bar-height, 30px)) !important;
+  max-height: calc(-webkit-fill-available - var(--taskbar-height, 40px) - var(--window-title-bar-height, 30px)) !important;
+  max-height: calc(100dvh - var(--taskbar-height, 40px) - var(--window-title-bar-height, 30px)) !important;
+}
+
 .window-resize-handle {
   position: absolute;
   bottom: 0;
@@ -452,6 +472,16 @@
       max-height: calc(100dvh - var(--taskbar-height, 40px) - var(--window-title-bar-height, 30px) - var(--window-menu-bar-height, 24px)) !important;
       overflow-y: auto !important;
       -webkit-overflow-scrolling: touch !important;
+    }
+    
+    /* Command prompt without menu bar */
+    .window.maximized:has(.command-prompt) .window-content {
+      height: calc(100vh - var(--taskbar-height, 40px) - var(--window-title-bar-height, 30px)) !important;
+      height: calc(-webkit-fill-available - var(--taskbar-height, 40px) - var(--window-title-bar-height, 30px)) !important;
+      height: calc(100dvh - var(--taskbar-height, 40px) - var(--window-title-bar-height, 30px)) !important;
+      max-height: calc(100vh - var(--taskbar-height, 40px) - var(--window-title-bar-height, 30px)) !important;
+      max-height: calc(-webkit-fill-available - var(--taskbar-height, 40px) - var(--window-title-bar-height, 30px)) !important;
+      max-height: calc(100dvh - var(--taskbar-height, 40px) - var(--window-title-bar-height, 30px)) !important;
     }
   }
 }

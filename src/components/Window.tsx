@@ -12,6 +12,31 @@ interface WindowProps {
   onSizeChange: (size: { width: number; height: number }) => void
 }
 
+// Helper function to constrain title bar within viewport
+const constrainTitleBarPosition = (x: number, y: number, windowWidth: number): { x: number; y: number } => {
+  const viewportWidth = window.innerWidth
+  const viewportHeight = window.innerHeight
+  const titleBarHeight = 48 // --window-title-bar-height
+  const taskbarHeight = 40 // --taskbar-height (default)
+  
+  // Get actual taskbar height from CSS variable if available
+  const rootStyle = getComputedStyle(document.documentElement)
+  const actualTaskbarHeight = parseInt(rootStyle.getPropertyValue('--taskbar-height')) || taskbarHeight
+  
+  // Constrain X: title bar must stay within viewport horizontally
+  // If window is wider than viewport, keep left edge visible (x >= 0)
+  // Otherwise, keep entire title bar within viewport
+  const constrainedX = windowWidth > viewportWidth
+    ? Math.max(0, x) // Only prevent going off left edge
+    : Math.max(0, Math.min(x, viewportWidth - windowWidth)) // Keep entire title bar visible
+  
+  // Constrain Y: title bar must stay within viewport vertically (accounting for taskbar)
+  const maxY = viewportHeight - actualTaskbarHeight - titleBarHeight
+  const constrainedY = Math.max(0, Math.min(y, maxY))
+  
+  return { x: constrainedX, y: constrainedY }
+}
+
 function Window({
   window,
   onClose,
@@ -204,8 +229,14 @@ function Window({
     const handleMouseMove = (e: MouseEvent) => {
       if (isDragging && windowRef.current && !window.isMaximized) {
         // Use transform for smooth dragging - updates DOM directly without React re-renders
-        const newX = e.clientX - dragStart.x
-        const newY = e.clientY - dragStart.y
+        let newX = e.clientX - dragStart.x
+        let newY = e.clientY - dragStart.y
+        
+        // Constrain title bar to stay within viewport
+        const windowWidth = windowRef.current.offsetWidth || window.size.width
+        const constrained = constrainTitleBarPosition(newX, newY, windowWidth)
+        newX = constrained.x
+        newY = constrained.y
         
         // Store offset for final commit
         dragOffsetRef.current = { x: newX, y: newY }
@@ -282,8 +313,14 @@ function Window({
         e.preventDefault()
         if (touch) {
           // Use transform for smooth dragging on touch devices too
-          const newX = touch.clientX - dragStart.x
-          const newY = touch.clientY - dragStart.y
+          let newX = touch.clientX - dragStart.x
+          let newY = touch.clientY - dragStart.y
+          
+          // Constrain title bar to stay within viewport
+          const windowWidth = windowRef.current.offsetWidth || window.size.width
+          const constrained = constrainTitleBarPosition(newX, newY, windowWidth)
+          newX = constrained.x
+          newY = constrained.y
           
           dragOffsetRef.current = { x: newX, y: newY }
           
@@ -425,8 +462,7 @@ function Window({
     }
   }, [isDragging, isResizing, dragStart, resizeStart, onPositionChange, onSizeChange, window.position, window.size, isMobile, window.isMaximized])
 
-  if (window.isMinimized) return null
-
+  // Don't unmount when minimized - just hide it to preserve scroll position
   const style: React.CSSProperties = window.isMaximized
     ? {
         position: 'fixed',
@@ -436,6 +472,7 @@ function Window({
         height: 'calc(100vh - var(--taskbar-height, 40px))',
         zIndex: window.zIndex,
         borderRadius: 0,
+        display: window.isMinimized ? 'none' : 'flex',
       }
     : {
         position: 'absolute',
@@ -445,6 +482,7 @@ function Window({
         height: `${window.size.height}px`,
         zIndex: window.zIndex,
         transform: 'translateZ(0)', // Reset transform if dragging was interrupted
+        display: window.isMinimized ? 'none' : 'flex',
       }
 
   return (
@@ -461,7 +499,7 @@ function Window({
       >
         <div className="window-title">
           <img src={window.icon} alt="" className="window-icon" />
-          <span style={{ flexShrink: 0 }}>{window.title}</span>
+          <span>{window.title}</span>
         </div>
         <div className="window-controls">
           <button className="window-button minimize" onClick={onMinimize} title="Minimize">
@@ -476,84 +514,86 @@ function Window({
         </div>
       </div>
       
-      <div 
-        ref={menuBarRef}
-        className="window-menu-bar"
-      >
-        <div className="menu-item-wrapper">
-          <span 
-            className={`menu-item ${openMenu === 'File' ? 'active' : ''}`}
-            onClick={(e) => handleMenuClick('File', e)}
-          >
-            File
-          </span>
-          {openMenu === 'File' && (
-            <div className="menu-dropdown">
-              <div className="menu-dropdown-item" onClick={(e) => handleMenuItemClick('New', e)}>New</div>
-              <div className="menu-dropdown-item" onClick={(e) => handleMenuItemClick('Open', e)}>Open</div>
-              <div className="menu-dropdown-item" onClick={(e) => handleMenuItemClick('Save', e)}>Save</div>
-              <div className="menu-dropdown-item" onClick={(e) => handleMenuItemClick('Save As', e)}>Save As...</div>
-              <div className="menu-dropdown-separator"></div>
-              <div className="menu-dropdown-item" onClick={(e) => handleMenuItemClick('Exit', e)}>Exit</div>
-            </div>
-          )}
+      {!window.hideMenuBar && (
+        <div 
+          ref={menuBarRef}
+          className="window-menu-bar"
+        >
+          <div className="menu-item-wrapper">
+            <span 
+              className={`menu-item ${openMenu === 'File' ? 'active' : ''}`}
+              onClick={(e) => handleMenuClick('File', e)}
+            >
+              File
+            </span>
+            {openMenu === 'File' && (
+              <div className="menu-dropdown">
+                <div className="menu-dropdown-item" onClick={(e) => handleMenuItemClick('New', e)}>New</div>
+                <div className="menu-dropdown-item" onClick={(e) => handleMenuItemClick('Open', e)}>Open</div>
+                <div className="menu-dropdown-item" onClick={(e) => handleMenuItemClick('Save', e)}>Save</div>
+                <div className="menu-dropdown-item" onClick={(e) => handleMenuItemClick('Save As', e)}>Save As...</div>
+                <div className="menu-dropdown-separator"></div>
+                <div className="menu-dropdown-item" onClick={(e) => handleMenuItemClick('Exit', e)}>Exit</div>
+              </div>
+            )}
+          </div>
+          <div className="menu-item-wrapper">
+            <span 
+              className={`menu-item ${openMenu === 'Edit' ? 'active' : ''}`}
+              onClick={(e) => handleMenuClick('Edit', e)}
+            >
+              Edit
+            </span>
+            {openMenu === 'Edit' && (
+              <div className="menu-dropdown">
+                <div className="menu-dropdown-item" onClick={(e) => handleMenuItemClick('Undo', e)}>Undo</div>
+                <div className="menu-dropdown-item" onClick={(e) => handleMenuItemClick('Redo', e)}>Redo</div>
+                <div className="menu-dropdown-separator"></div>
+                <div className="menu-dropdown-item" onClick={(e) => handleMenuItemClick('Cut', e)}>Cut</div>
+                <div className="menu-dropdown-item" onClick={(e) => handleMenuItemClick('Copy', e)}>Copy</div>
+                <div className="menu-dropdown-item" onClick={(e) => handleMenuItemClick('Paste', e)}>Paste</div>
+                <div className="menu-dropdown-separator"></div>
+                <div className="menu-dropdown-item" onClick={(e) => handleMenuItemClick('Select All', e)}>Select All</div>
+              </div>
+            )}
+          </div>
+          <div className="menu-item-wrapper">
+            <span 
+              className={`menu-item ${openMenu === 'View' ? 'active' : ''}`}
+              onClick={(e) => handleMenuClick('View', e)}
+            >
+              View
+            </span>
+            {openMenu === 'View' && (
+              <div className="menu-dropdown">
+                <div className="menu-dropdown-item" onClick={(e) => handleMenuItemClick('Toolbar', e)}>Toolbar</div>
+                <div className="menu-dropdown-item" onClick={(e) => handleMenuItemClick('Status Bar', e)}>Status Bar</div>
+                <div className="menu-dropdown-separator"></div>
+                <div className="menu-dropdown-item" onClick={(e) => handleMenuItemClick('Large Icons', e)}>Large Icons</div>
+                <div className="menu-dropdown-item" onClick={(e) => handleMenuItemClick('Small Icons', e)}>Small Icons</div>
+                <div className="menu-dropdown-item" onClick={(e) => handleMenuItemClick('List', e)}>List</div>
+                <div className="menu-dropdown-item" onClick={(e) => handleMenuItemClick('Details', e)}>Details</div>
+                <div className="menu-dropdown-separator"></div>
+                <div className="menu-dropdown-item" onClick={(e) => handleMenuItemClick('Refresh', e)}>Refresh</div>
+              </div>
+            )}
+          </div>
+          <div className="menu-item-wrapper">
+            <span 
+              className={`menu-item ${openMenu === 'Help' ? 'active' : ''}`}
+              onClick={(e) => handleMenuClick('Help', e)}
+            >
+              Help
+            </span>
+            {openMenu === 'Help' && (
+              <div className="menu-dropdown">
+                <div className="menu-dropdown-item" onClick={(e) => handleMenuItemClick('Help Topics', e)}>Help Topics</div>
+                <div className="menu-dropdown-item" onClick={(e) => handleMenuItemClick('About', e)}>About</div>
+              </div>
+            )}
+          </div>
         </div>
-        <div className="menu-item-wrapper">
-          <span 
-            className={`menu-item ${openMenu === 'Edit' ? 'active' : ''}`}
-            onClick={(e) => handleMenuClick('Edit', e)}
-          >
-            Edit
-          </span>
-          {openMenu === 'Edit' && (
-            <div className="menu-dropdown">
-              <div className="menu-dropdown-item" onClick={(e) => handleMenuItemClick('Undo', e)}>Undo</div>
-              <div className="menu-dropdown-item" onClick={(e) => handleMenuItemClick('Redo', e)}>Redo</div>
-              <div className="menu-dropdown-separator"></div>
-              <div className="menu-dropdown-item" onClick={(e) => handleMenuItemClick('Cut', e)}>Cut</div>
-              <div className="menu-dropdown-item" onClick={(e) => handleMenuItemClick('Copy', e)}>Copy</div>
-              <div className="menu-dropdown-item" onClick={(e) => handleMenuItemClick('Paste', e)}>Paste</div>
-              <div className="menu-dropdown-separator"></div>
-              <div className="menu-dropdown-item" onClick={(e) => handleMenuItemClick('Select All', e)}>Select All</div>
-            </div>
-          )}
-        </div>
-        <div className="menu-item-wrapper">
-          <span 
-            className={`menu-item ${openMenu === 'View' ? 'active' : ''}`}
-            onClick={(e) => handleMenuClick('View', e)}
-          >
-            View
-          </span>
-          {openMenu === 'View' && (
-            <div className="menu-dropdown">
-              <div className="menu-dropdown-item" onClick={(e) => handleMenuItemClick('Toolbar', e)}>Toolbar</div>
-              <div className="menu-dropdown-item" onClick={(e) => handleMenuItemClick('Status Bar', e)}>Status Bar</div>
-              <div className="menu-dropdown-separator"></div>
-              <div className="menu-dropdown-item" onClick={(e) => handleMenuItemClick('Large Icons', e)}>Large Icons</div>
-              <div className="menu-dropdown-item" onClick={(e) => handleMenuItemClick('Small Icons', e)}>Small Icons</div>
-              <div className="menu-dropdown-item" onClick={(e) => handleMenuItemClick('List', e)}>List</div>
-              <div className="menu-dropdown-item" onClick={(e) => handleMenuItemClick('Details', e)}>Details</div>
-              <div className="menu-dropdown-separator"></div>
-              <div className="menu-dropdown-item" onClick={(e) => handleMenuItemClick('Refresh', e)}>Refresh</div>
-            </div>
-          )}
-        </div>
-        <div className="menu-item-wrapper">
-          <span 
-            className={`menu-item ${openMenu === 'Help' ? 'active' : ''}`}
-            onClick={(e) => handleMenuClick('Help', e)}
-          >
-            Help
-          </span>
-          {openMenu === 'Help' && (
-            <div className="menu-dropdown">
-              <div className="menu-dropdown-item" onClick={(e) => handleMenuItemClick('Help Topics', e)}>Help Topics</div>
-              <div className="menu-dropdown-item" onClick={(e) => handleMenuItemClick('About', e)}>About</div>
-            </div>
-          )}
-        </div>
-      </div>
+      )}
 
       <div className="window-content">
         {window.component}

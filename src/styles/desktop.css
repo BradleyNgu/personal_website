@@ -1,7 +1,7 @@
 .desktop {
   width: 100%;
   height: 100%;
-  background: url('/assets/wallpaper.jpg') center/cover no-repeat;
+  /* Background is set dynamically via inline style for weekly rotation */
   position: relative;
   overflow: hidden;
   min-height: 100vh;

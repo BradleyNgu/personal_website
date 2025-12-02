@@ -15,6 +15,7 @@ import Resume from '../pages/Resume'
 import InternetExplorer from '../pages/InternetExplorer'
 import Search from '../pages/Search'
 import Run from '../pages/Run'
+import { getCurrentWallpaper } from '../utils/wallpaperRotation'
 import '../styles/desktop.css'
 
 export interface WindowState {
@@ -811,10 +812,15 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
     },
   ]
 
+  const currentWallpaper = getCurrentWallpaper()
+
   return (
     <div 
       ref={desktopRef}
       className={`desktop ${isDraggingSelected ? 'multi-drag-active' : ''}`}
+      style={{
+        background: `url('${currentWallpaper}') center/cover no-repeat`
+      }}
       onMouseDown={handleDesktopMouseDown}
       onTouchStart={handleDesktopTouchStart}
     >

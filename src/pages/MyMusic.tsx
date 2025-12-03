@@ -173,17 +173,13 @@ function MyMusic() {
               <span>Shop for music online</span>
             </div>
             <div className="task-item">
-              <img src="/assets/icons/Windows XP Icons/CD.png" alt="" />
+              <img src="/assets/icons/Windows XP Icons/CD-ROM.png" alt="" />
               <span>Copy to audio CD</span>
             </div>
           </div>
 
           <div className="file-folder-tasks-section">
             <h3>File and Folder Tasks</h3>
-            <div className="task-item">
-              <img src="/assets/icons/Windows XP Icons/Move.png" alt="" />
-              <span>Move the selected items</span>
-            </div>
             <div className="task-item">
               <img src="/assets/icons/Windows XP Icons/Copy.png" alt="" />
               <span>Copy the selected items</span>
@@ -209,7 +205,7 @@ function MyMusic() {
               <span>About Me</span>
             </div>
             <div className="place-item">
-              <img src="/assets/icons/Windows XP Icons/Shared Documents.png" alt="" />
+              <img src="/assets/icons/Windows XP Icons/Folder Closed.png" alt="" />
               <span>Shared Documents</span>
             </div>
             <div className="place-item">

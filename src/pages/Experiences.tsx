@@ -6,7 +6,6 @@ interface Experience {
   company: string
   position: string
   period: string
-  description: string
   responsibilities: string[]
 }
 
@@ -18,13 +17,13 @@ const experiences: Experience[] = [
   {
     id: '1',
     company: 'dynaCERT Inc.',
-    position: 'Full Stack Developer Co-op',
-    period: 'May 2025 - December 2025',
-    description: 'Building enterprise-scale industrial IoT dashboard systems with React, TypeScript, Node.js, MySQL, Docker, and Postman',
+    position: 'Full-Stack Developer',
+    period: 'May 2025 – December 2025',
     responsibilities: [
-      'Spearheaded a full-stack industrial IoT dashboard system serving 120+ enterprise customers and 450+ hydrogen generator units globally, delivering real-time monitoring capabilities that reduced equipment downtime by 20% and improved operational efficiency',
-      'Architected scalable React/TypeScript frontend and Node.js backend infrastructure with MySQL database integration, supporting concurrent monitoring of 25+ critical parameters (reactor states, temperatures, voltages, GPS telemetry) and reducing data processing latency by 65%',
-      'Developed advanced data visualization and export capabilities featuring real-time charts, filtering systems, and Excel export functionality, empowering field technicians and fleet managers to process service data 80% faster and reducing manual reporting overhead',
+      'Architected and deployed a full-stack **industrial IoT monitoring dashboard** with **18 RESTful APIs** and **20+ React components**, processing real-time telemetry from a **MySQL backend** for **450+ H2 generator units** across multiple time granularities',
+      'Implemented a scalable **Node.js microservices architecture** with **7 controllers** and **9 services**, containerized via **Docker** for development and production, and deployed to hydralytica.com serving live industrial data',
+      'Built a comprehensive **data visualization and reporting system** featuring **6 table modules**, **40+ dynamic filters**, and **5 automated Excel export formats**, enabling cross-fleet performance analytics for **120+ enterprise clients**',
+      'Developed a **C++ native module** for **binary data parsing**, achieving **10-100x faster processing** compared to JavaScript; integrated with **Node.js** via node-addon-api and supported cross-platform builds (Windows, macOS, Linux) for real-time H2Gen unit telemetry processing',
     ],
   },
 ]
@@ -78,18 +77,58 @@ function Experiences({ highlightExperienceId }: ExperiencesProps = {}) {
                   <h4>{experience.company}</h4>
                 </div>
               </div>
-              <span className="experience-period">{experience.period}</span>
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
+                <span className="experience-period">{experience.period}</span>
+                <span style={{ fontSize: '12px', color: '#666', marginTop: '4px' }}>Toronto, ON</span>
+              </div>
             </div>
-            <p className="experience-description">{experience.description}</p>
             {experience.responsibilities.length > 0 && (
               <ul className="responsibilities-list">
-                {experience.responsibilities.map((resp, idx) => (
-                  <li key={idx}>{resp}</li>
-                ))}
+                {experience.responsibilities.map((resp, idx) => {
+                  // Parse markdown-style bold text (**text**) and convert to HTML
+                  const parts = resp.split(/(\*\*.*?\*\*)/g)
+                  return (
+                    <li key={idx}>
+                      {parts.map((part, i) => {
+                        if (part.startsWith('**') && part.endsWith('**')) {
+                          return <strong key={i}>{part.slice(2, -2)}</strong>
+                        }
+                        return <span key={i}>{part}</span>
+                      })}
+                    </li>
+                  )
+                })}
               </ul>
             )}
           </div>
         ))}
+      </div>
+
+      <div className="page-header" style={{ marginTop: '40px' }}>
+        <h1>🎯 Extracurricular Activities</h1>
+      </div>
+
+      <div className="experiences-timeline">
+        <div className="experience-card">
+          <div className="experience-header">
+            <div className="experience-company-info">
+              <img src="/assets/icons/cuhacking_logo.jpeg" alt="cuHacking Logo" className="company-logo" />
+              <div>
+                <h3>Hacker Experience Team Lead</h3>
+                <h4>cuHacking</h4>
+              </div>
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
+              <span className="experience-period">Sep. 2025 – Present</span>
+              <span style={{ fontSize: '12px', color: '#666', marginTop: '4px' }}>Ottawa, ON</span>
+            </div>
+          </div>
+          <ul className="responsibilities-list">
+            <li>Coordinate and enhance the participant experience for <strong>300+ hackers</strong> through event planning, workshops, and sponsor engagement initiatives</li>
+            <li>Collaborate with cross-functional teams to manage logistics, marketing, and hacker communication using <strong>Notion, Discord, and Google Workspace</strong></li>
+            <li>Support technical workshops and hackathon preparation events to promote inclusivity and technical growth among university participants</li>
+          </ul>
+        </div>
       </div>
     </div>
   )

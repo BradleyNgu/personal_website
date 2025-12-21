@@ -19,7 +19,7 @@ const experiences: Experience[] = [
     id: '1',
     company: 'dynaCERT Inc.',
     position: 'Full Stack Developer Co-op',
-    period: 'May 2025 - Present',
+    period: 'May 2025 - December 2025',
     description: 'Building enterprise-scale industrial IoT dashboard systems with React, TypeScript, Node.js, MySQL, Docker, and Postman',
     responsibilities: [
       'Spearheaded a full-stack industrial IoT dashboard system serving 120+ enterprise customers and 450+ hydrogen generator units globally, delivering real-time monitoring capabilities that reduced equipment downtime by 20% and improved operational efficiency',

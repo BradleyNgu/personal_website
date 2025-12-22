@@ -48,10 +48,8 @@ function F1CarModel() {
           <Model />
         </Suspense>
         <OrbitControls
-          enableZoom={true}
+          enableZoom={false}
           enablePan={false}
-          minDistance={2}
-          maxDistance={10}
           autoRotate={false}
         />
       </Canvas>

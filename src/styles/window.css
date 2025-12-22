@@ -281,12 +281,31 @@
   background: linear-gradient(to bottom, #f0f0f0 0%, #e8e8e8 100%);
   border-bottom: 1px solid #d4d4d4;
   display: flex;
+  display: -webkit-flex;
+  display: -moz-box;
+  flex-direction: row;
+  -webkit-flex-direction: row;
+  flex-wrap: nowrap;
+  -webkit-flex-wrap: nowrap;
   gap: var(--window-menu-gap, 8px);
   padding: var(--window-menu-padding, 3px 8px);
   font-size: var(--window-menu-font-size, 11px);
   height: var(--window-menu-bar-height, 24px);
   min-height: var(--window-menu-bar-height, 24px);
   flex-shrink: 0;
+  align-items: center;
+  -webkit-align-items: center;
+  overflow: visible;
+}
+
+/* Firefox gap fallback */
+@supports not (gap: 8px) {
+  .window-menu-bar > * {
+    margin-right: 8px;
+  }
+  .window-menu-bar > *:last-child {
+    margin-right: 0;
+  }
 }
 
 .menu-item {
@@ -294,6 +313,11 @@
   cursor: pointer;
   border-radius: 2px;
   user-select: none;
+  display: inline-block;
+  display: -webkit-inline-flex;
+  white-space: nowrap;
+  flex-shrink: 0;
+  -webkit-flex-shrink: 0;
 }
 
 .menu-item:hover {

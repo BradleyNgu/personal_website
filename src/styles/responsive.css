@@ -1084,11 +1084,29 @@
     max-height: calc(100vh - 40px) !important;
   }
   
-  /* Ensure menu items don't wrap or get too large */
+  /* Ensure menu items display properly on all mobile browsers including Firefox */
   .menu-item {
-    max-width: 60px !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
+    max-width: none !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+    display: inline-block !important;
+    white-space: nowrap !important;
+    flex-shrink: 0 !important;
+    -webkit-flex-shrink: 0 !important;
+    -moz-box-flex: 0 !important;
+  }
+  
+  .window-menu-bar {
+    display: flex !important;
+    display: -webkit-flex !important;
+    display: -moz-box !important;
+    flex-direction: row !important;
+    -webkit-flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    -webkit-flex-wrap: nowrap !important;
+    align-items: center !important;
+    -webkit-align-items: center !important;
+    overflow: visible !important;
   }
   
   /* Prevent toolbar buttons from getting too large on mobile */

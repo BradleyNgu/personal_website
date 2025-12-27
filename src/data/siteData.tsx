@@ -110,7 +110,7 @@ export const projects: Project[] = [
     id: '6',
     title: 'Fitness Club Management System',
     description: 'A full-stack fitness club management system with a web interface',
-    technologies: ['Python', 'SQLAlchemy', 'PostgreSQL', 'HTML/CSS', 'JavaScript', 'React.js', 'fitness', 'gym', 'health'],
+    technologies: ['Python', 'SQLAlchemy', 'PostgreSQL', 'HTML/CSS', 'JavaScript', 'React.js'],
     link: 'https://github.com/COMP3005-Project',
     award: '🎓 Academic Project - 109% Grade',
     highlights: [

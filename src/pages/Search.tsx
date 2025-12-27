@@ -8,10 +8,11 @@ import MyPictures from './MyPictures'
 import MyMusic from './MyMusic'
 import InternetExplorer from './InternetExplorer'
 import CommandPrompt from './CommandPrompt'
+import { projects, experiences, extracurriculars } from '../data/siteData'
 
 interface SearchResult {
   id: string
-  type: 'application' | 'project' | 'experience'
+  type: 'application' | 'project' | 'experience' | 'extracurricular'
   title: string
   subtitle?: string
   icon?: string
@@ -21,74 +22,6 @@ interface SearchResult {
 interface SearchProps {
   onOpenWindow: (id: string, title: string, icon: string, component: React.ReactNode) => void
 }
-
-// Import project and experience data
-const projects = [
-  {
-    id: '1',
-    title: 'Meido',
-    description: 'Full-stack conversational AI desktop application with voice synthesis and anime recommendations',
-    technologies: ['Electron', 'Node.js', 'Express.js', 'Maid'],
-  },
-  {
-    id: '2',
-    title: 'X2 Insulin Pump Simulator',
-    description: 'Fully functional desktop simulator of the Tandem t:slim X2 insulin pump with Control-IQ algorithm',
-    technologies: ['C++', 'Qt'],
-  },
-  {
-    id: '3',
-    title: 'Dumpster Diver',
-    description: 'End-to-end automated waste sorting system using machine learning and IoT hardware',
-    technologies: ['Python', 'JavaScript', 'OpenCV', 'C++', 'Flask', 'TensorFlow', 'SQLite', 'Arduino', 'Keras', 'HTML/CSS'],
-  },
-  {
-    id: '4',
-    title: 'Elevator Simulator',
-    description: 'Real-time elevator simulation system with smart scheduling and safety protocols',
-    technologies: ['C++', 'Qt'],
-  },
-  {
-    id: '5',
-    title: 'Playtopia',
-    description: 'Blockchain-based interactive game creation platform with smart contracts and real-time rewards',
-    technologies: ['Python', 'JavaScript', 'OpenCV', 'C++', 'Flask', 'Cairo', 'Blockchain', 'TypeScript', 'Node.js', 'React.js', 'Arduino', 'HTML/CSS'],
-  },
-  {
-    id: '6',
-    title: 'Qmove',
-    description: 'AI-powered rehabilitation tracker using computer vision to monitor joint range of motion',
-    technologies: ['Streamlit', 'OpenCV', 'Flask', 'MongoDB', 'Node.js', 'MediaPipe', 'React.js', 'CSS'],
-  },
-  {
-    id: '7',
-    title: 'The Heart Stopper',
-    description: 'Gesture-controlled energy drink dispenser using computer vision and Arduino',
-    technologies: ['Python', 'OpenCV', 'C++', 'MediaPipe', 'Arduino'],
-  },
-  {
-    id: '8',
-    title: 'NewsBuzz',
-    description: 'Real-time news aggregation platform with AI summaries and location-based insights',
-    technologies: ['Express.js', 'HTML', 'Node.js', 'React.js', 'CSS'],
-  },
-  {
-    id: '9',
-    title: 'Fitness Club Management System',
-    description: 'A full-stack fitness club management system with a web interface',
-    technologies: ['Python', 'SQLAlchemy', 'PostgreSQL', 'HTML/CSS', 'JavaScript', 'React.js'],
-  },
-]
-
-const experiences = [
-  {
-    id: '1',
-    company: 'dynaCERT Inc.',
-    position: 'Full Stack Developer Co-op',
-    description: 'Building enterprise-scale industrial IoT dashboard systems with React, TypeScript, Node.js, MySQL, Docker, and Postman',
-    technologies: ['React', 'TypeScript', 'Node.js', 'MySQL', 'Docker', 'Postman'],
-  },
-]
 
 function Search({ onOpenWindow }: SearchProps) {
   const [searchQuery, setSearchQuery] = useState('')
@@ -148,17 +81,36 @@ function Search({ onOpenWindow }: SearchProps) {
     experiences.forEach(exp => {
       const matchesCompany = exp.company.toLowerCase().includes(lowerQuery)
       const matchesPosition = exp.position.toLowerCase().includes(lowerQuery)
-      const matchesDescription = exp.description.toLowerCase().includes(lowerQuery)
-      const matchesTech = exp.technologies?.some(tech => tech.toLowerCase().includes(lowerQuery))
+      const matchesResponsibilities = exp.responsibilities.some(r => r.toLowerCase().includes(lowerQuery))
+      const matchesKeywords = exp.searchKeywords?.some(keyword => keyword.toLowerCase().includes(lowerQuery))
 
-      if (matchesCompany || matchesPosition || matchesDescription || matchesTech) {
+      if (matchesCompany || matchesPosition || matchesResponsibilities || matchesKeywords) {
         results.push({
           id: `experience-${exp.id}`,
           type: 'experience',
           title: `${exp.position} at ${exp.company}`,
-          subtitle: exp.description,
-          icon: '/assets/icons/experiences.png',
+          subtitle: exp.responsibilities[0]?.replace(/\*\*/g, '') || '',
+          icon: exp.logo,
           action: () => onOpenWindow('experiences', 'My Experience', '/assets/icons/experiences.png', <Experiences highlightExperienceId={exp.id} />),
+        })
+      }
+    })
+
+    // Search extracurriculars
+    extracurriculars.forEach(ext => {
+      const matchesOrg = ext.organization.toLowerCase().includes(lowerQuery)
+      const matchesPosition = ext.position.toLowerCase().includes(lowerQuery)
+      const matchesResponsibilities = ext.responsibilities.some(r => r.toLowerCase().includes(lowerQuery))
+      const matchesKeywords = ext.searchKeywords?.some(keyword => keyword.toLowerCase().includes(lowerQuery))
+
+      if (matchesOrg || matchesPosition || matchesResponsibilities || matchesKeywords) {
+        results.push({
+          id: `extracurricular-${ext.id}`,
+          type: 'extracurricular',
+          title: `${ext.position} at ${ext.organization}`,
+          subtitle: ext.responsibilities[0]?.replace(/\*\*/g, '') || '',
+          icon: ext.logo,
+          action: () => onOpenWindow('experiences', 'My Experience', '/assets/icons/experiences.png', <Experiences highlightExperienceId={ext.id} />),
         })
       }
     })
@@ -301,6 +253,7 @@ function Search({ onOpenWindow }: SearchProps) {
                         {result.type === 'application' && 'Application'}
                         {result.type === 'project' && 'Project'}
                         {result.type === 'experience' && 'Work Experience'}
+                        {result.type === 'extracurricular' && 'Extracurricular Activity'}
                       </div>
                     </div>
                   </div>
@@ -320,9 +273,9 @@ function Search({ onOpenWindow }: SearchProps) {
               <h3 style={{ marginBottom: '10px', color: '#1e3f7a' }}>Search Tips</h3>
               <ul style={{ fontSize: '13px', lineHeight: '1.8', paddingLeft: '20px' }}>
                 <li>Search for applications: "Projects", "Resume", "Email", "Pictures", etc.</li>
-                <li>Search for projects by name: "Meido", "Insulin Pump", "Dumpster Diver"</li>
+                <li>Search for projects by name: "Meido", "Fitness Club", "Dumpster Diver"</li>
                 <li>Search by technology: "React", "Python", "C++", "Node.js"</li>
-                <li>Search for work experience: "dynaCERT", "Full Stack", "IoT"</li>
+                <li>Search for work experience: "dynaCERT", "cuHacking", "IoT"</li>
                 <li>Click on any result to open it</li>
               </ul>
             </div>

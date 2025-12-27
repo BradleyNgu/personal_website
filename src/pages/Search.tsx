@@ -28,7 +28,7 @@ const projects = [
     id: '1',
     title: 'Meido',
     description: 'Full-stack conversational AI desktop application with voice synthesis and anime recommendations',
-    technologies: ['Electron', 'Node.js', 'Express.js'],
+    technologies: ['Electron', 'Node.js', 'Express.js', 'Maid'],
   },
   {
     id: '2',
@@ -71,6 +71,12 @@ const projects = [
     title: 'NewsBuzz',
     description: 'Real-time news aggregation platform with AI summaries and location-based insights',
     technologies: ['Express.js', 'HTML', 'Node.js', 'React.js', 'CSS'],
+  },
+  {
+    id: '9',
+    title: 'Fitness Club Management System',
+    description: 'A full-stack fitness club management system with a web interface',
+    technologies: ['Python', 'SQLAlchemy', 'PostgreSQL', 'HTML/CSS', 'JavaScript', 'React.js'],
   },
 ]
 

@@ -161,7 +161,7 @@ function MyPictures() {
               <span>About Me</span>
             </div>
             <div className="place-item">
-              <img src="/assets/icons/Windows XP Icons/Shared Documents.png" alt="" />
+              <img src="/assets/icons/Windows XP Icons/Folder Closed.png" alt="" />
               <span>Shared Documents</span>
             </div>
             <div className="place-item">

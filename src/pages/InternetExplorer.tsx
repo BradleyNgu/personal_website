@@ -48,6 +48,11 @@ function InternetExplorer({ }: InternetExplorerProps) {
       id: 'OHxGY2OEQ0k',
       title: 'Meido-chan Demo',
       url: 'https://www.youtube.com/watch?v=OHxGY2OEQ0k'
+    },
+    {
+      id: 'JyTwrIHdYjk',
+      title: 'COMP3005 Final Project Bradley Daniel Torrey',
+      url: 'https://www.youtube.com/watch?v=JyTwrIHdYjk'
     }
   ]
 

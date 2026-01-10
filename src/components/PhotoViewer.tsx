@@ -102,29 +102,29 @@ function PhotoViewer({ photos, currentPhotoIndex, onClose, onNext, onPrevious }:
         <div className="photo-viewer-toolbar">
           <div className="toolbar-left">
             <button className="toolbar-button" onClick={onPrevious} disabled={currentPhotoIndex === 0}>
-              <img src="/assets/icons/Windows XP Icons/Back.png" alt="Previous" />
+              <img src="/assets/icons/Windows XP Icons/Back.png" alt="Previous" onError={(e) => { e.currentTarget.style.display = 'none' }} />
               Previous
             </button>
             <button className="toolbar-button" onClick={onNext} disabled={currentPhotoIndex === photos.length - 1}>
-              <img src="/assets/icons/Windows XP Icons/Forward.png" alt="Next" />
+              <img src="/assets/icons/Windows XP Icons/Forward.png" alt="Next" onError={(e) => { e.currentTarget.style.display = 'none' }} />
               Next
             </button>
             <div className="toolbar-separator"></div>
             <button className="toolbar-button" onClick={handleZoomOut}>
-              <img src="/assets/icons/Windows XP Icons/Zoom Out.png" alt="Zoom Out" />
+              <span className="toolbar-icon">−</span>
               Zoom Out
             </button>
             <span className="zoom-level">{zoom}%</span>
             <button className="toolbar-button" onClick={handleZoomIn}>
-              <img src="/assets/icons/Windows XP Icons/Zoom In.png" alt="Zoom In" />
+              <span className="toolbar-icon">+</span>
               Zoom In
             </button>
             <button className="toolbar-button" onClick={handleResetZoom}>
-              <img src="/assets/icons/Windows XP Icons/Actual Size.png" alt="Actual Size" />
+              <span className="toolbar-icon">1:1</span>
               Actual Size
             </button>
             <button className="toolbar-button" onClick={handleResetRotation}>
-              <img src="/assets/icons/Windows XP Icons/Reset.png" alt="Reset Rotation" />
+              <span className="toolbar-icon">↺</span>
               Reset Rotation
             </button>
           </div>
@@ -137,23 +137,23 @@ function PhotoViewer({ photos, currentPhotoIndex, onClose, onNext, onPrevious }:
           
           <div className="toolbar-right">
             <button className="toolbar-button" onClick={handleRotate}>
-              <img src="/assets/icons/Windows XP Icons/Rotate.png" alt="Rotate" />
+              <span className="toolbar-icon">↻</span>
               Rotate
             </button>
             <button className="toolbar-button" onClick={handlePrint}>
-              <img src="/assets/icons/Windows XP Icons/Print.png" alt="Print" />
+              <img src="/assets/icons/Windows XP Icons/Print.png" alt="Print" onError={(e) => { e.currentTarget.style.display = 'none' }} />
               Print
             </button>
             <button className="toolbar-button" onClick={handleDownload}>
-              <img src="/assets/icons/Windows XP Icons/Save.png" alt="Download" />
+              <img src="/assets/icons/Windows XP Icons/Save.png" alt="Download" onError={(e) => { e.currentTarget.style.display = 'none' }} />
               Download
             </button>
             <button className="toolbar-button" onClick={toggleFullscreen}>
-              <img src="/assets/icons/Windows XP Icons/Maximize.png" alt="Fullscreen" />
+              <img src="/assets/icons/Windows XP Icons/Maximize.png" alt="Fullscreen" onError={(e) => { e.currentTarget.style.display = 'none' }} />
               Fullscreen
             </button>
             <button className="toolbar-button close-button" onClick={onClose}>
-              <img src="/assets/icons/Windows XP Icons/Exit.png" alt="Close" />
+              <span className="close-icon">×</span>
               Close
             </button>
           </div>

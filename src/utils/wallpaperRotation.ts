@@ -20,7 +20,7 @@ export function getCurrentWallpaper(): string {
   const daysDiff = Math.floor(timeDiff / (1000 * 60 * 60 * 24))
   const weekNumber = Math.floor(daysDiff)
   
-  // Cycle through wallpapers based on week number
+  // Cycle through wallpapers everyday
   const wallpaperIndex = weekNumber % wallpapers.length
   
   return wallpapers[wallpaperIndex]

@@ -177,12 +177,11 @@ export const experiences: Experience[] = [
     location: 'Toronto, ON',
     logo: '/assets/icons/dynacert.png',
     responsibilities: [
-      'Architected and deployed a full-stack **industrial IoT monitoring dashboard** with **18 RESTful APIs** and **20+ React components**, processing real-time telemetry from a **MySQL backend** for **450+ H2 generator units** across multiple time granularities',
-      'Implemented a scalable **Node.js microservices architecture** with **7 controllers** and **9 services**, containerized via **Docker** for development and production, and deployed to hydralytica.com serving live industrial data',
-      'Built a comprehensive **data visualization and reporting system** featuring **6 table modules**, **40+ dynamic filters**, and **5 automated Excel export formats**, enabling cross-fleet performance analytics for **120+ enterprise clients**',
-      'Developed a **C++ native module** for **binary data parsing**, achieving **10-100x faster processing** compared to JavaScript; integrated with **Node.js** via node-addon-api and supported cross-platform builds (Windows, macOS, Linux) for real-time H2Gen unit telemetry processing',
+      'Architected and deployed a full-stack **industrial IoT monitoring dashboard** with **18 RESTful APIs** and **20+ React components**, processing real-time telemetry from a **MySQL backend** for **450+ H₂ generator units**',
+      'Delivered a **self-serve filtering interface** for **300K+ records**, cutting debugging data retrieval from hours to seconds and saving engineers **20+ hours/week**',
+      'Built a production-ready **real-time telemetry processing system** for vehicle-mounted **H₂ generator units**, processing **40+ sensor data fields** from concurrent **ZeroMQ connections** with protocol-aware parsing, graceful error handling for malformed data, and automated **MySQL persistence**, ensuring improved reliability for fleet monitoring and analytics',
     ],
-    searchKeywords: ['React', 'TypeScript', 'Node.js', 'MySQL', 'Docker', 'C++', 'IoT', 'full stack', 'co-op'],
+    searchKeywords: ['React', 'TypeScript', 'Node.js', 'MySQL', 'Docker', 'C++', 'IoT', 'full stack', 'co-op', 'API'],
   },
 ]
 
@@ -199,7 +198,6 @@ export const extracurriculars: Extracurricular[] = [
     logo: '/assets/icons/cuhacking_logo.jpeg',
     responsibilities: [
       'Coordinate and enhance the participant experience for **300+ hackers** through event planning, workshops, and sponsor engagement initiatives',
-      'Collaborate with cross-functional teams to manage logistics, marketing, and hacker communication using **Notion, Discord, and Google Workspace**',
       'Support technical workshops and hackathon preparation events to promote inclusivity and technical growth among university participants',
     ],
     searchKeywords: ['hackathon', 'event planning', 'team lead', 'Notion', 'Discord'],

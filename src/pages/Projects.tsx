@@ -35,7 +35,7 @@ function Projects({ highlightProjectId }: ProjectsProps = {}) {
   return (
     <div className="page-container">
       <div className="page-header">
-        <h1>📂 My Projects</h1>
+        <h1>My Projects</h1>
       </div>
 
       <div className="projects-grid">

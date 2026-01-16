@@ -31,7 +31,7 @@ const sections: AboutSection[] = [
   {
     id: '5',
     title: 'Contact',
-    content: '📧 Email: bradleynguyen2004@gmail.com\n📱 Phone: 647-686-9717\n💼 LinkedIn: linkedin.com/in/bradley-nguyen-cs\n👨‍💻 GitHub: github.com/bradleyngu\n\nFeel free to reach out for collaboration opportunities, project discussions, or just to connect!',
+    content: 'Email: bradleynguyen2004@gmail.com\nPhone: 647-686-9717\nLinkedIn: linkedin.com/in/bradley-nguyen-cs\nGitHub: github.com/bradleyngu\n\nFeel free to reach out for collaboration opportunities, project discussions, or just to connect!',
   },
 ]
 
@@ -39,7 +39,7 @@ function Autobiography() {
   return (
     <div className="page-container">
       <div className="page-header">
-        <h1>📝 About Bradley Nguyen</h1>
+        <h1>About Bradley Nguyen</h1>
       </div>
 
       <div className="about-sections">
@@ -50,10 +50,10 @@ function Autobiography() {
               {section.id === '5' ? (
                 // Special handling for contact section with hyperlinks
                 <div>
-                  <p>📧 Email: <a href="mailto:bradleynguyen2004@gmail.com">bradleynguyen2004@gmail.com</a></p>
-                  <p>📱 Phone: <a href="tel:647-686-9717">647-686-9717</a></p>
-                  <p>💼 LinkedIn: <a href="https://linkedin.com/in/bradley-nguyen-cs" target="_blank" rel="noopener noreferrer">linkedin.com/in/bradley-nguyen-cs</a></p>
-                  <p>👨‍💻 GitHub: <a href="https://github.com/bradleyngu" target="_blank" rel="noopener noreferrer">github.com/bradleyngu</a></p>
+                  <p>Email: <a href="mailto:bradleynguyen2004@gmail.com">bradleynguyen2004@gmail.com</a></p>
+                  <p>Phone: <a href="tel:647-686-9717">647-686-9717</a></p>
+                  <p>LinkedIn: <a href="https://linkedin.com/in/bradley-nguyen-cs" target="_blank" rel="noopener noreferrer">linkedin.com/in/bradley-nguyen-cs</a></p>
+                  <p>GitHub: <a href="https://github.com/bradleyngu" target="_blank" rel="noopener noreferrer">github.com/bradleyngu</a></p>
                   <p></p>
                   <p>Feel free to reach out for collaboration opportunities, project discussions, or just to connect!</p>
                 </div>

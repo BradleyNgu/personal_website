@@ -35,7 +35,7 @@ function Experiences({ highlightExperienceId }: ExperiencesProps = {}) {
   return (
     <div className="page-container">
       <div className="page-header">
-        <h1>💼 Work Experience</h1>
+        <h1>Work Experience</h1>
       </div>
 
       <div className="experiences-timeline">
@@ -72,7 +72,7 @@ function Experiences({ highlightExperienceId }: ExperiencesProps = {}) {
       </div>
 
       <div className="page-header" style={{ marginTop: '40px' }}>
-        <h1>🎯 Extracurricular Activities</h1>
+        <h1>Extracurricular Activities</h1>
       </div>
 
       <div className="experiences-timeline">

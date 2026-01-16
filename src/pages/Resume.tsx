@@ -46,7 +46,7 @@ function Resume() {
             boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.3)'
           }}
         >
-          📖 Open Resume in New Tab
+          Open Resume in New Tab
         </button>
       </div>
     </div>

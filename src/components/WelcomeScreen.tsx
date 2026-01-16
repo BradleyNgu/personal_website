@@ -10,7 +10,7 @@ interface WelcomeScreenProps {
 function WelcomeScreen({ onLogin, onSkip, onShutdown }: WelcomeScreenProps) {
   const [stage, setStage] = useState<'initial' | 'clicked' | 'typing' | 'loggingIn'>('initial')
   const [password, setPassword] = useState('')
-  const typingIntervalRef = React.useRef<NodeJS.Timeout | null>(null)
+  const typingIntervalRef = React.useRef<number | null>(null)
 
   useEffect(() => {
     if (stage === 'typing') {

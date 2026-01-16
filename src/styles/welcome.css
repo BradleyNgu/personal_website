@@ -192,6 +192,8 @@
   background: white;
   height: 32px;
   box-sizing: border-box;
+  color: #000;
+  letter-spacing: 2px;
 }
 
 .password-input:focus {
@@ -231,6 +233,71 @@
   object-fit: contain;
 }
 
+.skip-btn {
+  margin-top: 12px;
+  margin-left: 95px;
+  padding: 6px 20px;
+  background: linear-gradient(to bottom, #ece9d8 0%, #d4d0c8 100%);
+  border: 1px solid #8b8b7a;
+  border-top-color: #ffffff;
+  border-left-color: #ffffff;
+  border-right-color: #5a5a52;
+  border-bottom-color: #5a5a52;
+  border-radius: 3px;
+  color: #000;
+  font-size: 11px;
+  font-weight: bold;
+  font-family: 'Tahoma', sans-serif;
+  cursor: pointer;
+  transition: all 0.1s ease;
+  box-shadow: inset 1px 1px 0 rgba(255, 255, 255, 0.5);
+  animation: slideDown 0.3s ease-out;
+}
+
+.skip-btn:hover {
+  background: linear-gradient(to bottom, #f5f3e8 0%, #e8e4d8 100%);
+}
+
+.skip-btn:active {
+  background: linear-gradient(to bottom, #d4d0c8 0%, #ece9d8 100%);
+  border-top-color: #5a5a52;
+  border-left-color: #5a5a52;
+  border-right-color: #ffffff;
+  border-bottom-color: #ffffff;
+  box-shadow: inset 1px 1px 0 rgba(0, 0, 0, 0.2);
+}
+
+.skip-btn-footer {
+  padding: 10px 18px;
+  background: linear-gradient(to bottom, #ece9d8 0%, #d4d0c8 100%);
+  border: 1px solid #8b8b7a;
+  border-top-color: #ffffff;
+  border-left-color: #ffffff;
+  border-right-color: #5a5a52;
+  border-bottom-color: #5a5a52;
+  border-radius: 3px;
+  color: #000;
+  font-size: 14px;
+  font-weight: bold;
+  font-family: 'Tahoma', sans-serif;
+  cursor: pointer;
+  transition: all 0.1s ease;
+  box-shadow: inset 1px 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+.skip-btn-footer:hover {
+  background: linear-gradient(to bottom, #f5f3e8 0%, #e8e4d8 100%);
+}
+
+.skip-btn-footer:active {
+  background: linear-gradient(to bottom, #d4d0c8 0%, #ece9d8 100%);
+  border-top-color: #5a5a52;
+  border-left-color: #5a5a52;
+  border-right-color: #ffffff;
+  border-bottom-color: #ffffff;
+  box-shadow: inset 1px 1px 0 rgba(0, 0, 0, 0.2);
+}
+
 .welcome-footer {
   grid-column: 1 / -1;
   grid-row: 3;
@@ -243,6 +310,12 @@
   align-items: center;
   border-top: 1px solid #0d1f3a;
   width: 100%;
+}
+
+.footer-left {
+  display: flex;
+  align-items: center;
+  gap: 15px;
 }
 
 .turn-off-btn {
@@ -314,6 +387,14 @@
   .welcome-right {
     display: none; /* Hide right side on mobile */
   }
+
+  .mobile-user-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    margin-top: 20px;
+  }
   
   .user-account-tile {
     flex-direction: column;
@@ -345,6 +426,11 @@
     margin-left: 0;
     justify-content: center;
   }
+
+  .skip-btn {
+    margin-left: 0;
+    margin-top: 10px;
+  }
   
   .password-input {
     width: 250px;
@@ -365,6 +451,11 @@
     justify-content: center;
     align-items: center;
     width: 100%;
+  }
+
+  .footer-left {
+    flex-direction: column;
+    gap: 10px;
   }
   
   .windows-xp-logo {
@@ -430,6 +521,13 @@
   
   .password-section {
     margin-top: 5px !important;
+  }
+
+  .skip-btn {
+    margin-left: 0 !important;
+    margin-top: 8px !important;
+    padding: 8px 18px !important;
+    font-size: 12px !important;
   }
   
   .password-arrow-btn {

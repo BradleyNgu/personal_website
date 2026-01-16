@@ -63,6 +63,11 @@ function App() {
     setLoading(true)
   }
 
+  const handleSkip = () => {
+    setLoading(false)
+    setLoggedIn(true)
+  }
+
   const handleLoadingComplete = () => {
     setLoading(false)
     setLoggedIn(true)
@@ -88,7 +93,7 @@ function App() {
       ) : loading ? (
         <LoadingScreen onComplete={handleLoadingComplete} />
       ) : !loggedIn ? (
-        <WelcomeScreen onLogin={handleLogin} onShutdown={handleShutdown} />
+        <WelcomeScreen onLogin={handleLogin} onSkip={handleSkip} onShutdown={handleShutdown} />
       ) : (
         <Desktop onShutdown={handleShutdown} onLogOff={handleLogOff} />
       )}

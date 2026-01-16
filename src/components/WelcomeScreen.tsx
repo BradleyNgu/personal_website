@@ -1,36 +1,61 @@
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import '../styles/welcome.css'
 
 interface WelcomeScreenProps {
   onLogin: () => void
+  onSkip: () => void
   onShutdown: () => void
 }
 
-function WelcomeScreen({ onLogin, onShutdown }: WelcomeScreenProps) {
+function WelcomeScreen({ onLogin, onSkip, onShutdown }: WelcomeScreenProps) {
   const [stage, setStage] = useState<'initial' | 'clicked' | 'typing' | 'loggingIn'>('initial')
   const [password, setPassword] = useState('')
+  const typingIntervalRef = React.useRef<NodeJS.Timeout | null>(null)
 
   useEffect(() => {
     if (stage === 'typing') {
-      // Simulate typing password
-      const dots = '••••••••••••••••'
-      let currentDot = 0
-      const typingInterval = setInterval(() => {
-        if (currentDot < dots.length) {
-          setPassword(dots.substring(0, currentDot + 1))
-          currentDot++
-        } else {
-          clearInterval(typingInterval)
-          setStage('loggingIn')
-          // Wait a moment before logging in
-          setTimeout(() => {
-            onLogin()
-          }, 500)
-        }
+      // Reset password to empty when typing starts
+      setPassword('')
+      // Simulate typing password - use regular characters that will be converted to dots by password input
+      const passwordLength = 16
+      let currentLength = 0
+      // Start typing after a brief delay to ensure the field is visible
+      const startDelay = setTimeout(() => {
+        const typingInterval = setInterval(() => {
+          if (currentLength < passwordLength) {
+            // Add one character at a time - password field will show dots
+            setPassword('x'.repeat(currentLength + 1))
+            currentLength++
+          } else {
+            clearInterval(typingInterval)
+            typingIntervalRef.current = null
+            setStage('loggingIn')
+            // Wait a moment before logging in
+            setTimeout(() => {
+              onLogin()
+            }, 500)
+          }
+        }, 100)
+        typingIntervalRef.current = typingInterval
       }, 100)
-      return () => clearInterval(typingInterval)
+      
+      return () => {
+        clearTimeout(startDelay)
+        if (typingIntervalRef.current) {
+          clearInterval(typingIntervalRef.current)
+          typingIntervalRef.current = null
+        }
+      }
     }
   }, [stage, onLogin])
+
+  const handleSkip = () => {
+    if (typingIntervalRef.current) {
+      clearInterval(typingIntervalRef.current)
+      typingIntervalRef.current = null
+    }
+    onSkip()
+  }
 
   const handleUserClick = () => {
     if (stage === 'initial') {
@@ -78,6 +103,11 @@ function WelcomeScreen({ onLogin, onShutdown }: WelcomeScreenProps) {
                   <img src="/assets/icons/Windows XP Icons/Go.png" alt="Go" className="arrow-icon" />
                 </button>
               </div>
+              {stage === 'typing' && (
+                <button className="skip-btn" onClick={handleSkip}>
+                  Skip
+                </button>
+              )}
             </div>
           )}
         </div>
@@ -109,15 +139,27 @@ function WelcomeScreen({ onLogin, onShutdown }: WelcomeScreenProps) {
                 <img src="/assets/icons/Windows XP Icons/Go.png" alt="Go" className="arrow-icon" />
               </button>
             </div>
+            {stage === 'typing' && (
+              <button className="skip-btn" onClick={handleSkip}>
+                Skip
+              </button>
+            )}
           </div>
         )}
       </div>
 
       <div className="welcome-footer">
-        <button className="turn-off-btn" onClick={onShutdown}>
-          <img src="/assets/icons/Windows XP Icons/Power.png" alt="Power" className="shutdown-icon" />
-          Turn off computer
-        </button>
+        <div className="footer-left">
+          <button className="turn-off-btn" onClick={onShutdown}>
+            <img src="/assets/icons/Windows XP Icons/Power.png" alt="Power" className="shutdown-icon" />
+            Turn off computer
+          </button>
+          {stage === 'initial' && (
+            <button className="skip-btn-footer" onClick={handleSkip}>
+              Skip
+            </button>
+          )}
+        </div>
         <div className="footer-info">
           After you log on, you can add or change accounts.
         </div>

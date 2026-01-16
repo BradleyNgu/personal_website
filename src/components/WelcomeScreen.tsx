@@ -149,17 +149,10 @@ function WelcomeScreen({ onLogin, onSkip, onShutdown }: WelcomeScreenProps) {
       </div>
 
       <div className="welcome-footer">
-        <div className="footer-left">
-          <button className="turn-off-btn" onClick={onShutdown}>
-            <img src="/assets/icons/Windows XP Icons/Power.png" alt="Power" className="shutdown-icon" />
-            Turn off computer
-          </button>
-          {stage === 'initial' && (
-            <button className="skip-btn-footer" onClick={handleSkip}>
-              Skip
-            </button>
-          )}
-        </div>
+        <button className="turn-off-btn" onClick={onShutdown}>
+          <img src="/assets/icons/Windows XP Icons/Power.png" alt="Power" className="shutdown-icon" />
+          Turn off computer
+        </button>
         <div className="footer-info">
           After you log on, you can add or change accounts.
         </div>

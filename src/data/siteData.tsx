@@ -40,6 +40,17 @@ export interface Extracurricular {
 export const projects: Project[] = [
   {
     id: '1',
+    title: 'Arctic Argus',
+    description: 'Gamified simulation of the Canadian Arctic',
+    technologies: ['React.js', 'JavaScript', 'Arduino', 'HTML/CSS'],
+    link: 'https://github.com/bradleyngu/uOttaHack-8',
+    award: '1st for Thales: Northern Shield, Maritime Strategy Simulator Challenge @ uOttaHack 8',
+    highlights: [
+      'Arctic Argus is a real time gamified simulation of the Canadian Arctic designed to immerse the user in the role of a commander. The user is able to command and control various vehicles with the objective of spending a certain amount of budget to neutralize the most amounts of threats and gather the most amount of resources',
+    ],
+  },
+  {
+    id: '2',
     title: 'Playtopia',
     description: 'Blockchain-based interactive game creation platform with smart contracts and real-time rewards',
     technologies: ['Python', 'JavaScript', 'OpenCV', 'C++', 'Flask', 'Cairo', 'Blockchain', 'TypeScript', 'Node.js', 'React.js', 'Arduino', 'HTML/CSS'],
@@ -51,7 +62,7 @@ export const projects: Project[] = [
     ],
   },
   {
-    id: '2',
+    id: '3',
     title: 'X2 Insulin Pump Simulator',
     description: 'Fully functional desktop simulator of the Tandem t:slim X2 insulin pump with Control-IQ algorithm',
     technologies: ['C++', 'Qt'],
@@ -66,7 +77,7 @@ export const projects: Project[] = [
     ],
   },
   {
-    id: '3',
+    id: '4',
     title: 'Dumpster Diver',
     description: 'End-to-end automated waste sorting system using machine learning and IoT hardware',
     technologies: ['Python', 'JavaScript', 'OpenCV', 'C++', 'Flask', 'TensorFlow', 'SQLite', 'Arduino', 'Keras', 'HTML/CSS'],
@@ -79,20 +90,19 @@ export const projects: Project[] = [
     ],
   },
   {
-    id: '4',
+    id: '5',
     title: 'Meido',
     description: 'Full-stack conversational AI desktop application with voice synthesis and anime recommendations',
     technologies: ['Electron', 'Node.js', 'Express.js'],
     link: 'https://github.com/BradleyNgu/SolutionHacks',
     award: 'Winner for Silliest Most Convoluted Project @ SolutionHacks',
     highlights: [
-      'You know you\'ve always wanted one. A personal maid that goes around your desktop. Now, the time has finally come.',
-      'Introducing Meido-Chan, an anime-specialized chatbot with the ability to not only converse with you, but also manage your own MyAnimeList account!',
+      'You know you\'ve always wanted one. A personal maid that goes around your desktop. Now, the time has finally come. Introducing Meido-Chan, an anime-specialized chatbot with the ability to not only converse with you, but also manage your own MyAnimeList account!',
       'Includes based opinions as well!',
     ],
   },
   {
-    id: '5',
+    id: '6',
     title: 'Elevator Simulator',
     description: 'Real-time elevator simulation system with smart scheduling and safety protocols',
     technologies: ['C++', 'Qt'],
@@ -107,7 +117,7 @@ export const projects: Project[] = [
     ],
   },
   {
-    id: '6',
+    id: '7',
     title: 'Fitness Club Management System',
     description: 'A full-stack fitness club management system with a web interface',
     technologies: ['Python', 'SQLAlchemy', 'PostgreSQL', 'HTML/CSS', 'JavaScript', 'React.js'],
@@ -124,7 +134,7 @@ export const projects: Project[] = [
     ],
   },
   {
-    id: '7',
+    id: '8',
     title: 'Qmove',
     description: 'AI-powered rehabilitation tracker using computer vision to monitor joint range of motion',
     technologies: ['Streamlit', 'OpenCV', 'Flask', 'MongoDB', 'Node.js', 'MediaPipe', 'React.js', 'CSS'],
@@ -138,20 +148,18 @@ export const projects: Project[] = [
     ],
   },
   {
-    id: '8',
+    id: '9',
     title: 'The Heart Stopper',
     description: 'Gesture-controlled energy drink dispenser using computer vision and Arduino',
     technologies: ['Python', 'OpenCV', 'C++', 'MediaPipe', 'Arduino'],
     link: 'https://github.com/BradleyNgu/Hack-the-Hill',
     award: '1st for Best uOttawa x Carleton Collaboration @ Hack the Hill II',
     highlights: [
-      'The Heart Stopper is a machine that pours a designated amount of energy drink based on how many fingers you hold up to your webcam',
-      'Hold up one finger, you just need a slight pick-me-up. Hold up two, a little extra kick is all you need',
-      'Hold up 3 or 4, things are starting to get serious. Hold up 5, the situation is dire and you need to lock in',
+      'The Heart Stopper is a machine that pours a designated amount of energy drink based on how many fingers you hold up to your webcam. Hold up one finger, you just need a slight pick-me-up. Hold up two, a little extra kick is all you need. Hold up three or four, things are starting to get serious. Hold up five, the situation is dire and you need to lock in. Hold up 3 or 4, things are starting to get serious. Hold up 5, the situation is dire and you need to lock in',
     ],
   },
   {
-    id: '9',
+    id: '10',
     title: 'NewsBuzz',
     description: 'Real-time news aggregation platform with AI summaries and location-based insights',
     technologies: ['Express.js', 'HTML', 'Node.js', 'React.js', 'CSS'],

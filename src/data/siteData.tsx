@@ -6,7 +6,9 @@ export interface Project {
   title: string
   description: string
   technologies: string[]
-  link: string
+  link?: string
+  githubLink?: string
+  playLink?: string
   award?: string
   highlights: string[]
 }
@@ -43,7 +45,8 @@ export const projects: Project[] = [
     title: 'Arctic Argus',
     description: 'Gamified simulation of the Canadian Arctic',
     technologies: ['React.js', 'JavaScript', 'Arduino', 'HTML/CSS'],
-    link: 'https://arcticargus.xyz',
+    githubLink: 'https://github.com/BradleyNgu/uOttaHack-8',
+    playLink: 'https://arcticargus.xyz',
     award: '1st for Thales: Northern Shield, Maritime Strategy Simulator Challenge @ uOttaHack 8',
     highlights: [
       'Arctic Argus is a real time gamified simulation of the Canadian Arctic designed to immerse the user in the role of a commander. The user is able to command and control various vehicles with the objective of spending a certain amount of budget to neutralize the most amounts of threats and gather the most amount of resources',

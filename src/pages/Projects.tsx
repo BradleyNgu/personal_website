@@ -64,11 +64,23 @@ function Projects({ highlightProjectId }: ProjectsProps = {}) {
                 ))}
               </ul>
             )}
-            {project.link && (
-              <a href={project.link} className="project-link" target="_blank" rel="noopener noreferrer">
-                View on GitHub →
-              </a>
-            )}
+            <div className="project-links">
+              {project.githubLink && (
+                <a href={project.githubLink} className="project-link" target="_blank" rel="noopener noreferrer">
+                  View on GitHub →
+                </a>
+              )}
+              {project.playLink && (
+                <a href={project.playLink} className="project-link" target="_blank" rel="noopener noreferrer">
+                  Play →
+                </a>
+              )}
+              {project.link && !project.githubLink && !project.playLink && (
+                <a href={project.link} className="project-link" target="_blank" rel="noopener noreferrer">
+                  View on GitHub →
+                </a>
+              )}
+            </div>
           </div>
         ))}
       </div>

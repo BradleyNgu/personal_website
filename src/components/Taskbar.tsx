@@ -5,6 +5,7 @@ import '../styles/taskbar.css'
 
 interface TaskbarProps {
   windows: WindowState[]
+  onTaskbarReorder: (windowId: string, newIndex: number) => void
   onWindowClick: (id: string) => void
   onShutdown: () => void
   onLogOff: () => void
@@ -19,17 +20,28 @@ interface TaskbarProps {
   onRunClick: () => void
 }
 
-function Taskbar({ windows, onWindowClick, onShutdown, onLogOff, onEmailClick, onCommandPromptClick, onMyPicturesClick, onMyMusicClick, onResumeClick, onAutobiographyClick, onInternetExplorerClick, onSearchClick, onRunClick }: TaskbarProps) {
+const DRAG_THRESHOLD_PX = 5
+
+function Taskbar({ windows, onTaskbarReorder, onWindowClick, onShutdown, onLogOff, onEmailClick, onCommandPromptClick, onMyPicturesClick, onMyMusicClick, onResumeClick, onAutobiographyClick, onInternetExplorerClick, onSearchClick, onRunClick }: TaskbarProps) {
   const [showStartMenu, setShowStartMenu] = useState(false)
   const [showSystemTrayMenu, setShowSystemTrayMenu] = useState(false)
   const [showAllPrograms, setShowAllPrograms] = useState(false)
   const [volume, setVolume] = useState(AudioVolumeManager.getVolume())
   const [currentTime, setCurrentTime] = useState(new Date())
+  const [draggingWindowId, setDraggingWindowId] = useState<string | null>(null)
+  const [dragTranslateX, setDragTranslateX] = useState(0)
   const startMenuRef = useRef<HTMLDivElement>(null)
   const systemTrayMenuRef = useRef<HTMLDivElement>(null)
   const allProgramsRef = useRef<HTMLDivElement>(null)
   const systemTrayOpenTimeRef = useRef<number>(0)
   const touchHandledRef = useRef(false)
+  const taskbarWindowsRef = useRef<HTMLDivElement>(null)
+  const draggedButtonRef = useRef<HTMLButtonElement | null>(null)
+  const dragOffsetRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 })
+  const dragStartRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 })
+  const didDragRef = useRef(false)
+  const windowsRef = useRef(windows)
+  windowsRef.current = windows
 
   // Initialize volume from manager
   useEffect(() => {
@@ -137,6 +149,108 @@ function Taskbar({ windows, onWindowClick, onShutdown, onLogOff, onEmailClick, o
       systemTrayOpenTimeRef.current = Date.now()
     }
   }
+
+  const startTaskbarDrag = (windowId: string, clientX: number, clientY: number, buttonRect: DOMRect) => {
+    didDragRef.current = false
+    dragStartRef.current = { x: clientX, y: clientY }
+    dragOffsetRef.current = { x: clientX - buttonRect.left, y: clientY - buttonRect.top }
+    setDragTranslateX(0)
+    setDraggingWindowId(windowId)
+  }
+
+  const handleTaskbarWindowMouseDown = (e: React.MouseEvent, windowId: string) => {
+    e.preventDefault()
+    const rect = (e.currentTarget as HTMLElement).getBoundingClientRect()
+    startTaskbarDrag(windowId, e.clientX, e.clientY, rect)
+  }
+
+  const handleTaskbarWindowTouchStart = (e: React.TouchEvent, windowId: string) => {
+    e.preventDefault()
+    const touch = e.touches[0]
+    const rect = (e.currentTarget as HTMLElement).getBoundingClientRect()
+    startTaskbarDrag(windowId, touch.clientX, touch.clientY, rect)
+  }
+
+  useEffect(() => {
+    if (!draggingWindowId) return
+
+    const applyMove = (clientX: number, clientY: number) => {
+      const dx = clientX - dragStartRef.current.x
+      const dy = clientY - dragStartRef.current.y
+      if (!didDragRef.current && (Math.abs(dx) > DRAG_THRESHOLD_PX || Math.abs(dy) > DRAG_THRESHOLD_PX)) {
+        didDragRef.current = true
+      }
+      const btn = draggedButtonRef.current
+      if (btn) {
+        const rect = btn.getBoundingClientRect()
+        setDragTranslateX(clientX - dragOffsetRef.current.x - rect.left)
+      }
+    }
+
+    const trySwap = (clientX: number) => {
+      const container = taskbarWindowsRef.current
+      if (!container) return
+      const buttons = container.querySelectorAll<HTMLElement>('.taskbar-window')
+      if (buttons.length === 0) return
+      const currentWindows = windowsRef.current
+      const currentIndex = currentWindows.findIndex(w => w.id === draggingWindowId)
+      if (currentIndex === -1) return
+      let targetIndex = -1
+      for (let j = 0; j < buttons.length; j++) {
+        const rect = buttons[j].getBoundingClientRect()
+        if (clientX >= rect.left && clientX < rect.right) {
+          const mid = rect.left + rect.width / 2
+          if (j < currentIndex && clientX < mid) targetIndex = j
+          else if (j > currentIndex && clientX >= mid) targetIndex = j
+          break
+        }
+      }
+      if (targetIndex !== -1 && targetIndex !== currentIndex) {
+        onTaskbarReorder(draggingWindowId, targetIndex)
+      }
+    }
+
+    const handleMouseMove = (e: MouseEvent) => {
+      applyMove(e.clientX, e.clientY)
+      trySwap(e.clientX)
+    }
+
+    const handleTouchMove = (e: TouchEvent) => {
+      const touch = e.touches[0]
+      applyMove(touch.clientX, touch.clientY)
+      trySwap(touch.clientX)
+    }
+
+    const endDrag = (wasClick: boolean) => {
+      const id = draggingWindowId
+      const hadDragged = didDragRef.current
+      setDraggingWindowId(null)
+      setDragTranslateX(0)
+      draggedButtonRef.current = null
+      if (wasClick && !hadDragged && id) {
+        onWindowClick(id)
+      }
+    }
+
+    const handleMouseUp = () => {
+      endDrag(true)
+    }
+
+    const handleTouchEnd = () => {
+      endDrag(true)
+    }
+
+    document.addEventListener('mousemove', handleMouseMove)
+    document.addEventListener('mouseup', handleMouseUp)
+    document.addEventListener('touchmove', handleTouchMove, { passive: false })
+    document.addEventListener('touchend', handleTouchEnd)
+    return () => {
+      document.removeEventListener('mousemove', handleMouseMove)
+      document.removeEventListener('mouseup', handleMouseUp)
+      document.removeEventListener('touchmove', handleTouchMove)
+      document.removeEventListener('touchend', handleTouchEnd)
+    }
+  }, [draggingWindowId, onTaskbarReorder, onWindowClick])
 
   return (
     <div className="taskbar">
@@ -432,15 +546,15 @@ function Taskbar({ windows, onWindowClick, onShutdown, onLogOff, onEmailClick, o
         />
       </div>
 
-      <div className="taskbar-windows">
+      <div className="taskbar-windows" ref={taskbarWindowsRef}>
         {windows.map(window => (
           <button
             key={window.id}
-            className={`taskbar-window ${window.isMinimized ? '' : 'active'}`}
-            onClick={() => {
-              console.log('Taskbar button clicked for window:', window.id, 'isMinimized:', window.isMinimized)
-              onWindowClick(window.id)
-            }}
+            ref={draggingWindowId === window.id ? draggedButtonRef : undefined}
+            className={`taskbar-window ${window.isMinimized ? '' : 'active'} ${draggingWindowId === window.id ? 'taskbar-window-dragging' : ''}`}
+            style={draggingWindowId === window.id ? { transform: `translateX(${dragTranslateX}px)` } : undefined}
+            onMouseDown={(e) => handleTaskbarWindowMouseDown(e, window.id)}
+            onTouchStart={(e) => handleTaskbarWindowTouchStart(e, window.id)}
           >
             <img src={window.icon} alt="" className="taskbar-window-icon" />
             <span className="taskbar-window-title">{window.title}</span>

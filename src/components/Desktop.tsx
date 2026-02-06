@@ -226,6 +226,18 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
     ))
   }
 
+  const reorderTaskbarWindows = (windowId: string, newIndex: number) => {
+    setWindows(prev => {
+      const idx = prev.findIndex(w => w.id === windowId)
+      if (idx === -1 || idx === newIndex) return prev
+      const item = prev[idx]
+      const next = [...prev]
+      next.splice(idx, 1)
+      next.splice(newIndex, 0, item)
+      return next
+    })
+  }
+
   const openEmailWindow = () => {
     openWindow('email', 'Email - Contact Bradley', '/assets/icons/Windows XP Icons/Email.png', <ContactEmail />)
   }
@@ -909,6 +921,7 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
 
       <Taskbar 
         windows={windows}
+        onTaskbarReorder={reorderTaskbarWindows}
         onWindowClick={(id) => {
           const window = windows.find(w => w.id === id)
           console.log('Taskbar click on window:', id, 'isMinimized:', window?.isMinimized)

@@ -145,6 +145,10 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
   const selectionBoxRef = useRef<HTMLDivElement>(null)
   const recycleBinHoveredRef = useRef<boolean>(false)
   const lastDragOverTimeRef = useRef<number>(0)
+  // Throttle multi-drag updates to one per frame so desktop doesn't re-render 100+ times/sec (mouse fires very often; touch doesn't)
+  const multiDragLastPointerRef = useRef<{ x: number; y: number } | null>(null)
+  const multiDragLastCommittedRef = useRef<{ x: number; y: number } | null>(null)
+  const multiDragRafRef = useRef<number | null>(null)
 
   const openWindow = (id: string, title: string, icon: string, component: React.ReactNode, hideMenuBar: boolean = false) => {
     // Check if window is already open
@@ -453,11 +457,10 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
       const iconId = clickedIcon.getAttribute('data-icon-id')
       if (iconId && selectedIcons.includes(iconId)) {
         // Start dragging selected icons
+        const coords = { x: e.clientX, y: e.clientY }
+        multiDragLastCommittedRef.current = coords
         setIsDraggingSelected(true)
-        setDragOffset({
-          x: e.clientX,
-          y: e.clientY
-        })
+        setDragOffset(coords)
         return
       }
     }
@@ -485,11 +488,10 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
       const iconId = touchedIcon.getAttribute('data-icon-id')
       if (iconId && selectedIcons.includes(iconId)) {
         // Start dragging selected icons
+        const coords = { x: touch.clientX, y: touch.clientY }
+        multiDragLastCommittedRef.current = coords
         setIsDraggingSelected(true)
-        setDragOffset({
-          x: touch.clientX,
-          y: touch.clientY
-        })
+        setDragOffset(coords)
         return
       }
     }
@@ -543,32 +545,35 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
         setSelectedIcons(selected)
       }
       
-      if (isDraggingSelected && dragOffset && selectedIcons.length > 0) {
-        const deltaX = e.clientX - dragOffset.x
-        const deltaY = e.clientY - dragOffset.y
-        
-        // Constrain the delta to keep all selected icons within viewport
-        const constrained = constrainMultiSelectionDelta(iconPositions, selectedIcons, deltaX, deltaY)
-        
-        // Update positions of all selected icons with constrained delta
-        setIconPositions(prev => 
-          prev.map(icon => 
-            selectedIcons.includes(icon.id)
-              ? { ...icon, x: icon.x + constrained.deltaX, y: icon.y + constrained.deltaY }
-              : icon
-          )
-        )
-        
-        // Check if hovering over recycle bin
-        const recycleBinPos = iconPositions.find(p => p.id === 'recycle-bin')
-        if (recycleBinPos) {
-          const distance = Math.sqrt(
-            Math.pow(e.clientX - recycleBinPos.x, 2) + Math.pow(e.clientY - recycleBinPos.y, 2)
-          )
-          setIsRecycleBinHovered(distance < 100)
+      if (isDraggingSelected && selectedIcons.length > 0) {
+        multiDragLastPointerRef.current = { x: e.clientX, y: e.clientY }
+        if (multiDragRafRef.current === null) {
+          multiDragRafRef.current = requestAnimationFrame(() => {
+            multiDragRafRef.current = null
+            const latest = multiDragLastPointerRef.current
+            const prev = multiDragLastCommittedRef.current
+            if (!latest || !prev) return
+            const deltaX = latest.x - prev.x
+            const deltaY = latest.y - prev.y
+            const constrained = constrainMultiSelectionDelta(iconPositions, selectedIcons, deltaX, deltaY)
+            setIconPositions(prevPos => 
+              prevPos.map(icon => 
+                selectedIcons.includes(icon.id)
+                  ? { ...icon, x: icon.x + constrained.deltaX, y: icon.y + constrained.deltaY }
+                  : icon
+              )
+            )
+            const recycleBinPos = iconPositions.find(p => p.id === 'recycle-bin')
+            if (recycleBinPos) {
+              const distance = Math.sqrt(
+                Math.pow(latest.x - recycleBinPos.x, 2) + Math.pow(latest.y - recycleBinPos.y, 2)
+              )
+              setIsRecycleBinHovered(distance < 100)
+            }
+            multiDragLastCommittedRef.current = latest
+            setDragOffset(latest)
+          })
         }
-        
-        setDragOffset({ x: e.clientX, y: e.clientY })
       }
     }
 
@@ -579,6 +584,12 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
       }
       
       if (isDraggingSelected) {
+        if (multiDragRafRef.current !== null) {
+          cancelAnimationFrame(multiDragRafRef.current)
+          multiDragRafRef.current = null
+        }
+        multiDragLastPointerRef.current = null
+        multiDragLastCommittedRef.current = null
         // Check if dropped on recycle bin
         if (isRecycleBinHovered && selectedIcons.length > 0) {
           const toRecycle = selectedIcons.filter(id => id !== 'recycle-bin')
@@ -668,32 +679,35 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
         setSelectedIcons(selected)
       }
       
-      if (isDraggingSelected && dragOffset && selectedIcons.length > 0) {
-        const deltaX = touch.clientX - dragOffset.x
-        const deltaY = touch.clientY - dragOffset.y
-        
-        // Constrain the delta to keep all selected icons within viewport
-        const constrained = constrainMultiSelectionDelta(iconPositions, selectedIcons, deltaX, deltaY)
-        
-        // Update positions of all selected icons with constrained delta
-        setIconPositions(prev => 
-          prev.map(icon => 
-            selectedIcons.includes(icon.id)
-              ? { ...icon, x: icon.x + constrained.deltaX, y: icon.y + constrained.deltaY }
-              : icon
-          )
-        )
-        
-        // Check if hovering over recycle bin
-        const recycleBinPos = iconPositions.find(p => p.id === 'recycle-bin')
-        if (recycleBinPos) {
-          const distance = Math.sqrt(
-            Math.pow(touch.clientX - recycleBinPos.x, 2) + Math.pow(touch.clientY - recycleBinPos.y, 2)
-          )
-          setIsRecycleBinHovered(distance < 100)
+      if (isDraggingSelected && selectedIcons.length > 0) {
+        multiDragLastPointerRef.current = { x: touch.clientX, y: touch.clientY }
+        if (multiDragRafRef.current === null) {
+          multiDragRafRef.current = requestAnimationFrame(() => {
+            multiDragRafRef.current = null
+            const latest = multiDragLastPointerRef.current
+            const prev = multiDragLastCommittedRef.current
+            if (!latest || !prev) return
+            const deltaX = latest.x - prev.x
+            const deltaY = latest.y - prev.y
+            const constrained = constrainMultiSelectionDelta(iconPositions, selectedIcons, deltaX, deltaY)
+            setIconPositions(prevPos => 
+              prevPos.map(icon => 
+                selectedIcons.includes(icon.id)
+                  ? { ...icon, x: icon.x + constrained.deltaX, y: icon.y + constrained.deltaY }
+                  : icon
+              )
+            )
+            const recycleBinPos = iconPositions.find(p => p.id === 'recycle-bin')
+            if (recycleBinPos) {
+              const distance = Math.sqrt(
+                Math.pow(latest.x - recycleBinPos.x, 2) + Math.pow(latest.y - recycleBinPos.y, 2)
+              )
+              setIsRecycleBinHovered(distance < 100)
+            }
+            multiDragLastCommittedRef.current = latest
+            setDragOffset(latest)
+          })
         }
-        
-        setDragOffset({ x: touch.clientX, y: touch.clientY })
       }
     }
 
@@ -704,6 +718,12 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
       }
       
       if (isDraggingSelected) {
+        if (multiDragRafRef.current !== null) {
+          cancelAnimationFrame(multiDragRafRef.current)
+          multiDragRafRef.current = null
+        }
+        multiDragLastPointerRef.current = null
+        multiDragLastCommittedRef.current = null
         // Check if dropped on recycle bin
         if (isRecycleBinHovered && selectedIcons.length > 0) {
           const toRecycle = selectedIcons.filter(id => id !== 'recycle-bin')

@@ -46,6 +46,8 @@
   transform: scale(1.05);
   transition: transform 0.1s ease;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  /* No icon is "under" the cursor during multi-drag so they all re-render the same and none get extra :hover work */
+  pointer-events: none;
 }
 
 .delete-confirm-overlay {

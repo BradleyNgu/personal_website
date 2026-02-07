@@ -371,18 +371,16 @@ function Window({
       }
       
       if (isDragging && dragOffsetRef.current && windowRef.current && !window.isMaximized) {
-        // Commit final position to state
-        onPositionChange(dragOffsetRef.current)
-        // Reset transform
+        const newPos = dragOffsetRef.current
+        onPositionChange(newPos) // parent uses flushSync so we've re-rendered with new position before returning
         windowRef.current.style.transform = ''
         windowRef.current.style.willChange = 'auto'
         dragOffsetRef.current = null
       }
       
       if (isResizing && resizeSizeRef.current && windowRef.current) {
-        // Commit final size to state
-        onSizeChange(resizeSizeRef.current)
-        // Reset inline styles to let state control
+        const newSize = resizeSizeRef.current
+        onSizeChange(newSize) // parent uses flushSync so we've re-rendered with new size before returning
         windowRef.current.style.width = ''
         windowRef.current.style.height = ''
         resizeSizeRef.current = null
@@ -404,7 +402,8 @@ function Window({
       
       // Commit position if dragging
       if (isDragging && dragOffsetRef.current && windowRef.current && !window.isMaximized) {
-        onPositionChange(dragOffsetRef.current)
+        const newPos = dragOffsetRef.current
+        onPositionChange(newPos) // parent uses flushSync so we've re-rendered with new position before returning
         windowRef.current.style.transform = ''
         windowRef.current.style.willChange = 'auto'
         dragOffsetRef.current = null
@@ -412,7 +411,8 @@ function Window({
       
       // Commit size if resizing
       if (isResizing && resizeSizeRef.current && windowRef.current) {
-        onSizeChange(resizeSizeRef.current)
+        const newSize = resizeSizeRef.current
+        onSizeChange(newSize) // parent uses flushSync so we've re-rendered with new size before returning
         windowRef.current.style.width = ''
         windowRef.current.style.height = ''
         resizeSizeRef.current = null
@@ -432,9 +432,8 @@ function Window({
       document.addEventListener('mouseup', handleMouseUp)
     }
     
-    // Always listen for touch events to detect movement (especially on mobile)
-    // This is needed to distinguish taps from drags
-    document.addEventListener('touchmove', handleTouchMove, { passive: false })
+    // Capture phase so we run before scrollable content's passive listeners and can preventDefault()
+    document.addEventListener('touchmove', handleTouchMove, { passive: false, capture: true })
     document.addEventListener('touchend', handleTouchEnd)
     
     return () => {
@@ -460,7 +459,7 @@ function Window({
         document.removeEventListener('mousemove', handleMouseMove)
         document.removeEventListener('mouseup', handleMouseUp)
       }
-      document.removeEventListener('touchmove', handleTouchMove)
+      document.removeEventListener('touchmove', handleTouchMove, true)
       document.removeEventListener('touchend', handleTouchEnd)
     }
   }, [isDragging, isResizing, dragStart, resizeStart, onPositionChange, onSizeChange, window.position, window.size, isMobile, window.isMaximized])
@@ -494,6 +493,7 @@ function Window({
       className={`window ${window.isMaximized ? 'maximized' : ''} ${isResizing ? 'resizing' : ''}`}
       style={style}
       onMouseDown={() => onFocus()}
+      onDragStart={(e) => e.preventDefault()}
     >
       <div 
         className="window-title-bar" 
@@ -501,18 +501,18 @@ function Window({
         onTouchStart={handleTouchStartTitle}
       >
         <div className="window-title">
-          <img src={window.icon} alt="" className="window-icon" />
+          <img src={window.icon} alt="" className="window-icon" draggable={false} />
           <span>{window.title}</span>
         </div>
         <div className="window-controls">
           <button className="window-button minimize" onClick={onMinimize} title="Minimize">
-            <img src="/assets/icons/Windows XP Icons/Minimize.png" alt="Minimize" />
+            <img src="/assets/icons/Windows XP Icons/Minimize.png" alt="Minimize" draggable={false} />
           </button>
           <button className="window-button maximize" onClick={onMaximize} title={window.isMaximized ? "Restore" : "Maximize"}>
-            <img src={window.isMaximized ? "/assets/icons/Windows XP Icons/Restore.png" : "/assets/icons/Windows XP Icons/Maximize.png"} alt={window.isMaximized ? "Restore" : "Maximize"} />
+            <img src={window.isMaximized ? "/assets/icons/Windows XP Icons/Restore.png" : "/assets/icons/Windows XP Icons/Maximize.png"} alt={window.isMaximized ? "Restore" : "Maximize"} draggable={false} />
           </button>
           <button className="window-button close" onClick={onClose} title="Close">
-            <img src="/assets/icons/Windows XP Icons/Exit.png" alt="Close" />
+            <img src="/assets/icons/Windows XP Icons/Exit.png" alt="Close" draggable={false} />
           </button>
         </div>
       </div>

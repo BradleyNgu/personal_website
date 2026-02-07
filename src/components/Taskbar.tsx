@@ -242,12 +242,12 @@ function Taskbar({ windows, onTaskbarReorder, onWindowClick, onShutdown, onLogOf
 
     document.addEventListener('mousemove', handleMouseMove)
     document.addEventListener('mouseup', handleMouseUp)
-    document.addEventListener('touchmove', handleTouchMove, { passive: false })
+    document.addEventListener('touchmove', handleTouchMove, { passive: false, capture: true })
     document.addEventListener('touchend', handleTouchEnd)
     return () => {
       document.removeEventListener('mousemove', handleMouseMove)
       document.removeEventListener('mouseup', handleMouseUp)
-      document.removeEventListener('touchmove', handleTouchMove)
+      document.removeEventListener('touchmove', handleTouchMove, true)
       document.removeEventListener('touchend', handleTouchEnd)
     }
   }, [draggingWindowId, onTaskbarReorder, onWindowClick])

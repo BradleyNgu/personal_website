@@ -204,6 +204,7 @@
   align-items: center;
   cursor: move;
   user-select: none;
+  touch-action: none; /* avoid browser starting scroll so our touchmove preventDefault works */
   border-radius: 0;
   height: var(--window-title-bar-height, 48px);
   min-height: var(--window-title-bar-height, 48px);
@@ -377,6 +378,14 @@
   -ms-user-select: text !important;
 }
 
+/* Prevent native browser drag (ghost image) from snapping the window when dragging over images */
+.window img,
+.window-content img {
+  -webkit-user-drag: none;
+  user-drag: none;
+  pointer-events: auto;
+}
+
 /* When window has no menu bar (like command prompt), only subtract title bar height */
 .window.maximized:has(.command-prompt) .window-content {
   height: calc(100vh - var(--taskbar-height, 40px) - var(--window-title-bar-height, 30px)) !important;
@@ -394,6 +403,7 @@
   width: var(--window-resize-handle-size, 16px);
   height: var(--window-resize-handle-size, 16px);
   cursor: nwse-resize;
+  touch-action: none;
   background: linear-gradient(135deg, 
     transparent 0%, 
     transparent 45%, 

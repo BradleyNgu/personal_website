@@ -262,7 +262,7 @@ function DesktopIcon({
     if (isDragging) {
       document.addEventListener('mousemove', handleMouseMove)
       document.addEventListener('mouseup', handleMouseUp)
-      document.addEventListener('touchmove', handleTouchMove, { passive: false })
+      document.addEventListener('touchmove', handleTouchMove, { passive: false, capture: true })
       document.addEventListener('touchend', handleTouchEnd)
       return () => {
         // Cancel any pending RAF
@@ -279,7 +279,7 @@ function DesktopIcon({
         
         document.removeEventListener('mousemove', handleMouseMove)
         document.removeEventListener('mouseup', handleMouseUp)
-        document.removeEventListener('touchmove', handleTouchMove)
+        document.removeEventListener('touchmove', handleTouchMove, true)
         document.removeEventListener('touchend', handleTouchEnd)
       }
     }

@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
+import { flushSync } from 'react-dom'
 import Taskbar from './Taskbar'
 import Window from './Window'
 import DesktopIcon from './DesktopIcon'
@@ -215,15 +216,19 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
   }
 
   const updateWindowPosition = (id: string, position: { x: number; y: number }) => {
-    setWindows(prevWindows => prevWindows.map(w => 
-      w.id === id ? { ...w, position } : w
-    ))
+    flushSync(() => {
+      setWindows(prevWindows => prevWindows.map(w => 
+        w.id === id ? { ...w, position } : w
+      ))
+    })
   }
 
   const updateWindowSize = (id: string, size: { width: number; height: number }) => {
-    setWindows(prevWindows => prevWindows.map(w => 
-      w.id === id ? { ...w, size } : w
-    ))
+    flushSync(() => {
+      setWindows(prevWindows => prevWindows.map(w => 
+        w.id === id ? { ...w, size } : w
+      ))
+    })
   }
 
   const reorderTaskbarWindows = (windowId: string, newIndex: number) => {
@@ -791,12 +796,12 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
     if (selectionBox || isDraggingSelected) {
       document.addEventListener('mousemove', handleMouseMove)
       document.addEventListener('mouseup', handleMouseUp)
-      document.addEventListener('touchmove', handleTouchMove, { passive: false })
+      document.addEventListener('touchmove', handleTouchMove, { passive: false, capture: true })
       document.addEventListener('touchend', handleTouchEnd)
       return () => {
         document.removeEventListener('mousemove', handleMouseMove)
         document.removeEventListener('mouseup', handleMouseUp)
-        document.removeEventListener('touchmove', handleTouchMove)
+        document.removeEventListener('touchmove', handleTouchMove, true)
         document.removeEventListener('touchend', handleTouchEnd)
       }
     }

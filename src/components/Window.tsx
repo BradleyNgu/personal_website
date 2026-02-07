@@ -1,6 +1,9 @@
-import { useEffect, useRef, useState } from 'react'
+import { createContext, useEffect, useRef, useState } from 'react'
 import type { WindowState } from './Desktop'
 import '../styles/window.css'
+
+/** True when the window is visible (not minimized). Pages can use this to unmount heavy content (e.g. 3D) when hidden. */
+export const WindowVisibleContext = createContext(true)
 
 interface WindowProps {
   window: WindowState
@@ -596,7 +599,9 @@ function Window({
       )}
 
       <div className="window-content">
-        {window.component}
+        <WindowVisibleContext.Provider value={!window.isMinimized}>
+          {window.component}
+        </WindowVisibleContext.Provider>
       </div>
 
       {!window.isMaximized && (

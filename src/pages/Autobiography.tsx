@@ -1,5 +1,4 @@
 import '../styles/pages.css'
-import F1CarModel from '../components/F1CarModel'
 
 interface AboutSection {
   id: string
@@ -66,8 +65,6 @@ function Autobiography() {
           </div>
         ))}
       </div>
-
-      <F1CarModel />
     </div>
   )
 }

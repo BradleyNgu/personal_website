@@ -10,7 +10,7 @@ const sections: AboutSection[] = [
   {
     id: '1',
     title: 'About Me',
-    content: 'Hi! I\'m Bradley Nguyen, a Computer Science student at Carleton University pursuing a Bachelor\'s degree in the Honours Co-op program with a Software Engineering stream. I\'m passionate about building IoT systems and software/hardware solutions that solve real-world problems.\n\n Outside of school, I do a lot of hackathons on the side, in which I have won over $2,700 in prizes competing against 1000+ participants. Other than working with tech, I\'m interested in F1, sim racing, and playing volleyball.',
+    content: 'Hi! I\'m Bradley Nguyen, a Computer Science student at Carleton University pursuing a Bachelor\'s degree in the Honours Co-op program with a Software Engineering stream. I\'m passionate about building IoT systems and software/hardware solutions that solve real-world problems.\n\n Outside of school, I do a lot of hackathons on the side, in which I have won over $3,000 in prizes competing against 1000+ participants. Other than working with tech, I\'m interested in F1, sim racing, and playing volleyball.',
   },
   {
     id: '2',
@@ -25,7 +25,7 @@ const sections: AboutSection[] = [
   {
     id: '4',
     title: 'Achievements',
-    content: '🏆 Winner at SolutionHacks 2025 - $200 prize\n🏆 Challenge Winner at cuHacking 6 - $300 prize\n🥈 2nd Place at uOttaHack 7 (Best Use of Starknet) - $2,200 prize',
+    content: '🥇 1st Place at uOttaHack 8 (Thales: Northern Shield, Maritime Strategy Simulator Challenge) - $400 prize\n🥈 2nd Place at uOttaHack 7 (Best Use of Starknet) - $2,200 prize\n🏆 Challenge Winner at cuHacking 6 - $300 prize\n🏆 Winner at SolutionHacks 2025 - $200 prize',
   },
   {
     id: '5',

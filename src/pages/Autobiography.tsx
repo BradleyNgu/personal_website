@@ -10,7 +10,7 @@ const sections: AboutSection[] = [
   {
     id: '1',
     title: 'About Me',
-    content: 'Hi! I\'m Bradley Nguyen, a Computer Science student at Carleton University pursuing a Bachelor\'s degree in the Honours Co-op program with a Software Engineering stream. I\'m passionate about building IoT systems and software/hardware solutions that solve real-world problems.\n\n Outside of school, I do a lot of hackathons on the side, in which I have won over $3,000 in prizes competing against 1000+ participants. Other than working with tech, I\'m interested in F1, sim racing, and playing volleyball.',
+    content: 'Hi! I\'m Bradley Nguyen, a Computer Science student at Carleton University pursuing a Bachelor\'s degree in the Honours Co-op program with a Software Engineering stream. I\'m passionate about building IoT systems and software/hardware solutions that solve real-world problems. Outside of school, I do a lot of hackathons on the side, in which I have won over $3,000 in prizes competing against 1000+ participants. Other than working with tech, I\'m interested in F1, sim racing, and playing volleyball.',
   },
   {
     id: '2',
@@ -20,17 +20,17 @@ const sections: AboutSection[] = [
   {
     id: '3',
     title: 'Technical Skills',
-    content: 'Languages:\nJava, Python, C/C++, SQL, JavaScript, TypeScript, HTML/CSS\n\nFrameworks & Libraries:\nReact, Node.js, Express.js, Flask, Tailwind, Vite, MongoDB, Electron\n\nDeveloper Tools:\nGit, GitHub, Docker, Postman, Google Cloud Platform, Microsoft Azure, Linux/Unix, Jira, Excel',
+    content: 'Languages:\nPython, C++, C, Java, SQL (Postgres), JavaScript, TypeScript, HTML/CSS\nFrameworks/Libraries:\nReact, Next.js, Node.js, Express.js, Three.js, Flask, Tailwind, Vite, MongoDB, Electron\nDeveloper Tools:\nGit, GitHub, Docker, Google Cloud Platforms, Linux/Unix, Jira, Vercel, PowerBI, Excel, AWS\nMethodologies:\nAgile, Scrum, Waterfall, Incremental, Kanban',
   },
   {
     id: '4',
     title: 'Achievements',
-    content: '🥇 1st Place at uOttaHack 8 (Thales: Northern Shield, Maritime Strategy Simulator Challenge) - $400 prize\n🥈 2nd Place at uOttaHack 7 (Best Use of Starknet) - $2,200 prize\n🏆 Challenge Winner at cuHacking 6 - $300 prize\n🏆 Winner at SolutionHacks 2025 - $200 prize',
+    content: '🥇 1st Place at uOttaHack 8 (Thales: Northern Shield, Maritime Strategy Simulator Challenge) - $400 prize\n🥈 2nd Place at uOttaHack 7 (Best Use of Starknet) - $2,200 prize\n 🏆 1st place for uOttawa x Carleton Collaboration at Hack the Hill II - $300 prize\n🏆 Challenge Winner at cuHacking 6 - $300 prize\n🏆 Winner at SolutionHacks 2025 - $200 prize',
   },
   {
     id: '5',
     title: 'Contact',
-    content: 'Email: bradleynguyen2004@gmail.com\nPhone: 647-686-9717\nLinkedIn: linkedin.com/in/bradley-nguyen-cs\nGitHub: github.com/bradleyngu\n\nFeel free to reach out for collaboration opportunities, project discussions, or just to connect!',
+    content: 'Email: bradleynguyen2004@gmail.com\nPhone: 647-686-9717\nLinkedIn: linkedin.com/in/bradley-nguyen-cs\nGitHub: github.com/bradleyngu\nFeel free to reach out for collaboration opportunities, project discussions, or just to connect!',
   },
 ]
 
@@ -53,7 +53,6 @@ function Autobiography() {
                   <p>Phone: <a href="tel:647-686-9717">647-686-9717</a></p>
                   <p>LinkedIn: <a href="https://linkedin.com/in/bradley-nguyen-cs" target="_blank" rel="noopener noreferrer">linkedin.com/in/bradley-nguyen-cs</a></p>
                   <p>GitHub: <a href="https://github.com/bradleyngu" target="_blank" rel="noopener noreferrer">github.com/bradleyngu</a></p>
-                  <p></p>
                   <p>Feel free to reach out for collaboration opportunities, project discussions, or just to connect!</p>
                 </div>
               ) : (

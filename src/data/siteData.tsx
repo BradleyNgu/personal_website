@@ -182,6 +182,16 @@ export const projects: Project[] = [
 export const experiences: Experience[] = [
   {
     id: '1',
+    company: 'Innovation, Science and Economic Development Canada',
+    position: 'Data Engineer',
+    period: 'May 2026– August 2026',
+    location: 'Ottawa, ON',
+    logo: '/assets/icons/ISED.jpg',
+    responsibilities: ['Incoming Summer 2026'],
+    searchKeywords: ['Data Engineer', 'Python', 'ETL Pipelines', 'co-op'],
+  },
+  {
+    id: '2',
     company: 'dynaCERT Inc.',
     position: 'Full-Stack Developer',
     period: 'May 2025 – December 2025',
@@ -194,6 +204,7 @@ export const experiences: Experience[] = [
     ],
     searchKeywords: ['React', 'TypeScript', 'Node.js', 'MySQL', 'Docker', 'C++', 'IoT', 'full stack', 'co-op', 'API'],
   },
+
 ]
 
 // ===========================================

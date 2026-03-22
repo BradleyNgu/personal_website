@@ -37,7 +37,46 @@ const EDIT_EXEC_COMMAND: Record<string, string> = {
   Cut: 'cut',
   Copy: 'copy',
   Paste: 'paste',
-  'Select All': 'selectAll',
+}
+
+/** Select all text / content only inside this window's body, not the whole page. */
+function selectAllWithinElement(container: HTMLElement | null) {
+  if (!container) return
+
+  const active = document.activeElement
+  if (
+    active &&
+    container.contains(active) &&
+    (active instanceof HTMLInputElement ||
+      active instanceof HTMLTextAreaElement ||
+      (active instanceof HTMLElement && active.isContentEditable))
+  ) {
+    if (active instanceof HTMLInputElement || active instanceof HTMLTextAreaElement) {
+      active.select()
+      return
+    }
+    if (active.isContentEditable) {
+      const range = document.createRange()
+      range.selectNodeContents(active)
+      const sel = window.getSelection()
+      sel?.removeAllRanges()
+      sel?.addRange(range)
+      return
+    }
+  }
+
+  const selection = window.getSelection()
+  if (!selection) return
+
+  try {
+    const range = document.createRange()
+    range.selectNodeContents(container)
+    selection.removeAllRanges()
+    selection.addRange(range)
+    container.focus({ preventScroll: true })
+  } catch {
+    /* empty or non-selectable subtree */
+  }
 }
 
 // Helper function to constrain title bar within viewport
@@ -76,6 +115,7 @@ function Window({
   onMenuAction,
 }: WindowProps) {
   const windowRef = useRef<HTMLDivElement>(null)
+  const windowContentRef = useRef<HTMLDivElement>(null)
   const menuBarRef = useRef<HTMLDivElement>(null)
   const [isDragging, setIsDragging] = useState(false)
   const [isResizing, setIsResizing] = useState(false)
@@ -237,6 +277,10 @@ function Window({
     setOpenMenu(null)
 
     if (EDIT_MENU_ACTIONS.has(action)) {
+      if (action === 'Select All') {
+        selectAllWithinElement(windowContentRef.current)
+        return
+      }
       const cmd = EDIT_EXEC_COMMAND[action]
       if (cmd) {
         try {
@@ -637,6 +681,7 @@ function Window({
       )}
 
       <div
+        ref={windowContentRef}
         className="window-content"
         tabIndex={-1}
         key={window.contentKey ?? 0}

@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import { AudioVolumeManager } from '../utils/audioVolume'
+import { WindowInstanceContext, PORTFOLIO_WINDOW_MENU_EVENT } from '../components/Window'
 
 interface MusicFile {
   name: string
@@ -13,9 +14,12 @@ interface MusicFile {
 }
 
 function MyMusic() {
+  const { windowId } = useContext(WindowInstanceContext)
   const [musicFiles, setMusicFiles] = useState<MusicFile[]>([])
   const [selectedFiles, setSelectedFiles] = useState<string[]>([])
   const [viewMode, setViewMode] = useState<'large' | 'small' | 'list'>('large')
+  const [toolbarVisible, setToolbarVisible] = useState(true)
+  const [statusBarVisible, setStatusBarVisible] = useState(true)
   const [currentPath] = useState('My Music')
   const [loading, setLoading] = useState(true)
   const [isPlaying, setIsPlaying] = useState(false)
@@ -71,6 +75,39 @@ function MyMusic() {
 
     loadMusicFiles()
   }, [])
+
+  useEffect(() => {
+    if (!windowId) return
+    const handler = (e: Event) => {
+      const ce = e as CustomEvent<{ windowId: string; action: string }>
+      const d = ce.detail
+      if (!d || d.windowId !== windowId) return
+      switch (d.action) {
+        case 'Toolbar':
+          setToolbarVisible(v => !v)
+          break
+        case 'Status Bar':
+          setStatusBarVisible(v => !v)
+          break
+        case 'Large Icons':
+          setViewMode('large')
+          break
+        case 'Small Icons':
+          setViewMode('small')
+          break
+        case 'List':
+          setViewMode('list')
+          break
+        case 'Details':
+          setViewMode('list')
+          break
+        default:
+          break
+      }
+    }
+    document.addEventListener(PORTFOLIO_WINDOW_MENU_EVENT, handler)
+    return () => document.removeEventListener(PORTFOLIO_WINDOW_MENU_EVENT, handler)
+  }, [windowId])
 
   const handleMusicClick = (musicName: string, isCtrlKey: boolean) => {
     if (isCtrlKey) {
@@ -128,7 +165,7 @@ function MyMusic() {
 
   return (
     <div className="my-music">
-      <div className="explorer-toolbar">
+      <div className={`explorer-toolbar ${toolbarVisible ? '' : 'toolbar-hidden'}`}>
         <div className="toolbar-left">
           <button className="toolbar-btn" title="Back">
             <img src="/assets/icons/Windows XP Icons/Back.png" alt="Back" />
@@ -323,6 +360,12 @@ function MyMusic() {
             </div>
           )}
         </div>
+      </div>
+
+      <div className={`explorer-status-bar ${statusBarVisible ? '' : 'status-hidden'}`}>
+        {loading
+          ? 'Loading...'
+          : `${musicFiles.length} object${musicFiles.length === 1 ? '' : 's'}`}
       </div>
     </div>
   )

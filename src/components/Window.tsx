@@ -127,6 +127,13 @@ function Window({
   const dragOffsetRef = useRef<{ x: number; y: number } | null>(null)
   const resizeSizeRef = useRef<{ width: number; height: number } | null>(null)
   const rafRef = useRef<number | null>(null)
+
+  // Stable refs for callbacks so the drag/resize useEffect doesn't re-run
+  // every time the parent re-renders (these are inline lambdas in Desktop).
+  const onPositionChangeRef = useRef(onPositionChange)
+  const onSizeChangeRef = useRef(onSizeChange)
+  onPositionChangeRef.current = onPositionChange
+  onSizeChangeRef.current = onSizeChange
   
   // Detect if device is mobile (more specific detection)
   const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
@@ -313,30 +320,23 @@ function Window({
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       if (isDragging && windowRef.current && !window.isMaximized) {
-        // Use transform for smooth dragging - updates DOM directly without React re-renders
         let newX = e.clientX - dragStart.x
         let newY = e.clientY - dragStart.y
         
-        // Constrain title bar to stay within viewport
         const windowWidth = windowRef.current.offsetWidth || window.size.width
         const constrained = constrainTitleBarPosition(newX, newY, windowWidth)
         newX = constrained.x
         newY = constrained.y
         
-        // Store offset for final commit
         dragOffsetRef.current = { x: newX, y: newY }
         
-        // Apply transform directly to DOM for smooth animation
-        const baseX = window.position.x
-        const baseY = window.position.y
-        const deltaX = newX - baseX
-        const deltaY = newY - baseY
+        const deltaX = newX - window.position.x
+        const deltaY = newY - window.position.y
         
         windowRef.current.style.transform = `translate(${deltaX}px, ${deltaY}px)`
         windowRef.current.style.willChange = 'transform'
       } else if (isDragging) {
-        // For maximized windows or if ref not available, use state updates
-        onPositionChange({
+        onPositionChangeRef.current({
           x: e.clientX - dragStart.x,
           y: e.clientY - dragStart.y,
         })
@@ -345,17 +345,14 @@ function Window({
         const newWidth = Math.max(400, resizeStart.width + (e.clientX - resizeStart.x))
         const newHeight = Math.max(300, resizeStart.height + (e.clientY - resizeStart.y))
         
-        // Store for final commit
         resizeSizeRef.current = { width: newWidth, height: newHeight }
         
-        // Use requestAnimationFrame for smooth 60fps updates
         if (rafRef.current) {
           cancelAnimationFrame(rafRef.current)
         }
         
         rafRef.current = requestAnimationFrame(() => {
           if (windowRef.current && resizeSizeRef.current) {
-            // Apply size directly to DOM for smooth resizing
             windowRef.current.style.width = `${resizeSizeRef.current.width}px`
             windowRef.current.style.height = `${resizeSizeRef.current.height}px`
           }
@@ -367,23 +364,19 @@ function Window({
       const touch = e.touches[0]
       if (!touch || !touchStartPosRef.current) return
       
-      // Calculate movement distance
       const deltaX = Math.abs(touch.clientX - touchStartPosRef.current.x)
       const deltaY = Math.abs(touch.clientY - touchStartPosRef.current.y)
-      const moveThreshold = 10 // pixels - threshold to distinguish tap from drag
+      const moveThreshold = 10
       
-      // If user has moved significantly, mark as moved
       if (deltaX > moveThreshold || deltaY > moveThreshold) {
         hasMovedRef.current = true
         
-        // Prevent dragging on mobile when maximized - should never happen but safety check
         if (isMobile && window.isMaximized) {
           setIsDragging(false)
           e.preventDefault()
           return
         }
         
-        // On mobile, if not maximized and we haven't started dragging yet, start it now
         if (isMobile && !window.isMaximized && !isDragging) {
           setIsDragging(true)
           setDragStart({
@@ -394,14 +387,11 @@ function Window({
       }
       
       if (isDragging && windowRef.current && !window.isMaximized) {
-        // Prevent scrolling when dragging (touchmove is already non-passive)
         e.preventDefault()
         if (touch) {
-          // Use transform for smooth dragging on touch devices too
           let newX = touch.clientX - dragStart.x
           let newY = touch.clientY - dragStart.y
           
-          // Constrain title bar to stay within viewport
           const windowWidth = windowRef.current.offsetWidth || window.size.width
           const constrained = constrainTitleBarPosition(newX, newY, windowWidth)
           newX = constrained.x
@@ -409,126 +399,100 @@ function Window({
           
           dragOffsetRef.current = { x: newX, y: newY }
           
-          const baseX = window.position.x
-          const baseY = window.position.y
-          const deltaX = newX - baseX
-          const deltaY = newY - baseY
+          const dX = newX - window.position.x
+          const dY = newY - window.position.y
           
-          windowRef.current.style.transform = `translate(${deltaX}px, ${deltaY}px)`
+          windowRef.current.style.transform = `translate(${dX}px, ${dY}px)`
           windowRef.current.style.willChange = 'transform'
         }
       } else if (isDragging) {
-        // For maximized windows, use state updates
         e.preventDefault()
         if (touch) {
-          onPositionChange({
+          onPositionChangeRef.current({
             x: touch.clientX - dragStart.x,
             y: touch.clientY - dragStart.y,
           })
         }
       }
       if (isResizing && windowRef.current) {
-        // Prevent scrolling when resizing (touchmove is already non-passive)
         e.preventDefault()
         const touch = e.touches[0]
         if (touch) {
           const newWidth = Math.max(400, resizeStart.width + (touch.clientX - resizeStart.x))
           const newHeight = Math.max(300, resizeStart.height + (touch.clientY - resizeStart.y))
           
-          // Store for final commit
           resizeSizeRef.current = { width: newWidth, height: newHeight }
           
-          // Apply size directly to DOM for smooth resizing
           windowRef.current.style.width = `${newWidth}px`
           windowRef.current.style.height = `${newHeight}px`
         }
       }
     }
 
+    const commitDrag = () => {
+      if (!isDragging || !dragOffsetRef.current || !windowRef.current || window.isMaximized) return
+      const newPos = dragOffsetRef.current
+      dragOffsetRef.current = null
+      // React won't re-apply the transform if the virtual-DOM value hasn't changed
+      // ('translateZ(0)' before drag === 'translateZ(0)' after), so we must sync the
+      // DOM ourselves before updating position state.
+      windowRef.current.style.transform = 'translateZ(0)'
+      windowRef.current.style.willChange = 'auto'
+      onPositionChangeRef.current(newPos)
+    }
+
+    const commitResize = () => {
+      if (!isResizing || !resizeSizeRef.current || !windowRef.current) return
+      const newSize = resizeSizeRef.current
+      resizeSizeRef.current = null
+      windowRef.current.style.width = ''
+      windowRef.current.style.height = ''
+      onSizeChangeRef.current(newSize)
+    }
+
     const handleMouseUp = () => {
-      // Cancel any pending RAF
       if (rafRef.current) {
         cancelAnimationFrame(rafRef.current)
         rafRef.current = null
       }
-      
-      if (isDragging && dragOffsetRef.current && windowRef.current && !window.isMaximized) {
-        const newPos = dragOffsetRef.current
-        onPositionChange(newPos) // parent uses flushSync so we've re-rendered with new position before returning
-        windowRef.current.style.transform = ''
-        windowRef.current.style.willChange = 'auto'
-        dragOffsetRef.current = null
-      }
-      
-      if (isResizing && resizeSizeRef.current && windowRef.current) {
-        const newSize = resizeSizeRef.current
-        onSizeChange(newSize) // parent uses flushSync so we've re-rendered with new size before returning
-        windowRef.current.style.width = ''
-        windowRef.current.style.height = ''
-        resizeSizeRef.current = null
-      }
-      
+      commitDrag()
+      commitResize()
       setIsDragging(false)
       setIsResizing(false)
     }
 
     const handleTouchEnd = () => {
-      // Cancel any pending RAF
       if (rafRef.current) {
         cancelAnimationFrame(rafRef.current)
         rafRef.current = null
       }
-      
-      // On mobile, if maximized and user only tapped (didn't move), don't unmaximize
-      // The hasMovedRef check ensures we only unmaximize if user actually dragged
-      
-      // Commit position if dragging
-      if (isDragging && dragOffsetRef.current && windowRef.current && !window.isMaximized) {
-        const newPos = dragOffsetRef.current
-        onPositionChange(newPos) // parent uses flushSync so we've re-rendered with new position before returning
-        windowRef.current.style.transform = ''
-        windowRef.current.style.willChange = 'auto'
-        dragOffsetRef.current = null
-      }
-      
-      // Commit size if resizing
-      if (isResizing && resizeSizeRef.current && windowRef.current) {
-        const newSize = resizeSizeRef.current
-        onSizeChange(newSize) // parent uses flushSync so we've re-rendered with new size before returning
-        windowRef.current.style.width = ''
-        windowRef.current.style.height = ''
-        resizeSizeRef.current = null
-      }
-      
-      // Reset touch tracking
+      commitDrag()
+      commitResize()
       touchStartPosRef.current = null
       hasMovedRef.current = false
-      
       setIsDragging(false)
       setIsResizing(false)
     }
 
-    // Always listen for mouse events if dragging/resizing
     if (isDragging || isResizing) {
       document.addEventListener('mousemove', handleMouseMove)
       document.addEventListener('mouseup', handleMouseUp)
     }
     
-    // Capture phase so we run before scrollable content's passive listeners and can preventDefault()
     document.addEventListener('touchmove', handleTouchMove, { passive: false, capture: true })
     document.addEventListener('touchend', handleTouchEnd)
     
     return () => {
-      // Cancel any pending RAF
       if (rafRef.current) {
         cancelAnimationFrame(rafRef.current)
         rafRef.current = null
       }
       
-      // Cleanup: reset transform if dragging was interrupted
       if (windowRef.current) {
+        // Sync DOM overrides back to what React expects so the next
+        // render doesn't inherit stale direct-DOM values.
         if (dragOffsetRef.current) {
-          windowRef.current.style.transform = ''
+          windowRef.current.style.transform = 'translateZ(0)'
           windowRef.current.style.willChange = 'auto'
         }
         if (resizeSizeRef.current) {
@@ -544,9 +508,14 @@ function Window({
       document.removeEventListener('touchmove', handleTouchMove, true)
       document.removeEventListener('touchend', handleTouchEnd)
     }
-  }, [isDragging, isResizing, dragStart, resizeStart, onPositionChange, onSizeChange, window.position, window.size, isMobile, window.isMaximized])
+  }, [isDragging, isResizing, dragStart, resizeStart, window.position, window.size, isMobile, window.isMaximized])
 
-  // Don't unmount when minimized - just hide it to preserve scroll position
+  // Compute the drag transform from the ref so React re-renders during drag
+  // don't snap the window back to its old position for a frame.
+  const dragTransform = isDragging && dragOffsetRef.current
+    ? `translate(${dragOffsetRef.current.x - window.position.x}px, ${dragOffsetRef.current.y - window.position.y}px)`
+    : 'translateZ(0)'
+
   const style: React.CSSProperties = window.isMaximized
     ? {
         position: 'fixed',
@@ -565,7 +534,8 @@ function Window({
         width: `${window.size.width}px`,
         height: `${window.size.height}px`,
         zIndex: window.zIndex,
-        transform: 'translateZ(0)', // Reset transform if dragging was interrupted
+        transform: dragTransform,
+        willChange: isDragging ? 'transform' : 'auto',
         display: window.isMinimized ? 'none' : 'flex',
       }
 

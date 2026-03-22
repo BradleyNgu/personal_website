@@ -5,6 +5,12 @@ import '../styles/window.css'
 /** True when the window is visible (not minimized). Pages can use this to unmount heavy content (e.g. 3D) when hidden. */
 export const WindowVisibleContext = createContext(true)
 
+/** Current window id for menu-driven actions (View, etc.) */
+export const WindowInstanceContext = createContext<{ windowId: string | null }>({ windowId: null })
+
+/** Dispatched from Desktop when View menu targets a specific window (toolbar, icons, etc.) */
+export const PORTFOLIO_WINDOW_MENU_EVENT = 'portfolio-window-menu'
+
 interface WindowProps {
   window: WindowState
   onClose: () => void
@@ -13,6 +19,25 @@ interface WindowProps {
   onFocus: () => void
   onPositionChange: (position: { x: number; y: number }) => void
   onSizeChange: (size: { width: number; height: number }) => void
+  onMenuAction?: (action: string) => void
+}
+
+const EDIT_MENU_ACTIONS = new Set([
+  'Undo',
+  'Redo',
+  'Cut',
+  'Copy',
+  'Paste',
+  'Select All',
+])
+
+const EDIT_EXEC_COMMAND: Record<string, string> = {
+  Undo: 'undo',
+  Redo: 'redo',
+  Cut: 'cut',
+  Copy: 'copy',
+  Paste: 'paste',
+  'Select All': 'selectAll',
 }
 
 // Helper function to constrain title bar within viewport
@@ -48,6 +73,7 @@ function Window({
   onFocus,
   onPositionChange,
   onSizeChange,
+  onMenuAction,
 }: WindowProps) {
   const windowRef = useRef<HTMLDivElement>(null)
   const menuBarRef = useRef<HTMLDivElement>(null)
@@ -208,9 +234,21 @@ function Window({
   const handleMenuItemClick = (action: string, e: React.MouseEvent) => {
     e.preventDefault()
     e.stopPropagation()
-    // Handle menu item actions here
-    console.log(`Menu action: ${action}`)
     setOpenMenu(null)
+
+    if (EDIT_MENU_ACTIONS.has(action)) {
+      const cmd = EDIT_EXEC_COMMAND[action]
+      if (cmd) {
+        try {
+          document.execCommand(cmd)
+        } catch {
+          /* clipboard / selection may be unavailable */
+        }
+      }
+      return
+    }
+
+    onMenuAction?.(action)
   }
 
   useEffect(() => {
@@ -598,9 +636,15 @@ function Window({
         </div>
       )}
 
-      <div className="window-content">
+      <div
+        className="window-content"
+        tabIndex={-1}
+        key={window.contentKey ?? 0}
+      >
         <WindowVisibleContext.Provider value={!window.isMinimized}>
-          {window.component}
+          <WindowInstanceContext.Provider value={{ windowId: window.id }}>
+            {window.component}
+          </WindowInstanceContext.Provider>
         </WindowVisibleContext.Provider>
       </div>
 

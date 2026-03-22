@@ -184,7 +184,7 @@ export const experiences: Experience[] = [
     id: '1',
     company: 'Innovation, Science and Economic Development Canada',
     position: 'Data Engineer',
-    period: 'May 2026– August 2026',
+    period: 'May 2026 – August 2026',
     location: 'Ottawa, ON',
     logo: '/assets/icons/ISED.jpg',
     responsibilities: ['Incoming Summer 2026'],

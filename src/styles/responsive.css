@@ -1323,7 +1323,25 @@
   .experience-company-info {
     gap: 10px !important;
   }
-  
+
+  /* Experience header mobile fix */
+  .experience-header {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 10px !important;
+  }
+
+  .experience-header > div:last-child {
+    align-items: flex-start !important;
+    width: 100%;
+  }
+
+  .experience-period {
+    white-space: normal !important;
+    font-size: 10px !important;
+    padding: 3px 8px !important;
+  }
+
   /* Form mobile */
   .form-row {
     grid-template-columns: 1fr !important;

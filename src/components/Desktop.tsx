@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { flushSync } from 'react-dom'
 import Taskbar from './Taskbar'
-import Window from './Window'
+import Window, { PORTFOLIO_WINDOW_MENU_EVENT } from './Window'
 import DesktopIcon from './DesktopIcon'
 import ErrorDialog from './ErrorDialog'
 import Projects from '../pages/Projects'
@@ -30,6 +30,8 @@ export interface WindowState {
   size: { width: number; height: number }
   zIndex: number
   hideMenuBar?: boolean
+  /** Incremented by View → Refresh to remount window content */
+  contentKey?: number
 }
 
 export interface IconPosition {
@@ -324,7 +326,6 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
     openWindow('run', 'Run', '/assets/icons/Windows XP Icons/Run.png', <Run onRunCommand={handleRunCommand} />)
   }
 
-
   const updateIconPosition = (id: string, x: number, y: number) => {
     setIconPositions(prev => 
       prev.map(icon => icon.id === id ? { ...icon, x, y } : icon)
@@ -475,6 +476,180 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
       })
       // Remove from recycle bin
       setRecycleBinItems(prev => prev.filter(i => i.id !== itemId))
+    }
+  }
+
+  const KNOWN_TEMPLATE_IDS = [
+    'internet-explorer',
+    'my-pictures',
+    'my-music',
+    'recycle-bin',
+    'projects',
+    'experiences',
+    'autobiography',
+    'resume',
+    'email',
+    'cmd',
+    'search',
+    'run',
+  ] as const
+
+  const getTemplateId = (windowId: string): string | null => {
+    const sorted = [...KNOWN_TEMPLATE_IDS].sort((a, b) => b.length - a.length)
+    for (const tid of sorted) {
+      if (windowId === tid || windowId.startsWith(`${tid}-`)) return tid
+    }
+    return null
+  }
+
+  const createWindowByTemplate = (templateId: string): {
+    title: string
+    icon: string
+    component: React.ReactNode
+    hideMenuBar?: boolean
+  } | null => {
+    switch (templateId) {
+      case 'projects':
+        return { title: 'My Projects', icon: '/assets/icons/projects.png', component: <Projects /> }
+      case 'experiences':
+        return { title: 'My Experience', icon: '/assets/icons/experiences.png', component: <Experiences /> }
+      case 'autobiography':
+        return { title: 'About Me', icon: '/assets/icons/folder.png', component: <Autobiography /> }
+      case 'resume':
+        return { title: 'My Resume', icon: '/assets/icons/Windows XP Icons/pdf.png', component: <Resume /> }
+      case 'recycle-bin':
+        return {
+          title: 'Recycle Bin',
+          icon: '/assets/icons/recyclin-bin.png',
+          component: (
+            <RecycleBin
+              items={recycleBinItems}
+              onDelete={handleDeleteFromBin}
+              onRestore={handleRestoreFromBin}
+            />
+          ),
+        }
+      case 'email':
+        return {
+          title: 'Email - Contact Bradley',
+          icon: '/assets/icons/Windows XP Icons/Email.png',
+          component: <ContactEmail />,
+        }
+      case 'cmd':
+        return {
+          title: 'C:\\WINDOWS\\system32\\cmd.exe',
+          icon: '/assets/icons/Windows XP Icons/Command Prompt.png',
+          component: <CommandPrompt />,
+          hideMenuBar: true,
+        }
+      case 'my-pictures':
+        return {
+          title: 'My Pictures',
+          icon: '/assets/icons/Windows XP Icons/My Pictures.png',
+          component: <MyPictures />,
+        }
+      case 'my-music':
+        return {
+          title: 'My Music',
+          icon: '/assets/icons/Windows XP Icons/My Music.png',
+          component: <MyMusic />,
+        }
+      case 'internet-explorer':
+        return {
+          title: 'Internet Explorer',
+          icon: '/assets/icons/Windows XP Icons/Internet Explorer 6.png',
+          component: <InternetExplorer />,
+        }
+      case 'search':
+        return {
+          title: 'Search',
+          icon: '/assets/icons/Windows XP Icons/Search.png',
+          component: <Search onOpenWindow={openWindow} />,
+        }
+      case 'run':
+        return {
+          title: 'Run',
+          icon: '/assets/icons/Windows XP Icons/Run.png',
+          component: <Run onRunCommand={handleRunCommand} />,
+        }
+      default:
+        return null
+    }
+  }
+
+  const handleWindowMenuAction = (windowId: string, action: string) => {
+    const dispatchView = (a: string) => {
+      document.dispatchEvent(
+        new CustomEvent(PORTFOLIO_WINDOW_MENU_EVENT, { detail: { windowId, action: a } })
+      )
+    }
+
+    switch (action) {
+      case 'Exit':
+        closeWindow(windowId)
+        return
+      case 'New': {
+        const tid = getTemplateId(windowId)
+        if (!tid) {
+          showErrorDialog('New', 'Cannot create a new window for this item.')
+          return
+        }
+        const created = createWindowByTemplate(tid)
+        if (!created) {
+          showErrorDialog('New', 'Cannot create a new window for this item.')
+          return
+        }
+        openWindow(
+          `${tid}-${Date.now()}`,
+          created.title,
+          created.icon,
+          created.component,
+          created.hideMenuBar ?? false
+        )
+        return
+      }
+      case 'Open':
+        showErrorDialog(
+          'Open',
+          'To open a program or document, use the desktop icons or the Start menu.'
+        )
+        return
+      case 'Save':
+      case 'Save As':
+        showErrorDialog(
+          'Save As',
+          'This is a read-only portfolio demonstration. Changes cannot be saved to disk.'
+        )
+        return
+      case 'Toolbar':
+      case 'Status Bar':
+      case 'Large Icons':
+      case 'Small Icons':
+      case 'List':
+      case 'Details':
+        dispatchView(action)
+        return
+      case 'Refresh':
+        setWindows(prev =>
+          prev.map(w =>
+            w.id === windowId ? { ...w, contentKey: (w.contentKey ?? 0) + 1 } : w
+          )
+        )
+        return
+      case 'Help Topics':
+        showErrorDialog(
+          'Help Topics',
+          'Use the desktop icons to open applications. Double-click the Start button to browse the menu. Drag icons to the Recycle Bin to remove them from the desktop. Tip: Ctrl+C and Ctrl+V work when text is selected.'
+        )
+        return
+      case 'About':
+        showErrorDialog(
+          'About Windows Portfolio',
+          'Bradley Nguyen — Portfolio (Windows XP style)\n\nNot affiliated with Microsoft.\n\nBuilt with React & Vite.'
+        )
+        return
+      default:
+        break
     }
   }
 
@@ -974,6 +1149,7 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
           onFocus={() => bringToFront(window.id)}
           onPositionChange={(pos) => updateWindowPosition(window.id, pos)}
           onSizeChange={(size) => updateWindowSize(window.id, size)}
+          onMenuAction={(action) => handleWindowMenuAction(window.id, action)}
         />
       ))}
 

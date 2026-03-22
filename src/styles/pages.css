@@ -867,6 +867,23 @@
   height: 32px;
 }
 
+.explorer-toolbar.toolbar-hidden {
+  display: none;
+}
+
+.explorer-status-bar {
+  padding: 3px 8px;
+  border-top: 1px solid #d4d4d4;
+  background: #ece9d8;
+  font-size: 11px;
+  flex-shrink: 0;
+  color: #000;
+}
+
+.explorer-status-bar.status-hidden {
+  display: none;
+}
+
 .toolbar-left {
   display: flex;
   align-items: center;

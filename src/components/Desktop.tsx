@@ -129,7 +129,27 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
     endX: number
     endY: number
   } | null>(null)
-  const [recycleBinItems, setRecycleBinItems] = useState<RecycleBinItem[]>([])
+  
+  // Load recycle bin items from localStorage on mount
+  const [recycleBinItems, setRecycleBinItems] = useState<RecycleBinItem[]>(() => {
+    try {
+      const saved = localStorage.getItem('recycleBinItems')
+      return saved ? JSON.parse(saved) : []
+    } catch {
+      return []
+    }
+  })
+  
+  // Load permanently deleted icons from localStorage on mount
+  const [permanentlyDeleted, setPermanentlyDeleted] = useState<string[]>(() => {
+    try {
+      const saved = localStorage.getItem('permanentlyDeleted')
+      return saved ? JSON.parse(saved) : []
+    } catch {
+      return []
+    }
+  })
+  
   const [isRecycleBinHovered, setIsRecycleBinHovered] = useState(false)
   const [isDraggingSelected, setIsDraggingSelected] = useState(false)
   const [dragOffset, setDragOffset] = useState<{ x: number; y: number } | null>(null)
@@ -418,11 +438,23 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
   }
 
   const handleDeleteFromBin = (itemId: string) => {
+    // Get the item name for the confirmation message
+    const item = recycleBinItems.find(i => i.id === itemId)
+    const itemName = item?.title || 'item'
+    
     setRecycleBinItems(prev => prev.filter(item => item.id !== itemId))
+    // Mark as permanently deleted
+    setPermanentlyDeleted(prev => [...prev, itemId])
     // Also remove the icon position to prevent it from reappearing
     setIconPositions(prev => prev.filter(pos => pos.id !== itemId))
     // Remove from selected icons if it was selected
     setSelectedIcons(prev => prev.filter(id => id !== itemId))
+    
+    // Show dialog informing user they need to refresh to restore the icon
+    showErrorDialog(
+      'Item Permanently Deleted',
+      `${itemName} has been permanently deleted. To restore this item, you must refresh the page.`
+    )
   }
 
   const handleRestoreFromBin = (itemId: string) => {
@@ -445,6 +477,24 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
       setRecycleBinItems(prev => prev.filter(i => i.id !== itemId))
     }
   }
+
+  // Save recycle bin items to localStorage whenever they change
+  useEffect(() => {
+    try {
+      localStorage.setItem('recycleBinItems', JSON.stringify(recycleBinItems))
+    } catch (error) {
+      console.error('Failed to save recycle bin items:', error)
+    }
+  }, [recycleBinItems])
+
+  // Save permanently deleted icons to localStorage whenever they change
+  useEffect(() => {
+    try {
+      localStorage.setItem('permanentlyDeleted', JSON.stringify(permanentlyDeleted))
+    } catch (error) {
+      console.error('Failed to save permanently deleted items:', error)
+    }
+  }, [permanentlyDeleted])
 
   // Update RecycleBin window when items change
   useEffect(() => {
@@ -863,7 +913,10 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
     >
       <div className="desktop-icons">
         {desktopIcons
-          .filter(icon => !recycleBinItems.some(item => item.id === icon.id))
+          .filter(icon => 
+            !recycleBinItems.some(item => item.id === icon.id) && 
+            !permanentlyDeleted.includes(icon.id)
+          )
           .map((icon) => {
             const position = iconPositions.find(p => p.id === icon.id)
             if (!position) return null // Don't render if no position found

@@ -7,7 +7,8 @@ export function getCurrentWallpaper(): string {
   const wallpapers = [
     '/assets/wallpaper.jpg',
     '/assets/wallpaper2.png',
-    '/assets/wallpaper3.png'
+    '/assets/wallpaper3.png',
+    '/assets/wallpaper4.jpg'
   ]
   
   // Get the current date

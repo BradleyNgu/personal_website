@@ -192,7 +192,7 @@ export const experiences: Experience[] = [
   },
   {
     id: '2',
-    company: 'Lux Cognitivia Technologies Inc.',
+    company: 'Lux Cognitiva Technologies Inc.',
     position: 'Full-Stack Developer',
     period: 'May 2026 – August 2026',
     location: 'Remote',

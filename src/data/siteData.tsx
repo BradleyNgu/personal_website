@@ -192,6 +192,16 @@ export const experiences: Experience[] = [
   },
   {
     id: '2',
+    company: 'Lux Cognitivia Technologies Inc.',
+    position: 'Full-Stack Developer',
+    period: 'May 2026 – August 2026',
+    location: 'Remote',
+    logo: '/assets/icons/luxcognitiva_logo.jpeg',
+    responsibilities: ['Incoming Summer 2026'],
+    searchKeywords: ['Lux', 'Startup', 'Full-Stack Developer'],
+  },
+  {
+    id: '3',
     company: 'dynaCERT Inc.',
     position: 'Full-Stack Developer',
     period: 'May 2025 – December 2025',

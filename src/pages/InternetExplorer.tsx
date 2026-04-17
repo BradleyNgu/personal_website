@@ -53,6 +53,11 @@ function InternetExplorer({ }: InternetExplorerProps) {
       id: 'JyTwrIHdYjk',
       title: 'COMP3005 Final Project Bradley Daniel Torrey',
       url: 'https://www.youtube.com/watch?v=JyTwrIHdYjk'
+    },
+    {
+      id: '7SL1dDHCkDw',
+      title: 'COMP3008 - Brampton Transit Redesign',
+      url: 'https://www.youtube.com/watch?v=7SL1dDHCkDw'
     }
   ]
 

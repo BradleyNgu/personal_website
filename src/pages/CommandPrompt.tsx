@@ -1,15 +1,27 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef, useEffect, useCallback } from 'react'
+import {
+  INITIAL_CWD,
+  formatDirListing,
+  formatVirtualTree,
+  isVirtualDir,
+  resolveVirtualPath,
+  resolveFilePath,
+  fsKey,
+  VIRTUAL_FILE_TEXT,
+  tabComplete,
+} from '../utils/virtualCmdFs'
 
 interface Command {
   command: string
   output: string[]
   timestamp: Date
+  cwd: string
 }
 
 function CommandPrompt() {
   const [commands, setCommands] = useState<Command[]>([])
   const [currentCommand, setCurrentCommand] = useState('')
-  const [currentPath] = useState('C:\\Users\\Bradley>')
+  const [cwd, setCwd] = useState(INITIAL_CWD)
   const [isExecuting, setIsExecuting] = useState(false)
   const [showInputAtTop, setShowInputAtTop] = useState(true)
   const terminalRef = useRef<HTMLDivElement>(null)
@@ -55,7 +67,7 @@ function CommandPrompt() {
     }
   }, [showInputAtTop])
 
-  const executeCommand = (command: string) => {
+  const executeCommand = useCallback((command: string) => {
     if (!command.trim()) return
 
     // Move input to bottom after first command
@@ -63,8 +75,67 @@ function CommandPrompt() {
       setShowInputAtTop(false)
     }
 
-    const cmd = command.trim().toLowerCase()
+    const snapshotCwd = cwd
+    const trimmed = command.trim()
+    const firstSpace = trimmed.indexOf(' ')
+    const verb = firstSpace === -1 ? trimmed.toLowerCase() : trimmed.slice(0, firstSpace).toLowerCase()
+    const args = firstSpace === -1 ? '' : trimmed.slice(firstSpace + 1).trim()
     let output: string[] = []
+
+    if (verb === 'cls') {
+      setCommands([])
+      setShowInputAtTop(true)
+      return
+    }
+
+    if (verb === 'cd' || verb === 'chdir') {
+      if (!args) {
+        output = [cwd]
+      } else {
+        const dest = resolveVirtualPath(cwd, args)
+        const canon = dest ? fsKey(dest) : null
+        if (!canon || !isVirtualDir(canon)) {
+          output = ['The system cannot find the path specified.']
+        } else {
+          setCwd(canon)
+          output = []
+        }
+      }
+      setCommands((prev) => [...prev, { command, output, timestamp: new Date(), cwd: snapshotCwd }])
+      return
+    }
+
+    if (verb === 'dir') {
+      const targetPath = args ? resolveVirtualPath(cwd, args) : cwd
+      const canon = targetPath ? fsKey(targetPath) : null
+      if (!canon || !isVirtualDir(canon)) {
+        output = ['File Not Found']
+      } else {
+        output = formatDirListing(canon) ?? ['File Not Found']
+      }
+      setCommands((prev) => [...prev, { command, output, timestamp: new Date(), cwd: snapshotCwd }])
+      return
+    }
+
+    if (verb === 'echo') {
+      output = [args]
+      setCommands((prev) => [...prev, { command, output, timestamp: new Date(), cwd: snapshotCwd }])
+      return
+    }
+
+    if (verb === 'type' && args) {
+      const filePath = resolveFilePath(cwd, args)
+      if (!filePath) {
+        output = ['The system cannot find the file specified.']
+      } else {
+        const textKey = Object.keys(VIRTUAL_FILE_TEXT).find((k) => k.toLowerCase() === filePath.toLowerCase())
+        output = textKey ? VIRTUAL_FILE_TEXT[textKey] : ['The system cannot find the file specified.']
+      }
+      setCommands((prev) => [...prev, { command, output, timestamp: new Date(), cwd: snapshotCwd }])
+      return
+    }
+
+    const cmd = trimmed.toLowerCase()
 
     switch (cmd) {
       case 'help':
@@ -78,6 +149,8 @@ function CommandPrompt() {
           'TYPE           Displays the contents of a text file. Try "type readme.txt"',
           '\n',
           'SYSTEM COMMANDS',
+          'CD             Displays the name of or changes the current directory.',
+          'CHDIR          Same as CD.',
           'CLS            Clears the screen.',
           'DATE           Displays or sets the date.',
           'DIR            Displays a list of files and subdirectories in a directory.',
@@ -99,10 +172,6 @@ function CommandPrompt() {
           '\n',
         ]
         break
-      case 'cls':
-        setCommands([])
-        setShowInputAtTop(true)
-        return
       case 'ver':
         output = ['Microsoft Windows XP [Version 5.1.2600]']
         break
@@ -116,29 +185,6 @@ function CommandPrompt() {
         break
       case 'time':
         output = [`The current time is: ${new Date().toLocaleTimeString()}`]
-        break
-      case 'dir':
-        output = [
-          ' Volume in drive C has no label.',
-          ' Volume Serial Number is 1234-5678',
-          '',
-          ' Directory of C:\\Users\\Bradley',
-          '',
-          '12/25/2023  10:30 AM    <DIR>          Documents',
-          '12/25/2023  10:30 AM    <DIR>          Desktop',
-          '12/25/2023  10:30 AM    <DIR>          Downloads',
-          '12/25/2023  10:30 AM    <DIR>          Pictures',
-          '12/25/2023  10:30 AM    <DIR>          Music',
-          '12/25/2023  10:30 AM    <DIR>          Videos',
-          '12/25/2023  10:30 AM             1,024  readme.txt',
-          '12/25/2023  10:30 AM             2,048  notes.doc',
-          '               2 File(s)          3,072 bytes',
-          '               6 Dir(s)   1,000,000,000 bytes free'
-        ]
-        break
-      case 'echo':
-        const echoText = command.substring(5).trim()
-        output = [echoText]
         break
       case 'whoami':
         output = ['Bradley Nguyen']
@@ -172,24 +218,7 @@ function CommandPrompt() {
         ]
         break
       case 'tree':
-        output = [
-          'Folder PATH listing',
-          'Volume serial number is 1234-5678',
-          'C:\\USERS\\BRADLEY',
-          '├───Documents',
-          '│   ├───Projects',
-          '│   │   ├───React',
-          '│   │   ├───TypeScript',
-          '│   │   └───Python',
-          '│   └───Resume',
-          '├───Desktop',
-          '│   └───Portfolio',
-          '├───Downloads',
-          '├───Pictures',
-          '│   └───Screenshots',
-          '├───Music',
-          '└───Videos'
-        ]
+        output = formatVirtualTree()
         break
       case 'systeminfo':
         output = [
@@ -288,29 +317,6 @@ function CommandPrompt() {
           ''
         ]
         break
-      case 'type readme.txt':
-        output = [
-          'README.TXT',
-          'Welcome to Bradley\'s Portfolio!',
-          '',
-          'This is a fully interactive Windows XP themed portfolio',
-          'website built with React and TypeScript.',
-          '',
-          'Features:',
-          '  ✓ Draggable and resizable windows',
-          '  ✓ Desktop icons with double-click functionality',
-          '  ✓ Working command prompt with custom commands',
-          '  ✓ Taskbar with window management',
-          '  ✓ Start menu with applications',
-          '  ✓ Recycle bin functionality',
-          '  ✓ Fully responsive design',
-          '',
-          'Try exploring different applications on the desktop!',
-          '',
-          'Type "help" for a list of available commands.',
-          ''
-        ]
-        break
       case 'easter egg':
       case 'secret':
         output = [
@@ -368,14 +374,30 @@ function CommandPrompt() {
         output = [`'${command}' is not recognized as an internal or external command, operable program or batch file.`]
     }
 
-    setCommands(prev => [...prev, {
+    setCommands((prev) => [...prev, {
       command,
       output,
-      timestamp: new Date()
+      timestamp: new Date(),
+      cwd: snapshotCwd,
     }])
-  }
+  }, [cwd, showInputAtTop])
 
-  const handleKeyPress = (e: React.KeyboardEvent) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Tab') {
+      e.preventDefault()
+      const input = e.currentTarget
+      const pos = input.selectionStart ?? currentCommand.length
+      const result = tabComplete(currentCommand, pos, cwd)
+      if (!result) return
+      setCurrentCommand(result.line)
+      requestAnimationFrame(() => {
+        const el = inputRef.current
+        if (el) {
+          el.setSelectionRange(result.cursor, result.cursor)
+        }
+      })
+      return
+    }
     if (e.key === 'Enter') {
       setIsExecuting(true)
       executeCommand(currentCommand)
@@ -408,13 +430,13 @@ function CommandPrompt() {
                 Type 'help' to see available commands.
               </div>
               <div className="initial-prompt-line">
-                <span className="prompt">C:\Users\Bradley&gt;</span>
+                <span className="prompt">{cwd}&gt;</span>
                 <input
                   ref={inputRef}
                   type="text"
                   value={currentCommand}
                   onChange={handleInputChange}
-                  onKeyPress={handleKeyPress}
+                  onKeyDown={handleKeyDown}
                   className="command-input"
                   autoFocus
                   disabled={isExecuting}
@@ -427,7 +449,7 @@ function CommandPrompt() {
         {commands.map((cmd, index) => (
           <div key={index} className="command-block">
             <div className="command-line">
-              <span className="prompt">{currentPath}</span>
+              <span className="prompt">{cmd.cwd}&gt;</span>
               <span className="command">{cmd.command}</span>
             </div>
             {cmd.output.map((line, lineIndex) => (
@@ -439,13 +461,13 @@ function CommandPrompt() {
         ))}
         {!showInputAtTop && (
           <div className="current-line">
-            <span className="prompt">{currentPath}</span>
+            <span className="prompt">{cwd}&gt;</span>
             <input
               ref={inputRef}
               type="text"
               value={currentCommand}
               onChange={handleInputChange}
-              onKeyPress={handleKeyPress}
+              onKeyDown={handleKeyDown}
               className="command-input"
               autoFocus
               disabled={isExecuting}

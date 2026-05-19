@@ -195,7 +195,7 @@ export const experiences: Experience[] = [
     period: 'May 2026 – August 2026',
     location: 'Ottawa, ON',
     logo: '/assets/icons/ISED.jpg',
-    responsibilities: ['Incoming Summer 2026'],
+    responsibilities: ['Working on migrating and optimizing ETL pipelines for large-scale data processing using Python and cloud technologies.'],
     searchKeywords: ['Data Engineer', 'Python', 'ETL Pipelines', 'co-op'],
   },
   {
@@ -205,7 +205,7 @@ export const experiences: Experience[] = [
     period: 'May 2026 – August 2026',
     location: 'Remote',
     logo: '/assets/icons/luxcognitiva_logo.jpeg',
-    responsibilities: ['Incoming Summer 2026'],
+    responsibilities: ['Creating API endpoints and developing features for a web application using React and Node.js. Collaborating with cross-functional teams to enhance user experience and implement new functionalities.'],
     searchKeywords: ['Lux', 'Startup', 'Full-Stack Developer'],
   },
   {

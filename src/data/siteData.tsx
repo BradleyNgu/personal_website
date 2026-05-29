@@ -195,8 +195,12 @@ export const experiences: Experience[] = [
     period: 'May 2026 – August 2026',
     location: 'Ottawa, ON',
     logo: '/assets/icons/ISED.jpg',
-    responsibilities: ['Working on migrating and optimizing ETL pipelines for large-scale data processing using Python and cloud technologies.'],
-    searchKeywords: ['Data Engineer', 'Python', 'ETL Pipelines', 'co-op'],
+    responsibilities: [
+      'Developed ETL scripts to load, transform, and validate **3+ source datasets** into staging tables, reducing manual processing by **40%** and improving daily data delivery reliability',
+      'Automated SQL and shell-based batch jobs for scheduled data refreshes, improving runtime efficiency by **25%**',
+      'Implemented validation checks and logging across end-to-end pipelines to verify record counts, catch load errors, and support reliable production releases',
+    ],
+    searchKeywords: ['Data Engineer', 'Python', 'ETL Pipelines', 'co-op', 'AWS', 'SQL'],
   },
   {
     id: '2',
@@ -205,8 +209,11 @@ export const experiences: Experience[] = [
     period: 'May 2026 – August 2026',
     location: 'Remote',
     logo: '/assets/icons/luxcognitiva_logo.jpeg',
-    responsibilities: ['Creating API endpoints and developing features for a web application using React and Node.js. Collaborating with cross-functional teams to enhance user experience and implement new functionalities.'],
-    searchKeywords: ['Lux', 'Startup', 'Full-Stack Developer'],
+    responsibilities: [
+      'Built a **Health Canada DPD** sync and search API using **TypeScript, Prisma,** and **PostgreSQL**, with migrations, Zod validation, and integration tests',
+      'Developed scheduling APIs with **6 Prisma models, 6 routes**, RBAC/audit enforcement, and backend test coverage for visit workflow logic',
+    ],
+    searchKeywords: ['Lux', 'Startup', 'TypeScript', 'Prisma', 'PostgreSQL'],
   },
   {
     id: '3',

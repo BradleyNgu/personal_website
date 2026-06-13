@@ -52,6 +52,31 @@ interface DesktopProps {
   onLogOff: () => void
 }
 
+const DEFAULT_ICON_POSITIONS: IconPosition[] = [
+  { id: 'projects', x: 20, y: 20 },
+  { id: 'experiences', x: 20, y: 140 },
+  { id: 'autobiography', x: 20, y: 260 },
+  { id: 'resume', x: 20, y: 380 },
+  { id: 'recycle-bin', x: 20, y: 500 },
+]
+
+function loadIconPositions(): IconPosition[] {
+  try {
+    const saved = localStorage.getItem('iconPositions')
+    if (!saved) return DEFAULT_ICON_POSITIONS
+
+    const parsed = JSON.parse(saved) as IconPosition[]
+    if (!Array.isArray(parsed)) return DEFAULT_ICON_POSITIONS
+
+    return DEFAULT_ICON_POSITIONS.map(defaultPos => {
+      const savedPos = parsed.find(p => p.id === defaultPos.id)
+      return savedPos ?? defaultPos
+    })
+  } catch {
+    return DEFAULT_ICON_POSITIONS
+  }
+}
+
 // Helper function to constrain multi-selection icon positions within viewport
 const constrainMultiSelectionDelta = (
   iconPositions: IconPosition[],
@@ -110,20 +135,8 @@ const constrainMultiSelectionDelta = (
 function Desktop({ onShutdown, onLogOff }: DesktopProps) {
   const [windows, setWindows] = useState<WindowState[]>([])
   const [highestZIndex, setHighestZIndex] = useState(1)
-  const [iconPositions, setIconPositions] = useState<IconPosition[]>([
-    { id: 'projects', x: 20, y: 20 },
-    { id: 'experiences', x: 20, y: 140 },
-    { id: 'autobiography', x: 20, y: 260 },
-    { id: 'resume', x: 20, y: 380 },
-    { id: 'recycle-bin', x: 20, y: 500 },
-  ])
-  const [initialIconPositions] = useState<IconPosition[]>([
-    { id: 'projects', x: 20, y: 20 },
-    { id: 'experiences', x: 20, y: 140 },
-    { id: 'autobiography', x: 20, y: 260 },
-    { id: 'resume', x: 20, y: 380 },
-    { id: 'recycle-bin', x: 20, y: 500 },
-  ])
+  const [iconPositions, setIconPositions] = useState<IconPosition[]>(loadIconPositions)
+  const [initialIconPositions] = useState<IconPosition[]>(DEFAULT_ICON_POSITIONS)
   const [selectedIcons, setSelectedIcons] = useState<string[]>([])
   const [selectionBox, setSelectionBox] = useState<{
     startX: number
@@ -652,6 +665,15 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
         break
     }
   }
+
+  // Save icon positions to localStorage whenever they change
+  useEffect(() => {
+    try {
+      localStorage.setItem('iconPositions', JSON.stringify(iconPositions))
+    } catch (error) {
+      console.error('Failed to save icon positions:', error)
+    }
+  }, [iconPositions])
 
   // Save recycle bin items to localStorage whenever they change
   useEffect(() => {

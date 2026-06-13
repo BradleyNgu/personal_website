@@ -1,11 +1,11 @@
 /**
  * Recycle bin / desktop simulation state is stored in localStorage so it survives
- * log off → log on (same tab, no document reload).
+ * log off → log on (same tab, no document reload). Icon positions use the same storage.
  *
  * A full page refresh (F5 / reload) should restore the original desktop, so we
  * clear that storage when the navigation type is "reload", before React reads it.
  */
-const PERSISTED_DESKTOP_KEYS = ['recycleBinItems', 'permanentlyDeleted'] as const
+const PERSISTED_DESKTOP_KEYS = ['recycleBinItems', 'permanentlyDeleted', 'iconPositions'] as const
 
 /**
  * Detect full reload synchronously so localStorage is cleared before React's first render.

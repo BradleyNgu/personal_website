@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react'
+import '../styles/window.css'
+import '../styles/generic-viewer.css'
 import '../styles/photo-viewer.css'
 
 interface PhotoViewerProps {
@@ -19,6 +21,7 @@ function PhotoViewer({ photos, currentPhotoIndex, onClose, onNext, onPrevious }:
   const [isLoading, setIsLoading] = useState(true)
   const [zoom, setZoom] = useState(100)
   const [rotation, setRotation] = useState(0)
+  const [isFullscreen, setIsFullscreen] = useState(false)
 
   const currentPhoto = photos[currentPhotoIndex]
 
@@ -51,6 +54,15 @@ function PhotoViewer({ photos, currentPhotoIndex, onClose, onNext, onPrevious }:
   useEffect(() => {
     document.addEventListener('keydown', handleKeyDown)
     return () => document.removeEventListener('keydown', handleKeyDown)
+  }, [])
+
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      setIsFullscreen(!!document.fullscreenElement)
+    }
+
+    document.addEventListener('fullscreenchange', handleFullscreenChange)
+    return () => document.removeEventListener('fullscreenchange', handleFullscreenChange)
   }, [])
 
   const toggleFullscreen = () => {
@@ -97,72 +109,120 @@ function PhotoViewer({ photos, currentPhotoIndex, onClose, onNext, onPrevious }:
   }
 
   return (
-    <div className="photo-viewer-overlay" onClick={onClose}>
-      <div className="photo-viewer-container" onClick={(e) => e.stopPropagation()}>
-        <div className="photo-viewer-toolbar">
-          <div className="toolbar-left">
-            <button className="toolbar-button" onClick={onPrevious} disabled={currentPhotoIndex === 0}>
-              <img src="/assets/icons/Windows XP Icons/Back.png" alt="Previous" onError={(e) => { e.currentTarget.style.display = 'none' }} />
-              Previous
-            </button>
-            <button className="toolbar-button" onClick={onNext} disabled={currentPhotoIndex === photos.length - 1}>
-              <img src="/assets/icons/Windows XP Icons/Forward.png" alt="Next" onError={(e) => { e.currentTarget.style.display = 'none' }} />
-              Next
-            </button>
-            <div className="toolbar-separator"></div>
-            <button className="toolbar-button" onClick={handleZoomOut}>
-              <span className="toolbar-icon">−</span>
-              Zoom Out
-            </button>
-            <span className="zoom-level">{zoom}%</span>
-            <button className="toolbar-button" onClick={handleZoomIn}>
-              <span className="toolbar-icon">+</span>
-              Zoom In
-            </button>
-            <button className="toolbar-button" onClick={handleResetZoom}>
-              <span className="toolbar-icon">1:1</span>
-              Actual Size
-            </button>
-            <button className="toolbar-button" onClick={handleResetRotation}>
-              <span className="toolbar-icon">↺</span>
-              Reset Rotation
-            </button>
+    <div className="generic-viewer-overlay photo-viewer-overlay" onClick={onClose}>
+      <div className="generic-viewer-container photo-viewer-container" onClick={(e) => e.stopPropagation()}>
+        <div className="window-title-bar photo-viewer-titlebar">
+          <div className="window-title">
+            <img
+              src="/assets/icons/Windows XP Icons/JPG.png"
+              alt=""
+              className="window-icon"
+              draggable={false}
+              onError={(e) => {
+                e.currentTarget.src = '/assets/icons/Windows XP Icons/My Pictures.png'
+              }}
+            />
+            <span title={currentPhoto.name}>{currentPhoto.name}</span>
+            <span className="photo-viewer-index">({currentPhotoIndex + 1} of {photos.length})</span>
           </div>
-          
-          <div className="toolbar-center">
-            <span className="photo-info">
-              {currentPhotoIndex + 1} of {photos.length} - {currentPhoto.name}
-            </span>
-          </div>
-          
-          <div className="toolbar-right">
-            <button className="toolbar-button" onClick={handleRotate}>
-              <span className="toolbar-icon">↻</span>
-              Rotate
+          <div className="window-controls">
+            <button
+              type="button"
+              className="window-button maximize"
+              onClick={toggleFullscreen}
+              title={isFullscreen ? 'Restore' : 'Maximize'}
+              aria-label={isFullscreen ? 'Restore' : 'Maximize'}
+            >
+              <img
+                src={isFullscreen ? '/assets/icons/Windows XP Icons/Restore.png' : '/assets/icons/Windows XP Icons/Maximize.png'}
+                alt=""
+                draggable={false}
+              />
             </button>
-            <button className="toolbar-button" onClick={handlePrint}>
-              <img src="/assets/icons/Windows XP Icons/Print.png" alt="Print" onError={(e) => { e.currentTarget.style.display = 'none' }} />
-              Print
-            </button>
-            <button className="toolbar-button" onClick={handleDownload}>
-              <img src="/assets/icons/Windows XP Icons/Save.png" alt="Download" onError={(e) => { e.currentTarget.style.display = 'none' }} />
-              Download
-            </button>
-            <button className="toolbar-button" onClick={toggleFullscreen}>
-              <img src="/assets/icons/Windows XP Icons/Maximize.png" alt="Fullscreen" onError={(e) => { e.currentTarget.style.display = 'none' }} />
-              Fullscreen
-            </button>
-            <button className="toolbar-button close-button" onClick={onClose}>
-              <span className="close-icon">×</span>
-              Close
+            <button
+              type="button"
+              className="window-button close"
+              onClick={onClose}
+              title="Close"
+              aria-label="Close viewer"
+            >
+              <img src="/assets/icons/Windows XP Icons/Exit.png" alt="" draggable={false} />
             </button>
           </div>
         </div>
 
-        <div className="photo-viewer-content">
+        <div className="explorer-toolbar photo-viewer-actions">
+          <div className="toolbar-left">
+            <button
+              type="button"
+              className="toolbar-btn"
+              onClick={onPrevious}
+              disabled={currentPhotoIndex === 0}
+              title="Previous"
+              aria-label="Previous photo"
+            >
+              <img src="/assets/icons/Windows XP Icons/Back.png" alt="" />
+            </button>
+            <button
+              type="button"
+              className="toolbar-btn"
+              onClick={onNext}
+              disabled={currentPhotoIndex === photos.length - 1}
+              title="Next"
+              aria-label="Next photo"
+            >
+              <img src="/assets/icons/Windows XP Icons/Forward.png" alt="" />
+            </button>
+            <div className="toolbar-separator" />
+            <button type="button" className="toolbar-btn" onClick={handleZoomOut} title="Zoom out" aria-label="Zoom out">
+              <span className="photo-viewer-tool-label">−</span>
+            </button>
+            <button
+              type="button"
+              className="photo-viewer-zoom"
+              onClick={handleResetZoom}
+              title="Actual size"
+              aria-label={`Zoom ${zoom}%, reset to actual size`}
+            >
+              {zoom}%
+            </button>
+            <button type="button" className="toolbar-btn" onClick={handleZoomIn} title="Zoom in" aria-label="Zoom in">
+              <span className="photo-viewer-tool-label">+</span>
+            </button>
+            <div className="toolbar-separator" />
+            <button type="button" className="toolbar-btn" onClick={handleRotate} title="Rotate" aria-label="Rotate clockwise">
+              <span className="photo-viewer-tool-label">↻</span>
+            </button>
+            <button
+              type="button"
+              className="toolbar-btn"
+              onClick={handleResetRotation}
+              disabled={rotation === 0}
+              title="Reset rotation"
+              aria-label="Reset rotation"
+            >
+              <span className="photo-viewer-tool-label">↺</span>
+            </button>
+            <div className="toolbar-separator photo-viewer-desktop-only" />
+            <button
+              type="button"
+              className="toolbar-btn photo-viewer-desktop-only"
+              onClick={handlePrint}
+              title="Print"
+              aria-label="Print"
+            >
+              <img src="/assets/icons/Windows XP Icons/Printer.png" alt="" />
+            </button>
+            <button type="button" className="toolbar-btn" onClick={handleDownload} title="Download" aria-label="Download">
+              <img src="/assets/icons/Windows XP Icons/Save.png" alt="" />
+            </button>
+          </div>
+        </div>
+
+        <div className="generic-viewer-content photo-viewer-content">
           {isLoading ? (
             <div className="loading-container">
-              <div className="loading-spinner"></div>
+              <div className="loading-spinner" />
               <p>Loading image...</p>
             </div>
           ) : (
@@ -170,9 +230,9 @@ function PhotoViewer({ photos, currentPhotoIndex, onClose, onNext, onPrevious }:
               src={currentPhoto.path}
               alt={currentPhoto.name}
               className="photo-viewer-image"
-              style={{ 
+              style={{
                 transform: `scale(${zoom / 100}) rotate(${rotation}deg)`,
-                transition: 'transform 0.3s ease'
+                transition: 'transform 0.3s ease',
               }}
               onError={(e) => {
                 e.currentTarget.src = '/assets/icons/Windows XP Icons/Generic Document.png'
@@ -181,11 +241,11 @@ function PhotoViewer({ photos, currentPhotoIndex, onClose, onNext, onPrevious }:
           )}
         </div>
 
-        <div className="photo-viewer-status-bar">
+        <div className="generic-viewer-status-bar">
           <div className="status-left">
-            <span>{currentPhoto.name}</span>
-            <span>{currentPhoto.size}</span>
-            <span>{currentPhoto.date}</span>
+            <span className="photo-viewer-status-name">{currentPhoto.name}</span>
+            <span className="photo-viewer-status-meta">{currentPhoto.size}</span>
+            <span className="photo-viewer-status-meta">{currentPhoto.date}</span>
           </div>
           <div className="status-right">
             <span>{zoom}%</span>

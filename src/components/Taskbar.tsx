@@ -18,11 +18,12 @@ interface TaskbarProps {
   onInternetExplorerClick: () => void
   onSearchClick: () => void
   onRunClick: () => void
+  unavailableDesktopShortcuts?: string[]
 }
 
 const DRAG_THRESHOLD_PX = 5
 
-function Taskbar({ windows, onTaskbarReorder, onWindowClick, onShutdown, onLogOff, onEmailClick, onCommandPromptClick, onMyPicturesClick, onMyMusicClick, onResumeClick, onAutobiographyClick, onInternetExplorerClick, onSearchClick, onRunClick }: TaskbarProps) {
+function Taskbar({ windows, onTaskbarReorder, onWindowClick, onShutdown, onLogOff, onEmailClick, onCommandPromptClick, onMyPicturesClick, onMyMusicClick, onResumeClick, onAutobiographyClick, onInternetExplorerClick, onSearchClick, onRunClick, unavailableDesktopShortcuts = [] }: TaskbarProps) {
   const [showStartMenu, setShowStartMenu] = useState(false)
   const [showSystemTrayMenu, setShowSystemTrayMenu] = useState(false)
   const [showAllPrograms, setShowAllPrograms] = useState(false)
@@ -117,6 +118,8 @@ function Taskbar({ windows, onTaskbarReorder, onWindowClick, onShutdown, onLogOf
       hour12: true 
     })
   }
+
+  const isShortcutUnavailable = (id: string) => unavailableDesktopShortcuts.includes(id)
 
   const handleStartButtonClick = (e: React.MouseEvent) => {
     e.preventDefault()
@@ -303,6 +306,7 @@ function Taskbar({ windows, onTaskbarReorder, onWindowClick, onShutdown, onLogOf
                   <img src="/assets/icons/Windows XP Icons/Internet Explorer 6.png" alt="" className="menu-icon-large" />
                   <span>Internet</span>
                 </div>
+                {!isShortcutUnavailable('resume') && (
                 <div className="start-menu-item" 
                   onClick={() => {
                     onResumeClick()
@@ -316,6 +320,7 @@ function Taskbar({ windows, onTaskbarReorder, onWindowClick, onShutdown, onLogOf
                   <img src="/assets/icons/Windows XP Icons/pdf.png" alt="" className="menu-icon-large" />
                   <span>My Resume</span>
                 </div>
+                )}
               </div>
               <div className="start-menu-divider"></div>
               <div 
@@ -394,6 +399,7 @@ function Taskbar({ windows, onTaskbarReorder, onWindowClick, onShutdown, onLogOf
                     <img src="/assets/icons/Windows XP Icons/My Music.png" alt="" className="menu-icon-small" />
                     <span>My Music</span>
                   </div>
+                  {!isShortcutUnavailable('resume') && (
                   <div className="all-programs-item"
                     onClick={() => {
                       onResumeClick()
@@ -404,6 +410,8 @@ function Taskbar({ windows, onTaskbarReorder, onWindowClick, onShutdown, onLogOf
                     <img src="/assets/icons/Windows XP Icons/pdf.png" alt="" className="menu-icon-small" />
                     <span>My Resume</span>
                   </div>
+                  )}
+                  {!isShortcutUnavailable('autobiography') && (
                   <div className="all-programs-item"
                     onClick={() => {
                       onAutobiographyClick()
@@ -414,6 +422,7 @@ function Taskbar({ windows, onTaskbarReorder, onWindowClick, onShutdown, onLogOf
                     <img src="/assets/icons/Windows XP Icons/My Documents.png" alt="" className="menu-icon-small" />
                     <span>About Me</span>
                   </div>
+                  )}
                   <div className="all-programs-item"
                     onClick={() => {
                       onSearchClick()
@@ -439,6 +448,7 @@ function Taskbar({ windows, onTaskbarReorder, onWindowClick, onShutdown, onLogOf
             )}
             
             <div className="start-menu-right">
+              {!isShortcutUnavailable('autobiography') && (
               <div className="start-menu-item" 
                 onClick={() => {
                   onAutobiographyClick()
@@ -452,6 +462,7 @@ function Taskbar({ windows, onTaskbarReorder, onWindowClick, onShutdown, onLogOf
                 <img src="/assets/icons/Windows XP Icons/My Documents.png" alt="" className="menu-icon-small" />
                 <span>About Me</span>
               </div>
+              )}
               <div className="start-menu-item" 
                 onClick={() => {
                   onMyPicturesClick()

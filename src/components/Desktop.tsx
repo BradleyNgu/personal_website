@@ -52,6 +52,16 @@ interface DesktopProps {
   onLogOff: () => void
 }
 
+const DESKTOP_SHORTCUT_IDS = ['projects', 'experiences', 'autobiography', 'resume'] as const
+
+function getDesktopShortcutId(windowId: string): string | null {
+  const sorted = [...DESKTOP_SHORTCUT_IDS].sort((a, b) => b.length - a.length)
+  for (const id of sorted) {
+    if (windowId === id || windowId.startsWith(`${id}-`)) return id
+  }
+  return null
+}
+
 const DEFAULT_ICON_POSITIONS: IconPosition[] = [
   { id: 'projects', x: 20, y: 20 },
   { id: 'experiences', x: 20, y: 140 },
@@ -187,6 +197,18 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
   const multiDragRafRef = useRef<number | null>(null)
 
   const openWindow = (id: string, title: string, icon: string, component: React.ReactNode, hideMenuBar: boolean = false) => {
+    const shortcutId = getDesktopShortcutId(id)
+    if (
+      shortcutId &&
+      (recycleBinItems.some(item => item.id === shortcutId) || permanentlyDeleted.includes(shortcutId))
+    ) {
+      showErrorDialog(
+        'Shortcut',
+        `Windows cannot find '${title}'. This item might have been moved, renamed or deleted.\n\nCheck the Recycle Bin.`
+      )
+      return
+    }
+
     // Check if window is already open
     const existingWindow = windows.find(w => w.id === id)
     if (existingWindow) {
@@ -1201,6 +1223,9 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
         onInternetExplorerClick={openInternetExplorer}
         onSearchClick={openSearch}
         onRunClick={openRun}
+        unavailableDesktopShortcuts={DESKTOP_SHORTCUT_IDS.filter(
+          id => recycleBinItems.some(item => item.id === id) || permanentlyDeleted.includes(id)
+        )}
       />
 
       <ErrorDialog

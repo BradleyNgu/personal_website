@@ -9,6 +9,19 @@
   height: 95vh;
   border: none;
   border-radius: 0;
+  transition: width 0.15s ease, height 0.15s ease;
+}
+
+.photo-viewer-container.photo-viewer-maximized {
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  max-height: 100dvh;
+}
+
+.photo-viewer-overlay:has(.photo-viewer-maximized) {
+  align-items: stretch;
+  justify-content: stretch;
 }
 
 .photo-viewer-titlebar {

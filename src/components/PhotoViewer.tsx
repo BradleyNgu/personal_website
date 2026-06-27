@@ -21,7 +21,7 @@ function PhotoViewer({ photos, currentPhotoIndex, onClose, onNext, onPrevious }:
   const [isLoading, setIsLoading] = useState(true)
   const [zoom, setZoom] = useState(100)
   const [rotation, setRotation] = useState(0)
-  const [isFullscreen, setIsFullscreen] = useState(false)
+  const [isMaximized, setIsMaximized] = useState(false)
 
   const currentPhoto = photos[currentPhotoIndex]
 
@@ -33,46 +33,31 @@ function PhotoViewer({ photos, currentPhotoIndex, onClose, onNext, onPrevious }:
     img.src = currentPhoto.path
   }, [currentPhoto.path])
 
-  const handleKeyDown = (e: KeyboardEvent) => {
-    switch (e.key) {
-      case 'Escape':
-        onClose()
-        break
-      case 'ArrowLeft':
-        onPrevious()
-        break
-      case 'ArrowRight':
-        onNext()
-        break
-      case 'F11':
-        e.preventDefault()
-        toggleFullscreen()
-        break
-    }
-  }
-
   useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      switch (e.key) {
+        case 'Escape':
+          onClose()
+          break
+        case 'ArrowLeft':
+          onPrevious()
+          break
+        case 'ArrowRight':
+          onNext()
+          break
+        case 'F11':
+          e.preventDefault()
+          setIsMaximized(prev => !prev)
+          break
+      }
+    }
+
     document.addEventListener('keydown', handleKeyDown)
     return () => document.removeEventListener('keydown', handleKeyDown)
-  }, [])
+  }, [onClose, onNext, onPrevious])
 
-  useEffect(() => {
-    const handleFullscreenChange = () => {
-      setIsFullscreen(!!document.fullscreenElement)
-    }
-
-    document.addEventListener('fullscreenchange', handleFullscreenChange)
-    return () => document.removeEventListener('fullscreenchange', handleFullscreenChange)
-  }, [])
-
-  const toggleFullscreen = () => {
-    if (!document.fullscreenElement) {
-      document.documentElement.requestFullscreen().catch(err => {
-        console.log('Error attempting to enable fullscreen:', err)
-      })
-    } else {
-      document.exitFullscreen()
-    }
+  const toggleMaximize = () => {
+    setIsMaximized(prev => !prev)
   }
 
   const handleZoomIn = () => {
@@ -110,7 +95,10 @@ function PhotoViewer({ photos, currentPhotoIndex, onClose, onNext, onPrevious }:
 
   return (
     <div className="generic-viewer-overlay photo-viewer-overlay" onClick={onClose}>
-      <div className="generic-viewer-container photo-viewer-container" onClick={(e) => e.stopPropagation()}>
+      <div
+        className={`generic-viewer-container photo-viewer-container${isMaximized ? ' photo-viewer-maximized' : ''}`}
+        onClick={(e) => e.stopPropagation()}
+      >
         <div className="window-title-bar photo-viewer-titlebar">
           <div className="window-title">
             <img
@@ -129,12 +117,12 @@ function PhotoViewer({ photos, currentPhotoIndex, onClose, onNext, onPrevious }:
             <button
               type="button"
               className="window-button maximize"
-              onClick={toggleFullscreen}
-              title={isFullscreen ? 'Restore' : 'Maximize'}
-              aria-label={isFullscreen ? 'Restore' : 'Maximize'}
+              onClick={toggleMaximize}
+              title={isMaximized ? 'Restore' : 'Maximize'}
+              aria-label={isMaximized ? 'Restore' : 'Maximize'}
             >
               <img
-                src={isFullscreen ? '/assets/icons/Windows XP Icons/Restore.png' : '/assets/icons/Windows XP Icons/Maximize.png'}
+                src={isMaximized ? '/assets/icons/Windows XP Icons/Restore.png' : '/assets/icons/Windows XP Icons/Maximize.png'}
                 alt=""
                 draggable={false}
               />

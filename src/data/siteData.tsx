@@ -190,6 +190,16 @@ export const projects: Project[] = [
 export const experiences: Experience[] = [
   {
     id: '1',
+    company: 'Tangerine',
+    position: 'Project Manager',
+    period: 'September 2026 – December 2026',
+    location: 'Toronto, ON',
+    logo: '/assets/icons/images.jpeg',
+    responsibilities: ['Incoming Fall 2026'],
+    searchKeywords: ['Project Manager', 'Tangerine', 'Toronto', 'Ontario'],
+  },
+  {
+    id: '2',
     company: 'Innovation, Science and Economic Development Canada',
     position: 'Data Engineer',
     period: 'May 2026 – August 2026',
@@ -203,7 +213,7 @@ export const experiences: Experience[] = [
     searchKeywords: ['Data Engineer', 'Python', 'ETL Pipelines', 'co-op', 'AWS', 'SQL'],
   },
   {
-    id: '2',
+    id: '3',
     company: 'Lux Cognitiva Technologies Inc.',
     position: 'Software Engineer',
     period: 'May 2026 – August 2026',
@@ -216,7 +226,7 @@ export const experiences: Experience[] = [
     searchKeywords: ['Lux', 'Startup', 'TypeScript', 'Prisma', 'PostgreSQL'],
   },
   {
-    id: '3',
+    id: '4',
     company: 'dynaCERT Inc.',
     position: 'Full-Stack Developer',
     period: 'May 2025 – December 2025',

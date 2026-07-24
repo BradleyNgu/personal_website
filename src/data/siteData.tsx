@@ -250,7 +250,7 @@ export const extracurriculars: Extracurricular[] = [
     id: 'cuhacking',
     organization: 'cuHacking',
     position: 'Hacker Experience Team Lead',
-    period: 'Sep. 2025 – Present',
+    period: 'September 2025 – Present',
     location: 'Ottawa, ON',
     logo: '/assets/icons/cuhacking_logo.jpeg',
     responsibilities: [

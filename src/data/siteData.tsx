@@ -192,7 +192,7 @@ export const experiences: Experience[] = [
     id: '1',
     company: 'Tangerine',
     position: 'Project Manager',
-    period: 'September 2026 – December 2026',
+    period: 'Sep. 2026 – Dec. 2026',
     location: 'Toronto, ON',
     logo: '/assets/icons/images.jpeg',
     responsibilities: ['Incoming Fall 2026'],
@@ -202,7 +202,7 @@ export const experiences: Experience[] = [
     id: '2',
     company: 'Innovation, Science and Economic Development Canada',
     position: 'Data Engineer',
-    period: 'May 2026 – August 2026',
+    period: 'May 2026 – Aug. 2026',
     location: 'Ottawa, ON',
     logo: '/assets/icons/ISED.jpg',
     responsibilities: [
@@ -216,7 +216,7 @@ export const experiences: Experience[] = [
     id: '3',
     company: 'Lux Cognitiva Technologies Inc.',
     position: 'Software Engineer',
-    period: 'May 2026 – August 2026',
+    period: 'May 2026 – Aug. 2026',
     location: 'Remote',
     logo: '/assets/icons/luxcognitiva_logo.jpeg',
     responsibilities: [
@@ -229,7 +229,7 @@ export const experiences: Experience[] = [
     id: '4',
     company: 'dynaCERT Inc.',
     position: 'Full-Stack Developer',
-    period: 'May 2025 – December 2025',
+    period: 'May 2025 – Dec. 2025',
     location: 'Toronto, ON',
     logo: '/assets/icons/dynacert.png',
     responsibilities: [
@@ -250,7 +250,7 @@ export const extracurriculars: Extracurricular[] = [
     id: 'cuhacking',
     organization: 'cuHacking',
     position: 'Hacker Experience Team Lead',
-    period: 'September 2025 – Present',
+    period: 'Sep. 2025 – Jun. 2026',
     location: 'Ottawa, ON',
     logo: '/assets/icons/cuhacking_logo.jpeg',
     responsibilities: [

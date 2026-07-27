@@ -191,7 +191,7 @@ export const experiences: Experience[] = [
   {
     id: '1',
     company: 'Tangerine',
-    position: 'Project Manager',
+    position: 'Project Delivery Intern',
     period: 'Sep. 2026 – Dec. 2026',
     location: 'Toronto, ON',
     logo: '/assets/icons/images.jpeg',

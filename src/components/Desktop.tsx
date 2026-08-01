@@ -87,14 +87,36 @@ function loadIconPositions(): IconPosition[] {
   }
 }
 
+const RECYCLE_BIN_ID = 'recycle-bin'
+const DESKTOP_ICON_WIDTH = 75
+const DESKTOP_ICON_HEIGHT = 100
+
+/** True when the pointer is over the recycle bin icon (not when the bin itself is being dragged). */
+const isPointerOverRecycleBin = (
+  clientX: number,
+  clientY: number,
+  iconPositions: IconPosition[],
+  selectedIds: string[] = []
+): boolean => {
+  if (selectedIds.includes(RECYCLE_BIN_ID)) return false
+  const recycleBinPos = iconPositions.find(p => p.id === RECYCLE_BIN_ID)
+  if (!recycleBinPos) return false
+  return (
+    clientX >= recycleBinPos.x &&
+    clientX <= recycleBinPos.x + DESKTOP_ICON_WIDTH &&
+    clientY >= recycleBinPos.y &&
+    clientY <= recycleBinPos.y + DESKTOP_ICON_HEIGHT
+  )
+}
+
 // Helper function to constrain multi-selection icon positions within viewport
 const constrainMultiSelectionDelta = (
   iconPositions: IconPosition[],
   selectedIds: string[],
   deltaX: number,
   deltaY: number,
-  iconWidth: number = 75,
-  iconHeight: number = 100
+  iconWidth: number = DESKTOP_ICON_WIDTH,
+  iconHeight: number = DESKTOP_ICON_HEIGHT
 ): { deltaX: number; deltaY: number } => {
   if (selectedIds.length === 0) return { deltaX, deltaY }
   
@@ -849,12 +871,11 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
                   : icon
               )
             )
-            const recycleBinPos = iconPositions.find(p => p.id === 'recycle-bin')
-            if (recycleBinPos) {
-              const distance = Math.sqrt(
-                Math.pow(latest.x - recycleBinPos.x, 2) + Math.pow(latest.y - recycleBinPos.y, 2)
-              )
-              setIsRecycleBinHovered(distance < 100)
+            // Don't treat as "drop on bin" while the bin itself is part of the selection
+            const overBin = isPointerOverRecycleBin(latest.x, latest.y, iconPositions, selectedIcons)
+            if (overBin !== recycleBinHoveredRef.current) {
+              recycleBinHoveredRef.current = overBin
+              setIsRecycleBinHovered(overBin)
             }
             multiDragLastCommittedRef.current = latest
             setDragOffset(latest)
@@ -876,9 +897,9 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
         }
         multiDragLastPointerRef.current = null
         multiDragLastCommittedRef.current = null
-        // Check if dropped on recycle bin
-        if (isRecycleBinHovered && selectedIcons.length > 0) {
-          const toRecycle = selectedIcons.filter(id => id !== 'recycle-bin')
+        // Only recycle when dropping onto the bin (not when the bin is part of the selection)
+        if (recycleBinHoveredRef.current && selectedIcons.length > 0 && !selectedIcons.includes(RECYCLE_BIN_ID)) {
+          const toRecycle = selectedIcons.filter(id => id !== RECYCLE_BIN_ID)
           
           // Check if any of the items to recycle are currently open
           const openApplications = toRecycle.filter(id => isApplicationOpen(id))
@@ -924,6 +945,7 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
         
         setIsDraggingSelected(false)
         setDragOffset(null)
+        recycleBinHoveredRef.current = false
         setIsRecycleBinHovered(false)
       }
     }
@@ -983,12 +1005,11 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
                   : icon
               )
             )
-            const recycleBinPos = iconPositions.find(p => p.id === 'recycle-bin')
-            if (recycleBinPos) {
-              const distance = Math.sqrt(
-                Math.pow(latest.x - recycleBinPos.x, 2) + Math.pow(latest.y - recycleBinPos.y, 2)
-              )
-              setIsRecycleBinHovered(distance < 100)
+            // Don't treat as "drop on bin" while the bin itself is part of the selection
+            const overBin = isPointerOverRecycleBin(latest.x, latest.y, iconPositions, selectedIcons)
+            if (overBin !== recycleBinHoveredRef.current) {
+              recycleBinHoveredRef.current = overBin
+              setIsRecycleBinHovered(overBin)
             }
             multiDragLastCommittedRef.current = latest
             setDragOffset(latest)
@@ -1010,9 +1031,9 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
         }
         multiDragLastPointerRef.current = null
         multiDragLastCommittedRef.current = null
-        // Check if dropped on recycle bin
-        if (isRecycleBinHovered && selectedIcons.length > 0) {
-          const toRecycle = selectedIcons.filter(id => id !== 'recycle-bin')
+        // Only recycle when dropping onto the bin (not when the bin is part of the selection)
+        if (recycleBinHoveredRef.current && selectedIcons.length > 0 && !selectedIcons.includes(RECYCLE_BIN_ID)) {
+          const toRecycle = selectedIcons.filter(id => id !== RECYCLE_BIN_ID)
           
           // Check if any of the items to recycle are currently open
           const openApplications = toRecycle.filter(id => isApplicationOpen(id))
@@ -1058,6 +1079,7 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
         
         setIsDraggingSelected(false)
         setDragOffset(null)
+        recycleBinHoveredRef.current = false
         setIsRecycleBinHovered(false)
       }
     }

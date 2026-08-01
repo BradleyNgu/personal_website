@@ -15,7 +15,7 @@ const sections: AboutSection[] = [
   {
     id: '2',
     title: 'Education',
-    content: 'Carleton University\nBachelor of Computer Science, Honours Program (Co-op)\nSoftware Engineering Stream\n2023 - 2027\nMajor CGPA: 3.77/4.0',
+    content: 'Carleton University\nBachelor of Computer Science (Co-op)\n2023 - 2027\nMajor CGPA: 10.19/12.0',
   },
   {
     id: '3',

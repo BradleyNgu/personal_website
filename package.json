@@ -4,7 +4,10 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "resume:sync": "node scripts/generate-resume-manifest.mjs",
+    "predev": "npm run resume:sync",
     "dev": "vite",
+    "prebuild": "npm run resume:sync",
     "build": "tsc && vite build",
     "preview": "vite preview",
     "predeploy": "npm run build",

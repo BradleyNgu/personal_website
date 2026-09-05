@@ -22,47 +22,30 @@ function MyPictures() {
   const [viewerOpen, setViewerOpen] = useState(false)
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0)
 
-  // Load photos from the MyPictures folder
+  // Load photos from public/MyPictures via generated manifest
   useEffect(() => {
+    let cancelled = false
+
     const loadPhotos = async () => {
       setLoading(true)
-      
-      const knownPhotos = [
-        'SolutionHacks.jpg',
-        'The_gang.jpg', 
-        'uOttaHack.jpg'
-      ]
-      
-      const detectedPhotos: Photo[] = []
-      
-      // Check which photos exist by trying to load them
-      for (const filename of knownPhotos) {
-        const img = new Image()
-        img.onload = () => {
-          // Photo exists, add it to the list
-          const photo: Photo = {
-            name: filename,
-            path: `/MyPictures/${filename}`,
-            size: `${Math.floor(Math.random() * 5) + 1}.${Math.floor(Math.random() * 9)} MB`,
-            date: new Date().toLocaleDateString('en-US'),
-            thumbnail: `/MyPictures/${filename}`
-          }
-          detectedPhotos.push(photo)
-          setPhotos([...detectedPhotos])
+      try {
+        const response = await fetch('/MyPictures/manifest.json')
+        if (!response.ok) throw new Error('manifest not found')
+        const data = (await response.json()) as { photos: Photo[] }
+        if (!cancelled) {
+          setPhotos(Array.isArray(data.photos) ? data.photos : [])
         }
-        img.onerror = () => {
-          // Photo doesn't exist, skip it
-        }
-        img.src = `/MyPictures/${filename}`
+      } catch {
+        if (!cancelled) setPhotos([])
+      } finally {
+        if (!cancelled) setLoading(false)
       }
-      
-      // Set loading to false after a short delay
-      setTimeout(() => {
-        setLoading(false)
-      }, 500)
     }
 
     loadPhotos()
+    return () => {
+      cancelled = true
+    }
   }, [])
 
   useEffect(() => {

@@ -20,7 +20,7 @@ function MyMusic() {
   const [viewMode, setViewMode] = useState<'large' | 'small' | 'list'>('large')
   const [toolbarVisible, setToolbarVisible] = useState(true)
   const [statusBarVisible, setStatusBarVisible] = useState(true)
-  const [currentPath] = useState('My Music')
+  const [currentPath] = useState('Music')
   const [loading, setLoading] = useState(true)
   const [isPlaying, setIsPlaying] = useState(false)
   const [currentTrack, setCurrentTrack] = useState<string | null>(null)
@@ -235,7 +235,7 @@ function MyMusic() {
             <h3>Other Places</h3>
             <div className="place-item">
               <img src="/assets/icons/Windows XP Icons/My Music.png" alt="" />
-              <span>My Music</span>
+              <span>Music</span>
             </div>
             <div className="place-item">
               <img src="/assets/icons/Windows XP Icons/My Documents.png" alt="" />
@@ -253,7 +253,7 @@ function MyMusic() {
 
           <div className="details-section">
             <h3>Details</h3>
-            <div className="detail-item">My Music</div>
+            <div className="detail-item">Music</div>
             <div className="detail-item">File Folder</div>
           </div>
         </div>

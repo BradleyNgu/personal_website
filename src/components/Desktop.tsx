@@ -339,7 +339,7 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
   }
 
   const openResume = () => {
-    openWindow('resume', 'My Resume', '/assets/icons/Windows XP Icons/pdf.png', <Resume />)
+    openWindow('resume', 'Resume', '/assets/icons/Windows XP Icons/pdf.png', <Resume />)
   }
 
   const openAutobiography = () => {
@@ -567,13 +567,13 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
   } | null => {
     switch (templateId) {
       case 'projects':
-        return { title: 'My Projects', icon: '/assets/icons/projects.png', component: <Projects /> }
+        return { title: 'Projects', icon: '/assets/icons/projects.png', component: <Projects /> }
       case 'experiences':
-        return { title: 'My Experience', icon: '/assets/icons/experiences.png', component: <Experiences /> }
+        return { title: 'Experience', icon: '/assets/icons/experiences.png', component: <Experiences /> }
       case 'autobiography':
         return { title: 'About Me', icon: '/assets/icons/folder.png', component: <Autobiography /> }
       case 'resume':
-        return { title: 'My Resume', icon: '/assets/icons/Windows XP Icons/pdf.png', component: <Resume /> }
+        return { title: 'Resume', icon: '/assets/icons/Windows XP Icons/pdf.png', component: <Resume /> }
       case 'recycle-bin':
         return {
           title: 'Recycle Bin',
@@ -1101,15 +1101,15 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
   const desktopIcons = [
     {
       id: 'projects',
-      title: 'My Projects',
+      title: 'Projects',
       icon: '/assets/icons/projects.png',
-      onDoubleClick: () => openWindow('projects', 'My Projects', '/assets/icons/projects.png', <Projects />),
+      onDoubleClick: () => openWindow('projects', 'Projects', '/assets/icons/projects.png', <Projects />),
     },
     {
       id: 'experiences',
-      title: 'My Experience',
+      title: 'Experience',
       icon: '/assets/icons/experiences.png',
-      onDoubleClick: () => openWindow('experiences', 'My Experience', '/assets/icons/experiences.png', <Experiences />),
+      onDoubleClick: () => openWindow('experiences', 'Experience', '/assets/icons/experiences.png', <Experiences />),
     },
     {
       id: 'autobiography',
@@ -1119,9 +1119,9 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
     },
     {
       id: 'resume',
-      title: 'My Resume',
+      title: 'Resume',
       icon: '/assets/icons/Windows XP Icons/pdf.png',
-      onDoubleClick: () => openWindow('resume', 'My Resume', '/assets/icons/Windows XP Icons/pdf.png', <Resume />),
+      onDoubleClick: () => openWindow('resume', 'Resume', '/assets/icons/Windows XP Icons/pdf.png', <Resume />),
     },
     {
       id: 'recycle-bin',

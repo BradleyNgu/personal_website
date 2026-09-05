@@ -17,7 +17,7 @@ function MyPictures() {
   const [viewMode, setViewMode] = useState<'large' | 'small' | 'list'>('large')
   const [toolbarVisible, setToolbarVisible] = useState(true)
   const [statusBarVisible, setStatusBarVisible] = useState(true)
-  const [currentPath] = useState('My Pictures')
+  const [currentPath] = useState('Pictures')
   const [loading, setLoading] = useState(true)
   const [viewerOpen, setViewerOpen] = useState(false)
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0)
@@ -191,7 +191,7 @@ function MyPictures() {
             <h3>Other Places</h3>
             <div className="place-item">
               <img src="/assets/icons/Windows XP Icons/My Pictures.png" alt="" />
-              <span>My Pictures</span>
+              <span>Pictures</span>
             </div>
             <div className="place-item">
               <img src="/assets/icons/Windows XP Icons/My Documents.png" alt="" />
@@ -209,7 +209,7 @@ function MyPictures() {
 
           <div className="details-section">
             <h3>Details</h3>
-            <div className="detail-item">My Pictures</div>
+            <div className="detail-item">Pictures</div>
             <div className="detail-item">File Folder</div>
           </div>
         </div>

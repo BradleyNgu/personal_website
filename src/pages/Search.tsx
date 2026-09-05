@@ -35,10 +35,10 @@ function Search({ onOpenWindow }: SearchProps) {
 
     // Search applications
     const applications = [
-      { id: 'projects', title: 'My Projects', keywords: ['projects', 'project', 'portfolio', 'work'], icon: '/assets/icons/projects.png', component: <Projects /> },
-      { id: 'experiences', title: 'My Experience', keywords: ['experience', 'experiences', 'work', 'job', 'employment', 'career'], icon: '/assets/icons/experiences.png', component: <Experiences /> },
+      { id: 'projects', title: 'Projects', keywords: ['projects', 'project', 'portfolio', 'work'], icon: '/assets/icons/projects.png', component: <Projects /> },
+      { id: 'experiences', title: 'Experience', keywords: ['experience', 'experiences', 'work', 'job', 'employment', 'career'], icon: '/assets/icons/experiences.png', component: <Experiences /> },
       { id: 'autobiography', title: 'About Me', keywords: ['about', 'me', 'autobiography', 'bio', 'who'], icon: '/assets/icons/folder.png', component: <Autobiography /> },
-      { id: 'resume', title: 'My Resume', keywords: ['resume', 'cv', 'curriculum vitae'], icon: '/assets/icons/Windows XP Icons/pdf.png', component: <Resume /> },
+      { id: 'resume', title: 'Resume', keywords: ['resume', 'cv', 'curriculum vitae'], icon: '/assets/icons/Windows XP Icons/pdf.png', component: <Resume /> },
       { id: 'email', title: 'Email - Contact Bradley', keywords: ['email', 'contact', 'mail', 'message'], icon: '/assets/icons/Windows XP Icons/Email.png', component: <ContactEmail /> },
       { id: 'my-pictures', title: 'My Pictures', keywords: ['pictures', 'pics', 'photos', 'images', 'gallery'], icon: '/assets/icons/Windows XP Icons/My Pictures.png', component: <MyPictures /> },
       { id: 'my-music', title: 'My Music', keywords: ['music', 'songs', 'audio', 'tracks'], icon: '/assets/icons/Windows XP Icons/My Music.png', component: <MyMusic /> },
@@ -72,7 +72,7 @@ function Search({ onOpenWindow }: SearchProps) {
           title: project.title,
           subtitle: project.description,
           icon: '/assets/icons/projects.png',
-          action: () => onOpenWindow('projects', 'My Projects', '/assets/icons/projects.png', <Projects highlightProjectId={project.id} />),
+          action: () => onOpenWindow('projects', 'Projects', '/assets/icons/projects.png', <Projects highlightProjectId={project.id} />),
         })
       }
     })
@@ -91,7 +91,7 @@ function Search({ onOpenWindow }: SearchProps) {
           title: `${exp.position} at ${exp.company}`,
           subtitle: exp.responsibilities[0]?.replace(/\*\*/g, '') || '',
           icon: exp.logo,
-          action: () => onOpenWindow('experiences', 'My Experience', '/assets/icons/experiences.png', <Experiences highlightExperienceId={exp.id} />),
+          action: () => onOpenWindow('experiences', 'Experience', '/assets/icons/experiences.png', <Experiences highlightExperienceId={exp.id} />),
         })
       }
     })
@@ -110,7 +110,7 @@ function Search({ onOpenWindow }: SearchProps) {
           title: `${ext.position} at ${ext.organization}`,
           subtitle: ext.responsibilities[0]?.replace(/\*\*/g, '') || '',
           icon: ext.logo,
-          action: () => onOpenWindow('experiences', 'My Experience', '/assets/icons/experiences.png', <Experiences highlightExperienceId={ext.id} />),
+          action: () => onOpenWindow('experiences', 'Experience', '/assets/icons/experiences.png', <Experiences highlightExperienceId={ext.id} />),
         })
       }
     })

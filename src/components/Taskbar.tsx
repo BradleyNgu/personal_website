@@ -318,7 +318,7 @@ function Taskbar({ windows, onTaskbarReorder, onWindowClick, onShutdown, onLogOf
                   }}
                 >
                   <img src="/assets/icons/Windows XP Icons/pdf.png" alt="" className="menu-icon-large" />
-                  <span>My Resume</span>
+                  <span>Resume</span>
                 </div>
                 )}
               </div>
@@ -408,7 +408,7 @@ function Taskbar({ windows, onTaskbarReorder, onWindowClick, onShutdown, onLogOf
                     }}
                   >
                     <img src="/assets/icons/Windows XP Icons/pdf.png" alt="" className="menu-icon-small" />
-                    <span>My Resume</span>
+                    <span>Resume</span>
                   </div>
                   )}
                   {!isShortcutUnavailable('autobiography') && (

@@ -44,7 +44,7 @@ export const projects: Project[] = [
     id: '0',
     title: 'TalkBlock',
     description: "A way to get out of a conversation",
-    technologies: ['TypeScript', 'Kotlin', 'Python', 'JavaScript'],
+    technologies: ['TypeScript', 'Kotlin', 'Python', 'JavaScript', 'Twilio', 'OpenAI'],
     link: 'https://github.com/BradleyNgu/HTN2026',
     highlights: ["Using AI, big data, blockchain, and web3, we built a... Wait what, an emergency? Sorry, I can't listen to this BS."],
   },

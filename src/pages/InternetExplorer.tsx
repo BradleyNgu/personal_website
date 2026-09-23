@@ -58,6 +58,11 @@ function InternetExplorer({ }: InternetExplorerProps) {
       id: '7SL1dDHCkDw',
       title: 'COMP3008 - Brampton Transit Redesign',
       url: 'https://www.youtube.com/watch?v=7SL1dDHCkDw'
+    },
+    {
+      id: '8YzN8h4a5j0',
+      title: 'TalkBlock Video Demo',
+      url: 'https://www.youtube.com/watch?v=8YzN8h4a5j0'
     }
   ]
 

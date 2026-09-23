@@ -42,11 +42,11 @@ export interface Extracurricular {
 export const projects: Project[] = [
   {
     id: '0',
-    title: 'MediaspaceDownloader',
-    description: "Bypass for Mediaspace's download restriction",
-    technologies: ['Python', 'Selenium', 'Playwright', 'M3U8'],
-    link: 'https://github.com/BradleyNgu/MediaspaceDownloader',
-    highlights: ["Sometimes I wanted to watch lectures offline but with Mediaspace (especially with Carleton) you're unable to download lectures if the prof disables downloading. Here, I made a bypass to this problem. Just input your Mediaspace URL and thats all."],
+    title: 'TalkBlock',
+    description: "A way to get out of a conversation",
+    technologies: ['TypeScript', 'Kotlin', 'Python', 'JavaScript'],
+    link: 'https://github.com/BradleyNgu/HTN2026',
+    highlights: ["Using AI, big data, blockchain, and web3, we built a... Wait what, an emergency? Sorry, I can't listen to this BS."],
   },
   {
     id: '1',

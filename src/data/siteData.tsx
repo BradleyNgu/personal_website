@@ -78,7 +78,6 @@ export const projects: Project[] = [
     description: 'Fully functional desktop simulator of the Tandem t:slim X2 insulin pump with Control-IQ algorithm',
     technologies: ['C++', 'Qt'],
     link: 'https://github.com/BradleyNgu/COMP3004-W25',
-    award: 'Academic Project - 97.5% Grade',
     highlights: [
       'Developed a fully functional desktop simulator of the Tandem t:slim X2 insulin pump, replicating core functionalities and interface of the real-world device',
       'Interactive Touchscreen UI simulating the real insulin pump experience with Manual & Automated Bolus Delivery, including override and dose suggestions',
@@ -118,7 +117,6 @@ export const projects: Project[] = [
     description: 'Real-time elevator simulation system with smart scheduling and safety protocols',
     technologies: ['C++', 'Qt'],
     link: 'https://github.com/BradleyNgu/COMP3004/tree/main/assignment3',
-    award: 'Academic Project - 99% Grade',
     highlights: [
       'Built a full-featured, real-time elevator simulation system using C++ and Qt allowing configuration of simulation parameters',
       'Developed a smart elevator scheduling algorithm that prioritizes direction, proximity, and current load',
@@ -133,7 +131,6 @@ export const projects: Project[] = [
     description: 'A full-stack fitness club management system with a web interface',
     technologies: ['Python', 'SQLAlchemy', 'PostgreSQL', 'HTML/CSS', 'JavaScript', 'React.js'],
     link: 'https://github.com/COMP3005-Project',
-    award: 'Academic Project - 109% Grade',
     highlights: [
       'Full-Stack Gym Management Application - A comprehensive database-driven web application for managing a health and fitness club, built with PostgreSQL backend, Flask REST API, and React frontend (COMP3005 course project)',
       'Three-Tier User System - Supports distinct user roles with separate dashboards and functionality: Members (gym clients), Trainers (fitness instructors), and Admins (facility managers)',
@@ -150,7 +147,6 @@ export const projects: Project[] = [
     description: 'AI-powered rehabilitation tracker using computer vision to monitor joint range of motion',
     technologies: ['Streamlit', 'OpenCV', 'Flask', 'MongoDB', 'Node.js', 'MediaPipe', 'React.js', 'CSS'],
     link: 'https://github.com/BradleyNgu/QHacks',
-    award: 'QHacks 2025',
     highlights: [
       'Qmove tracks the range of motion (ROM) for injured joints, such as a shoulder after dislocation, using a camera and OpenCV',
       'Records daily progress and feeds the data to a trained Physiotherapist AI, which recommends tailored rehabilitation programs',
@@ -175,7 +171,6 @@ export const projects: Project[] = [
     description: 'Real-time news aggregation platform with AI summaries and location-based insights',
     technologies: ['Express.js', 'HTML', 'Node.js', 'React.js', 'CSS'],
     link: 'https://github.com/BradleyNgu/HawkHacks',
-    award: 'HawkHacks 2024 - First Hackathon',
     highlights: [
       'NewsBuzz is a dynamic web application designed to provide users with real-time news updates from various categories such as business, entertainment, health, science, sports, and technology',
       'Built with React.js for the front end and Node.js with Express for the backend',

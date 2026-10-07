@@ -184,19 +184,29 @@ export const projects: Project[] = [
 // ===========================================
 export const experiences: Experience[] = [
   {
+    id: '0',
+    company: 'BDO',
+    position: 'Software Developer Intern',
+    period: 'Jan. 2027 – Apr. 2027',
+    location: 'Toronto, ON',
+    logo: '/assets/icons/bdo_canada_logo.jpeg',
+    responsibilities: ['Incoming Winter 2027'],
+    searchKeywords: ['Software Developer', 'BDO', 'Toronto', 'Ontario'],
+  },
+  {
     id: '1',
     company: 'Tangerine',
-    position: 'Project Delivery Intern',
+    position: 'Project Management Intern',
     period: 'Sep. 2026 – Dec. 2026',
     location: 'Toronto, ON',
     logo: '/assets/icons/images.jpeg',
-    responsibilities: ['Incoming Fall 2026'],
+    responsibilities: ['Delivering projects on time and within budget'],
     searchKeywords: ['Project Manager', 'Tangerine', 'Toronto', 'Ontario'],
   },
   {
     id: '2',
     company: 'Innovation, Science and Economic Development Canada',
-    position: 'Data Engineering Intern',
+    position: 'Data Engineer Intern',
     period: 'May 2026 – Aug. 2026',
     location: 'Ottawa, ON',
     logo: '/assets/icons/ISED.jpg',
@@ -223,7 +233,7 @@ export const experiences: Experience[] = [
   {
     id: '4',
     company: 'dynaCERT Inc.',
-    position: 'Full-Stack Development Intern',
+    position: 'Full-Stack Developer Intern',
     period: 'May 2025 – Dec. 2025',
     location: 'Toronto, ON',
     logo: '/assets/icons/dynacert.png',

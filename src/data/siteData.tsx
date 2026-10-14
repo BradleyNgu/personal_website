@@ -200,8 +200,12 @@ export const experiences: Experience[] = [
     period: 'Sep. 2026 – Dec. 2026',
     location: 'Toronto, ON',
     logo: '/assets/icons/images.jpeg',
-    responsibilities: ['Delivering projects on time and within budget'],
-    searchKeywords: ['Project Manager', 'Tangerine', 'Toronto', 'Ontario'],
+    responsibilities: [
+      'Conducted **8+ stakeholder** discovery sessions across Cybersecurity, Infrastructure, and Application teams to analyze enterprise vulnerability management and reporting workflows',
+      'Documented and assessed process supporting **40,000+ enterprise vulnerabilities**, identifying opportunities to improve reporting, triage, and remediation tracking',
+    ],
+    searchKeywords: ['Project Manager', 'Tangerine', 'Toronto', 'Ontario', 'Cybersecurity', 'vulnerability'],
+
   },
   {
     id: '2',

@@ -216,7 +216,6 @@ export const experiences: Experience[] = [
     logo: '/assets/icons/ISED.jpg',
     responsibilities: [
       'Developed ETL scripts to load, transform, and validate **3+ source datasets** into staging tables, reducing manual processing by **40%** and improving daily data delivery reliability',
-      'Automated SQL and shell-based batch jobs for scheduled data refreshes, improving runtime efficiency by **25%**',
       'Implemented validation checks and logging across end-to-end pipelines to verify record counts, catch load errors, and support reliable production releases',
     ],
     searchKeywords: ['Data Engineer', 'Python', 'ETL Pipelines', 'co-op', 'AWS', 'SQL'],
@@ -237,7 +236,7 @@ export const experiences: Experience[] = [
   {
     id: '4',
     company: 'dynaCERT Inc.',
-    position: 'Full-Stack Developer Intern',
+    position: 'Software Developer Intern',
     period: 'May 2025 – Dec. 2025',
     location: 'Toronto, ON',
     logo: '/assets/icons/dynacert.png',

@@ -64,6 +64,11 @@ function InternetExplorer({ }: InternetExplorerProps) {
       title: 'TalkBlock Video Demo',
       url: 'https://www.youtube.com/watch?v=8YzN8h4a5j0'
     }
+    {
+      id: 'uncoChSK1bU',
+      title: 'HTV - Checkpoint',
+      url: 'https://www.youtube.com/watch?v=uncoChSK1bU'
+    }
   ]
 
   // Get current video embed URL (using enablejsapi=1 for IFrame API)

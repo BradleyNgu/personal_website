@@ -42,6 +42,14 @@ export interface Extracurricular {
 export const projects: Project[] = [
   {
     id: '0',
+    title: 'Checkpoint',
+    description: "Make job finder easier and happier",
+    technologies: ['JavaScript', 'CSS', 'HTML'],
+    link: 'https://github.com/BradleyNgu/HTV',
+    highlights: ["Checkpoint is a browser extension designed to help you on the job/internship search process, and more importantly, keep yourself happy."],
+  },
+  {
+    id: '1',
     title: 'TalkBlock',
     description: "A way to get out of a conversation",
     technologies: ['TypeScript', 'Kotlin', 'Python', 'JavaScript', 'Twilio', 'OpenAI', 'Expo', 'React Native'],
@@ -49,7 +57,7 @@ export const projects: Project[] = [
     highlights: ["Using AI, big data, blockchain, and web3, we built a... Wait what, an emergency? Sorry, I can't listen to this BS."],
   },
   {
-    id: '1',
+    id: '2',
     title: 'Arctic Argus',
     description: 'Gamified simulation of the Canadian Arctic',
     technologies: ['React.js', 'JavaScript', 'Arduino', 'HTML/CSS'],
@@ -61,7 +69,7 @@ export const projects: Project[] = [
     ],
   },
   {
-    id: '2',
+    id: '3',
     title: 'Playtopia',
     description: 'Blockchain-based interactive game creation platform with smart contracts and real-time rewards',
     technologies: ['Python', 'JavaScript', 'OpenCV', 'C++', 'Flask', 'Cairo', 'Blockchain', 'TypeScript', 'Node.js', 'React.js', 'Arduino', 'HTML/CSS'],
@@ -73,7 +81,7 @@ export const projects: Project[] = [
     ],
   },
   {
-    id: '3',
+    id: '4',
     title: 'X2 Insulin Pump Simulator',
     description: 'Fully functional desktop simulator of the Tandem t:slim X2 insulin pump with Control-IQ algorithm',
     technologies: ['C++', 'Qt'],
@@ -87,7 +95,7 @@ export const projects: Project[] = [
     ],
   },
   {
-    id: '4',
+    id: '5',
     title: 'Dumpster Diver',
     description: 'End-to-end automated waste sorting system using machine learning and IoT hardware',
     technologies: ['Python', 'JavaScript', 'OpenCV', 'C++', 'Flask', 'TensorFlow', 'SQLite', 'Arduino', 'Keras', 'HTML/CSS'],
@@ -100,7 +108,7 @@ export const projects: Project[] = [
     ],
   },
   {
-    id: '5',
+    id: '6',
     title: 'Meido',
     description: 'Full-stack conversational AI desktop application with voice synthesis and anime recommendations',
     technologies: ['Electron', 'Node.js', 'Express.js'],
@@ -112,7 +120,7 @@ export const projects: Project[] = [
     ],
   },
   {
-    id: '6',
+    id: '7',
     title: 'Elevator Simulator',
     description: 'Real-time elevator simulation system with smart scheduling and safety protocols',
     technologies: ['C++', 'Qt'],
@@ -126,7 +134,7 @@ export const projects: Project[] = [
     ],
   },
   {
-    id: '7',
+    id: '8',
     title: 'Fitness Club Management System',
     description: 'A full-stack fitness club management system with a web interface',
     technologies: ['Python', 'SQLAlchemy', 'PostgreSQL', 'HTML/CSS', 'JavaScript', 'React.js'],
@@ -142,7 +150,7 @@ export const projects: Project[] = [
     ],
   },
   {
-    id: '8',
+    id: '9',
     title: 'Qmove',
     description: 'AI-powered rehabilitation tracker using computer vision to monitor joint range of motion',
     technologies: ['Streamlit', 'OpenCV', 'Flask', 'MongoDB', 'Node.js', 'MediaPipe', 'React.js', 'CSS'],
@@ -155,7 +163,7 @@ export const projects: Project[] = [
     ],
   },
   {
-    id: '9',
+    id: '10',
     title: 'The Heart Stopper',
     description: 'Gesture-controlled energy drink dispenser using computer vision and Arduino',
     technologies: ['Python', 'OpenCV', 'C++', 'MediaPipe', 'Arduino'],
@@ -166,7 +174,7 @@ export const projects: Project[] = [
     ],
   },
   {
-    id: '10',
+    id: '11',
     title: 'NewsBuzz',
     description: 'Real-time news aggregation platform with AI summaries and location-based insights',
     technologies: ['Express.js', 'HTML', 'Node.js', 'React.js', 'CSS'],

@@ -194,7 +194,7 @@ export const experiences: Experience[] = [
   {
     id: '0',
     company: 'BDO',
-    position: 'Software Developer Intern',
+    position: 'Software Engineer Intern',
     period: 'Jan. 2027 – Apr. 2027',
     location: 'Toronto, ON',
     logo: '/assets/icons/bdo_canada_logo.jpeg',

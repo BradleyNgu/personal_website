@@ -70,26 +70,85 @@ const DEFAULT_ICON_POSITIONS: IconPosition[] = [
   { id: 'recycle-bin', x: 20, y: 500 },
 ]
 
-function loadIconPositions(): IconPosition[] {
-  try {
-    const saved = localStorage.getItem('iconPositions')
-    if (!saved) return DEFAULT_ICON_POSITIONS
-
-    const parsed = JSON.parse(saved) as IconPosition[]
-    if (!Array.isArray(parsed)) return DEFAULT_ICON_POSITIONS
-
-    return DEFAULT_ICON_POSITIONS.map(defaultPos => {
-      const savedPos = parsed.find(p => p.id === defaultPos.id)
-      return savedPos ?? defaultPos
-    })
-  } catch {
-    return DEFAULT_ICON_POSITIONS
-  }
-}
-
 const RECYCLE_BIN_ID = 'recycle-bin'
 const DESKTOP_ICON_WIDTH = 75
 const DESKTOP_ICON_HEIGHT = 100
+const MOBILE_ICON_BREAKPOINT = 768
+
+/** Keep icons inside the visible desktop (mobile overflow:hidden clips off-screen absolute icons). */
+function ensureIconPositionsInViewport(positions: IconPosition[]): IconPosition[] {
+  if (typeof window === 'undefined') return positions
+
+  const isNarrow = window.innerWidth <= MOBILE_ICON_BREAKPOINT
+  const iconW = isNarrow ? 64 : DESKTOP_ICON_WIDTH
+  const iconH = isNarrow ? 88 : DESKTOP_ICON_HEIGHT
+  const rootStyle = getComputedStyle(document.documentElement)
+  const taskbarHeight = parseInt(rootStyle.getPropertyValue('--taskbar-height')) || 40
+  const maxX = Math.max(0, window.innerWidth - iconW)
+  const maxY = Math.max(0, window.innerHeight - taskbarHeight - iconH)
+
+  const clamped = positions.map(p => ({
+    ...p,
+    x: Math.max(0, Math.min(p.x, maxX)),
+    y: Math.max(0, Math.min(p.y, maxY)),
+  }))
+
+  const movedCount = positions.reduce(
+    (count, p, i) => count + (p.x !== clamped[i].x || p.y !== clamped[i].y ? 1 : 0),
+    0
+  )
+  if (movedCount === 0) return positions
+
+  const hasOverlap = clamped.some((a, i) =>
+    clamped.some(
+      (b, j) =>
+        i < j &&
+        Math.abs(a.x - b.x) < iconW * 0.7 &&
+        Math.abs(a.y - b.y) < iconH * 0.7
+    )
+  )
+
+  // Narrow screens: if several icons were shoved onto the same edge, pack into a fitting grid
+  if (isNarrow && (hasOverlap || movedCount >= 2)) {
+    const gapX = iconW + 16
+    const gapY = iconH + 12
+    const startX = 12
+    const startY = 12
+    const rows = Math.max(1, Math.floor(maxY / gapY) + 1)
+    const ordered = DEFAULT_ICON_POSITIONS.map(d => d.id).filter(id =>
+      clamped.some(p => p.id === id)
+    )
+    clamped.forEach(p => {
+      if (!ordered.includes(p.id)) ordered.push(p.id)
+    })
+
+    return ordered.map((id, i) => ({
+      id,
+      x: Math.min(startX + Math.floor(i / rows) * gapX, maxX),
+      y: Math.min(startY + (i % rows) * gapY, maxY),
+    }))
+  }
+
+  return clamped
+}
+
+function loadIconPositions(): IconPosition[] {
+  try {
+    const saved = localStorage.getItem('iconPositions')
+    if (!saved) return ensureIconPositionsInViewport(DEFAULT_ICON_POSITIONS)
+
+    const parsed = JSON.parse(saved) as IconPosition[]
+    if (!Array.isArray(parsed)) return ensureIconPositionsInViewport(DEFAULT_ICON_POSITIONS)
+
+    const merged = DEFAULT_ICON_POSITIONS.map(defaultPos => {
+      const savedPos = parsed.find(p => p.id === defaultPos.id)
+      return savedPos ?? defaultPos
+    })
+    return ensureIconPositionsInViewport(merged)
+  } catch {
+    return ensureIconPositionsInViewport(DEFAULT_ICON_POSITIONS)
+  }
+}
 
 /** True when the pointer is over the recycle bin icon (not when the bin itself is being dragged). */
 const isPointerOverRecycleBin = (
@@ -718,6 +777,31 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
       console.error('Failed to save icon positions:', error)
     }
   }, [iconPositions])
+
+  // Clamp / reflow icons when the viewport changes (desktop→mobile often leaves icons clipped)
+  useEffect(() => {
+    const keepIconsVisible = () => {
+      setIconPositions(prev => {
+        const next = ensureIconPositionsInViewport(prev)
+        if (next === prev) return prev
+        if (
+          next.length === prev.length &&
+          next.every((p, i) => p.id === prev[i].id && p.x === prev[i].x && p.y === prev[i].y)
+        ) {
+          return prev
+        }
+        return next
+      })
+    }
+
+    keepIconsVisible()
+    window.addEventListener('resize', keepIconsVisible)
+    window.addEventListener('orientationchange', keepIconsVisible)
+    return () => {
+      window.removeEventListener('resize', keepIconsVisible)
+      window.removeEventListener('orientationchange', keepIconsVisible)
+    }
+  }, [])
 
   // Save recycle bin items to localStorage whenever they change
   useEffect(() => {

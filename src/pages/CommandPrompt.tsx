@@ -10,6 +10,11 @@ import {
   VIRTUAL_FILE_TEXT,
   tabComplete,
 } from '../utils/virtualCmdFs'
+import { PORTFOLIO_OPEN_APP_EVENT } from '../components/Window'
+
+function requestOpenApp(app: string) {
+  document.dispatchEvent(new CustomEvent(PORTFOLIO_OPEN_APP_EVENT, { detail: { app } }))
+}
 
 interface Command {
   command: string
@@ -135,6 +140,26 @@ function CommandPrompt() {
       return
     }
 
+    if (verb === 'start') {
+      const target = args.toLowerCase().replace(/\.exe$/, '').trim()
+      if (!target) {
+        output = ['The system cannot find the file notepad.']
+      } else if (target === 'notepad') {
+        requestOpenApp('notepad')
+        output = []
+      } else {
+        output = [`The system cannot find the file ${args}.`]
+      }
+      setCommands((prev) => [...prev, { command, output, timestamp: new Date(), cwd: snapshotCwd }])
+      return
+    }
+
+    if (verb === 'notepad' || verb === 'notepad.exe') {
+      requestOpenApp('notepad')
+      setCommands((prev) => [...prev, { command, output: [], timestamp: new Date(), cwd: snapshotCwd }])
+      return
+    }
+
     const cmd = trimmed.toLowerCase()
 
     switch (cmd) {
@@ -145,8 +170,10 @@ function CommandPrompt() {
           'CONTACT        Displays contact information and links.',
           'EDUCATION      Displays educational background and coursework.',
           'JOKE           Tells a random programming joke.',
+          'NOTEPAD        Opens Notepad (tiramisu.txt).',
           'SOCIAL         Displays social media links.',
-          'TYPE           Displays the contents of a text file. Try "type readme.txt"',
+          'START          Starts a program. Try "start notepad".',
+          'TYPE           Displays the contents of a text file. Try "type tiramisu.txt"',
           '\n',
           'SYSTEM COMMANDS',
           'CD             Displays the name of or changes the current directory.',

@@ -43,7 +43,7 @@ export const projects: Project[] = [
   {
     id: '0',
     title: 'Checkpoint',
-    description: "Make job hunting easier and happier",
+    description: "Make job finder easier and happier",
     technologies: ['JavaScript', 'CSS', 'HTML'],
     link: 'https://github.com/BradleyNgu/HTV',
     highlights: ["Checkpoint is a browser extension designed to help you on the job/internship search process, and more importantly, keep yourself happy."],

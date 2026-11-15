@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { flushSync } from 'react-dom'
 import Taskbar from './Taskbar'
-import Window, { PORTFOLIO_WINDOW_MENU_EVENT } from './Window'
+import Window, { PORTFOLIO_WINDOW_MENU_EVENT, PORTFOLIO_OPEN_APP_EVENT } from './Window'
 import DesktopIcon from './DesktopIcon'
 import ErrorDialog from './ErrorDialog'
 import Projects from '../pages/Projects'
@@ -16,6 +16,7 @@ import Resume from '../pages/Resume'
 import InternetExplorer from '../pages/InternetExplorer'
 import Search from '../pages/Search'
 import Run from '../pages/Run'
+import Notepad from '../pages/Notepad'
 import { getCurrentWallpaper } from '../utils/wallpaperRotation'
 import '../styles/desktop.css'
 
@@ -68,6 +69,7 @@ const DEFAULT_ICON_POSITIONS: IconPosition[] = [
   { id: 'autobiography', x: 20, y: 260 },
   { id: 'resume', x: 20, y: 380 },
   { id: 'recycle-bin', x: 20, y: 500 },
+  { id: 'tiramisu', x: 110, y: 20 },
 ]
 
 function loadIconPositions(): IconPosition[] {
@@ -330,6 +332,10 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
     openWindow('cmd', 'C:\\WINDOWS\\system32\\cmd.exe', '/assets/icons/Windows XP Icons/Command Prompt.png', <CommandPrompt />, true)
   }
 
+  const openNotepad = () => {
+    openWindow('notepad', 'tiramisu.txt - Notepad', '/assets/icons/Windows XP Icons/Notepad.png', <Notepad />, true)
+  }
+
   const openMyPictures = () => {
     openWindow('my-pictures', 'My Pictures', '/assets/icons/Windows XP Icons/My Pictures.png', <MyPictures />)
   }
@@ -376,12 +382,37 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
       openAutobiography()
     } else if (cmd === 'search' || cmd === 'find') {
       openSearch()
+    } else if (cmd === 'notepad' || cmd === 'notepad.exe') {
+      openNotepad()
     }
   }
 
   const openRun = () => {
     openWindow('run', 'Run', '/assets/icons/Windows XP Icons/Run.png', <Run onRunCommand={handleRunCommand} />)
   }
+
+  // Allow in-app menus (e.g. Notepad File → Exit) to close their window
+  useEffect(() => {
+    const handler = (e: Event) => {
+      const ce = e as CustomEvent<{ windowId: string; action: string }>
+      if (ce.detail?.action === 'Exit' && ce.detail.windowId) {
+        const id = ce.detail.windowId
+        setWindows(prev => prev.filter(w => w.id !== id))
+      }
+    }
+    document.addEventListener(PORTFOLIO_WINDOW_MENU_EVENT, handler)
+    return () => document.removeEventListener(PORTFOLIO_WINDOW_MENU_EVENT, handler)
+  }, [])
+
+  // Allow CMD (and others) to open apps via custom event
+  useEffect(() => {
+    const handler = (e: Event) => {
+      const app = (e as CustomEvent<{ app: string }>).detail?.app?.toLowerCase()
+      if (app === 'notepad') openNotepad()
+    }
+    document.addEventListener(PORTFOLIO_OPEN_APP_EVENT, handler)
+    return () => document.removeEventListener(PORTFOLIO_OPEN_APP_EVENT, handler)
+  }, [])
 
   const updateIconPosition = (id: string, x: number, y: number) => {
     setIconPositions(prev => 
@@ -547,6 +578,7 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
     'resume',
     'email',
     'cmd',
+    'notepad',
     'search',
     'run',
   ] as const
@@ -597,6 +629,13 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
           title: 'C:\\WINDOWS\\system32\\cmd.exe',
           icon: '/assets/icons/Windows XP Icons/Command Prompt.png',
           component: <CommandPrompt />,
+          hideMenuBar: true,
+        }
+      case 'notepad':
+        return {
+          title: 'tiramisu.txt - Notepad',
+          icon: '/assets/icons/Windows XP Icons/Notepad.png',
+          component: <Notepad />,
           hideMenuBar: true,
         }
       case 'my-pictures':
@@ -1124,6 +1163,12 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
       onDoubleClick: () => openWindow('resume', 'Resume', '/assets/icons/Windows XP Icons/pdf.png', <Resume />),
     },
     {
+      id: 'tiramisu',
+      title: 'tiramisu',
+      icon: '/assets/icons/Windows XP Icons/Generic Text Document.png',
+      onDoubleClick: openNotepad,
+    },
+    {
       id: 'recycle-bin',
       title: 'Recycle Bin',
       icon: '/assets/icons/recyclin-bin.png',
@@ -1238,6 +1283,7 @@ function Desktop({ onShutdown, onLogOff }: DesktopProps) {
         onLogOff={onLogOff}
         onEmailClick={openEmailWindow}
         onCommandPromptClick={openCommandPrompt}
+        onNotepadClick={openNotepad}
         onMyPicturesClick={openMyPictures}
         onMyMusicClick={openMyMusic}
         onResumeClick={openResume}

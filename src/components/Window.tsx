@@ -11,6 +11,9 @@ export const WindowInstanceContext = createContext<{ windowId: string | null }>(
 /** Dispatched from Desktop when View menu targets a specific window (toolbar, icons, etc.) */
 export const PORTFOLIO_WINDOW_MENU_EVENT = 'portfolio-window-menu'
 
+/** Dispatched by apps (e.g. CMD) to ask Desktop to open another application */
+export const PORTFOLIO_OPEN_APP_EVENT = 'portfolio-open-app'
+
 interface WindowProps {
   window: WindowState
   onClose: () => void

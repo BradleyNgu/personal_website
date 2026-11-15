@@ -30,6 +30,7 @@ function Run({ onRunCommand }: RunProps) {
 
   const commonCommands = [
     'cmd',
+    'notepad',
     'email',
     'internet',
     'pictures',

@@ -8,6 +8,7 @@ import MyPictures from './MyPictures'
 import MyMusic from './MyMusic'
 import InternetExplorer from './InternetExplorer'
 import CommandPrompt from './CommandPrompt'
+import Notepad from './Notepad'
 import { projects, experiences, extracurriculars } from '../data/siteData'
 
 interface SearchResult {
@@ -20,7 +21,7 @@ interface SearchResult {
 }
 
 interface SearchProps {
-  onOpenWindow: (id: string, title: string, icon: string, component: React.ReactNode) => void
+  onOpenWindow: (id: string, title: string, icon: string, component: React.ReactNode, hideMenuBar?: boolean) => void
 }
 
 function Search({ onOpenWindow }: SearchProps) {
@@ -44,6 +45,7 @@ function Search({ onOpenWindow }: SearchProps) {
       { id: 'my-music', title: 'My Music', keywords: ['music', 'songs', 'audio', 'tracks'], icon: '/assets/icons/Windows XP Icons/My Music.png', component: <MyMusic /> },
       { id: 'internet-explorer', title: 'Internet Explorer', keywords: ['internet', 'browser', 'web', 'youtube', 'videos'], icon: '/assets/icons/Windows XP Icons/Internet Explorer 6.png', component: <InternetExplorer /> },
       { id: 'cmd', title: 'Command Prompt', keywords: ['cmd', 'command', 'prompt', 'terminal', 'cli'], icon: '/assets/icons/Windows XP Icons/Command Prompt.png', component: <CommandPrompt />, hideMenuBar: true },
+      { id: 'notepad', title: 'Notepad', keywords: ['notepad', 'text', 'editor', 'txt', 'notes'], icon: '/assets/icons/Windows XP Icons/Notepad.png', component: <Notepad />, hideMenuBar: true },
     ]
 
     applications.forEach(app => {
@@ -54,7 +56,7 @@ function Search({ onOpenWindow }: SearchProps) {
           type: 'application',
           title: app.title,
           icon: app.icon,
-          action: () => onOpenWindow(app.id, app.title, app.icon, app.component),
+          action: () => onOpenWindow(app.id, app.title, app.icon, app.component, 'hideMenuBar' in app ? app.hideMenuBar : false),
         })
       }
     })

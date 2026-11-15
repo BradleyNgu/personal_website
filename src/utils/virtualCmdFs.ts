@@ -1,5 +1,7 @@
 /** Virtual Windows-style paths for Command Prompt (matches site apps / desktop). */
 
+import { TIRAMISU_FILENAME, TIRAMISU_RECIPE_LINES } from '../data/tiramisuRecipe'
+
 export type FsEntry = { name: string; isDir: boolean; size?: number }
 
 const DESKTOP_DATE = '04/17/2026  10:30 AM'
@@ -23,6 +25,7 @@ export const VIRTUAL_FS: Record<string, FsEntry[]> = {
     { name: 'Resume.lnk', isDir: false, size: 1_024 },
     { name: 'Recycle Bin.lnk', isDir: false, size: 512 },
     { name: 'readme.txt', isDir: false, size: 1_024 },
+    { name: TIRAMISU_FILENAME, isDir: false, size: TIRAMISU_RECIPE_LINES.join('\n').length },
   ],
   'C:\\Users\\Bradley\\Documents': [],
   'C:\\Users\\Bradley\\Downloads': [],
@@ -33,6 +36,7 @@ export const VIRTUAL_FS: Record<string, FsEntry[]> = {
     { name: 'Email.lnk', isDir: false, size: 640 },
     { name: 'Internet Explorer.lnk', isDir: false, size: 720 },
     { name: 'Command Prompt.lnk', isDir: false, size: 580 },
+    { name: 'Notepad.lnk', isDir: false, size: 512 },
     { name: 'My Pictures.lnk', isDir: false, size: 688 },
     { name: 'My Music.lnk', isDir: false, size: 672 },
     { name: 'Resume.lnk', isDir: false, size: 1_024 },
@@ -64,6 +68,7 @@ export const VIRTUAL_FILE_TEXT: Record<string, string[]> = {
     'Type "help" for a list of available commands.',
     '',
   ],
+  [`C:\\Users\\Bradley\\Desktop\\${TIRAMISU_FILENAME}`]: TIRAMISU_RECIPE_LINES,
 }
 
 export function normalizeFsPath(path: string): string {

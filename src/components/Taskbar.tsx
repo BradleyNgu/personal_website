@@ -11,6 +11,7 @@ interface TaskbarProps {
   onLogOff: () => void
   onEmailClick: () => void
   onCommandPromptClick: () => void
+  onNotepadClick: () => void
   onMyPicturesClick: () => void
   onMyMusicClick: () => void
   onResumeClick: () => void
@@ -23,7 +24,7 @@ interface TaskbarProps {
 
 const DRAG_THRESHOLD_PX = 5
 
-function Taskbar({ windows, onTaskbarReorder, onWindowClick, onShutdown, onLogOff, onEmailClick, onCommandPromptClick, onMyPicturesClick, onMyMusicClick, onResumeClick, onAutobiographyClick, onInternetExplorerClick, onSearchClick, onRunClick, unavailableDesktopShortcuts = [] }: TaskbarProps) {
+function Taskbar({ windows, onTaskbarReorder, onWindowClick, onShutdown, onLogOff, onEmailClick, onCommandPromptClick, onNotepadClick, onMyPicturesClick, onMyMusicClick, onResumeClick, onAutobiographyClick, onInternetExplorerClick, onSearchClick, onRunClick, unavailableDesktopShortcuts = [] }: TaskbarProps) {
   const [showStartMenu, setShowStartMenu] = useState(false)
   const [showSystemTrayMenu, setShowSystemTrayMenu] = useState(false)
   const [showAllPrograms, setShowAllPrograms] = useState(false)
@@ -381,6 +382,16 @@ function Taskbar({ windows, onTaskbarReorder, onWindowClick, onShutdown, onLogOf
                   </div>
                   <div className="all-programs-item"
                     onClick={() => {
+                      onNotepadClick()
+                      setShowStartMenu(false)
+                      setShowAllPrograms(false)
+                    }}
+                  >
+                    <img src="/assets/icons/Windows XP Icons/Notepad.png" alt="" className="menu-icon-small" />
+                    <span>Notepad</span>
+                  </div>
+                  <div className="all-programs-item"
+                    onClick={() => {
                       onMyPicturesClick()
                       setShowStartMenu(false)
                       setShowAllPrograms(false)
@@ -554,6 +565,13 @@ function Taskbar({ windows, onTaskbarReorder, onWindowClick, onShutdown, onLogOf
           className="quick-launch-icon" 
           title="Command Prompt"
           onClick={onCommandPromptClick}
+        />
+        <img 
+          src="/assets/icons/Windows XP Icons/Notepad.png" 
+          alt="Notepad" 
+          className="quick-launch-icon" 
+          title="Notepad"
+          onClick={onNotepadClick}
         />
       </div>
 

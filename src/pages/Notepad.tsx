@@ -1,24 +1,47 @@
 import { useState, useRef, useEffect, useContext, useCallback } from 'react'
 import { WindowInstanceContext, PORTFOLIO_WINDOW_MENU_EVENT } from '../components/Window'
-import { TIRAMISU_FILENAME, TIRAMISU_RECIPE } from '../data/tiramisuRecipe'
+import {
+  DEFAULT_NOTEPAD_STATE,
+  loadNotepadState,
+  saveNotepadState,
+  type NotepadPersistedState,
+} from '../utils/notepadStorage'
 import '../styles/notepad.css'
 
 type OpenMenu = 'File' | 'Edit' | 'Format' | 'View' | 'Help' | null
 
 function Notepad() {
   const { windowId } = useContext(WindowInstanceContext)
-  const [content, setContent] = useState(TIRAMISU_RECIPE)
-  const [fileName, setFileName] = useState(TIRAMISU_FILENAME)
+  const initial = useRef(loadNotepadState()).current
+  const [content, setContent] = useState(initial.content)
+  const [fileName, setFileName] = useState(initial.fileName)
   const [isDirty, setIsDirty] = useState(false)
-  const [wordWrap, setWordWrap] = useState(true)
-  const [statusBarVisible, setStatusBarVisible] = useState(true)
-  const [fontSize, setFontSize] = useState(14)
+  const [wordWrap, setWordWrap] = useState(initial.wordWrap)
+  const [statusBarVisible, setStatusBarVisible] = useState(initial.statusBarVisible)
+  const [fontSize, setFontSize] = useState(initial.fontSize)
   const [openMenu, setOpenMenu] = useState<OpenMenu>(null)
   const [cursorPos, setCursorPos] = useState({ line: 1, col: 1 })
 
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
   const menuBarRef = useRef<HTMLDivElement>(null)
+
+  const persist = useCallback((patch: Partial<NotepadPersistedState>) => {
+    const next: NotepadPersistedState = {
+      content,
+      fileName,
+      wordWrap,
+      statusBarVisible,
+      fontSize,
+      ...patch,
+    }
+    saveNotepadState(next)
+  }, [content, fileName, wordWrap, statusBarVisible, fontSize])
+
+  // Keep localStorage in sync whenever document/prefs change
+  useEffect(() => {
+    saveNotepadState({ content, fileName, wordWrap, statusBarVisible, fontSize })
+  }, [content, fileName, wordWrap, statusBarVisible, fontSize])
 
   const updateCursorPos = useCallback(() => {
     const el = textareaRef.current
@@ -43,8 +66,8 @@ function Notepad() {
       setOpenMenu(null)
       return
     }
-    setContent(TIRAMISU_RECIPE)
-    setFileName(TIRAMISU_FILENAME)
+    setContent(DEFAULT_NOTEPAD_STATE.content)
+    setFileName(DEFAULT_NOTEPAD_STATE.fileName)
     setIsDirty(false)
     setOpenMenu(null)
     setTimeout(() => textareaRef.current?.focus(), 0)
@@ -73,24 +96,37 @@ function Notepad() {
   }
 
   const handleSave = useCallback(() => {
+    const name = fileName.toLowerCase().endsWith('.txt') ? fileName : `${fileName}.txt`
+    persist({ content, fileName: name })
+    setFileName(name)
+    setIsDirty(false)
+    setOpenMenu(null)
+  }, [content, fileName, persist])
+
+  const handleSaveAsDownload = useCallback(() => {
+    const name = fileName.toLowerCase().endsWith('.txt') ? fileName : `${fileName}.txt`
     const blob = new Blob([content], { type: 'text/plain;charset=utf-8' })
     const url = URL.createObjectURL(blob)
     const link = document.createElement('a')
-    const name = fileName.toLowerCase().endsWith('.txt') ? fileName : `${fileName}.txt`
     link.href = url
     link.download = name
     document.body.appendChild(link)
     link.click()
     document.body.removeChild(link)
     URL.revokeObjectURL(url)
+    persist({ content, fileName: name })
     setFileName(name)
     setIsDirty(false)
     setOpenMenu(null)
-  }, [content, fileName])
+  }, [content, fileName, persist])
 
   const handleExit = () => {
     setOpenMenu(null)
-    if (isDirty && !window.confirm('Discard unsaved changes?')) return
+    // Autosave already persisted; only warn if they somehow skipped that
+    if (isDirty) {
+      persist({ content, fileName })
+      setIsDirty(false)
+    }
     if (windowId) {
       document.dispatchEvent(
         new CustomEvent(PORTFOLIO_WINDOW_MENU_EVENT, { detail: { windowId, action: 'Exit' } })
@@ -104,7 +140,8 @@ function Notepad() {
       const key = e.key.toLowerCase()
       if (key === 's') {
         e.preventDefault()
-        handleSave()
+        if (e.shiftKey) handleSaveAsDownload()
+        else handleSave()
       } else if (key === 'n') {
         e.preventDefault()
         handleNew()
@@ -115,7 +152,7 @@ function Notepad() {
     }
     document.addEventListener('keydown', handleKeyDown)
     return () => document.removeEventListener('keydown', handleKeyDown)
-  }, [handleSave, handleNew])
+  }, [handleSave, handleSaveAsDownload, handleNew])
 
   const runEditCommand = (command: string) => {
     textareaRef.current?.focus()
@@ -170,6 +207,9 @@ function Notepad() {
                     </div>
                     <div className="menu-dropdown-item" onClick={handleSave}>
                       Save<span className="notepad-shortcut">Ctrl+S</span>
+                    </div>
+                    <div className="menu-dropdown-item" onClick={handleSaveAsDownload}>
+                      Save As...<span className="notepad-shortcut">Ctrl+Shift+S</span>
                     </div>
                     <div className="menu-dropdown-separator" />
                     <div className="menu-dropdown-item" onClick={handleExit}>
@@ -257,7 +297,7 @@ function Notepad() {
                   <div
                     className="menu-dropdown-item"
                     onClick={() => {
-                      window.alert('Notepad\n\nA simple text editor for this Windows XP portfolio.\n\nBradley Nguyen')
+                      window.alert('Notepad\n\nA simple text editor for this Windows XP portfolio.\nEdits are saved automatically in this browser.\n\nBradley Nguyen')
                       setOpenMenu(null)
                     }}
                   >
@@ -288,7 +328,7 @@ function Notepad() {
 
       {statusBarVisible && (
         <div className="notepad-status-bar">
-          <span>Ln {cursorPos.line}, Col {cursorPos.col}</span>
+          <span>Ln {cursorPos.line}, Col {cursorPos.col}{isDirty ? ' *' : ''}</span>
           <span>{content.length} character{content.length === 1 ? '' : 's'}</span>
         </div>
       )}

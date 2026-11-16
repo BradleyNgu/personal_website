@@ -1,6 +1,7 @@
 /** Virtual Windows-style paths for Command Prompt (matches site apps / desktop). */
 
 import { TIRAMISU_FILENAME, TIRAMISU_RECIPE_LINES } from '../data/tiramisuRecipe'
+import { getPersistedNotepadLines } from './notepadStorage'
 
 export type FsEntry = { name: string; isDir: boolean; size?: number }
 
@@ -69,6 +70,16 @@ export const VIRTUAL_FILE_TEXT: Record<string, string[]> = {
     '',
   ],
   [`C:\\Users\\Bradley\\Desktop\\${TIRAMISU_FILENAME}`]: TIRAMISU_RECIPE_LINES,
+}
+
+/** Resolve text for `type` — tiramisu reflects the saved Notepad document. */
+export function getVirtualFileText(filePath: string): string[] | null {
+  const textKey = Object.keys(VIRTUAL_FILE_TEXT).find((k) => k.toLowerCase() === filePath.toLowerCase())
+  if (!textKey) return null
+  if (textKey.toLowerCase().endsWith(`\\${TIRAMISU_FILENAME.toLowerCase()}`)) {
+    return getPersistedNotepadLines()
+  }
+  return VIRTUAL_FILE_TEXT[textKey]
 }
 
 export function normalizeFsPath(path: string): string {

@@ -7,7 +7,7 @@ import {
   resolveVirtualPath,
   resolveFilePath,
   fsKey,
-  VIRTUAL_FILE_TEXT,
+  getVirtualFileText,
   tabComplete,
 } from '../utils/virtualCmdFs'
 import { PORTFOLIO_OPEN_APP_EVENT } from '../components/Window'
@@ -133,8 +133,8 @@ function CommandPrompt() {
       if (!filePath) {
         output = ['The system cannot find the file specified.']
       } else {
-        const textKey = Object.keys(VIRTUAL_FILE_TEXT).find((k) => k.toLowerCase() === filePath.toLowerCase())
-        output = textKey ? VIRTUAL_FILE_TEXT[textKey] : ['The system cannot find the file specified.']
+        const lines = getVirtualFileText(filePath)
+        output = lines ?? ['The system cannot find the file specified.']
       }
       setCommands((prev) => [...prev, { command, output, timestamp: new Date(), cwd: snapshotCwd }])
       return
